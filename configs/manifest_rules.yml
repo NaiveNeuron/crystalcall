@@ -1,0 +1,177 @@
+# CrystalCall / DenoisePTC prompt-manifest construction rules.
+#
+# Every decision that turns an upstream benchmark record into a CrystalCall
+# PromptRecord lives here as data.  The file is loaded by
+# ``crystalcall.manifest.load_rules`` and applied mechanically by
+# ``scripts/build_manifests.py``; its sha256 is recorded in the header record of
+# every manifest file so a drifting rule set fails loudly.
+#
+# DECLARED BEFORE ANY MODEL RUN.  Nothing in this file may be conditioned on a
+# model outcome, and no rule may be edited after traces exist without bumping
+# the schema version below.
+schema: crystalcall-manifest-rules/1
+
+bfcl:
+  # Path of the BFCL prompt files, relative to --vendor-dir.
+  data_dir: bfcl/data
+  # Ground-truth files live in this subdirectory of data_dir, same basename.
+  answer_subdir: possible_answer
+  source: bfcl_v4
+  # The four single-turn categories.  BFCL v4 splits `simple` by language; we
+  # use the Python split because CrystalCall speculates Python programmatic
+  # tool calls.
+  categories:
+    simple: BFCL_v4_simple_python.json
+    multiple: BFCL_v4_multiple.json
+    parallel: BFCL_v4_parallel.json
+    parallel_multiple: BFCL_v4_parallel_multiple.json
+
+param_kinds:
+  # JSON-schema `type` -> ParamKind string value.  BFCL writes `dict` for
+  # objects and `float` for reals, and uses `tuple` for fixed-length arrays;
+  # both spellings are accepted.  Any type not listed here is unsupported and
+  # drops the prompt (reason `unsupported_param_type`).
+  type_map:
+    string: str
+    integer: int
+    number: float
+    float: float
+    boolean: bool
+    array: list
+    object: dict
+    dict: dict
+    tuple: list
+  # A `str` parameter whose name matches this regex becomes a `path` parameter.
+  path_name_regex: '(?i)(^|_)(path|dir|directory|file|filename|filepath)($|_)'
+  # Per-parameter allow-listed root for `path` parameters.  BFCL tools are
+  # never executed, so the notional root is the whole POSIX namespace; this
+  # makes absolute upstream paths canonicalise to root-relative form instead of
+  # being rejected as escaping.
+  path_root: /
+  # Arrays are order sensitive unless the schema explicitly declares set
+  # semantics through this key.
+  unique_items_key: uniqueItems
+  # Element kind is taken from items.type when the schema declares a uniform
+  # item type and that type is in type_map; otherwise the list stays
+  # heterogeneous (element_kind = null).
+  items_key: items
+  # A declared default is kept only when it type-checks against the declared
+  # ParamKind; otherwise it is dropped to null and counted in
+  # meta.dropped_defaults.  Required parameters never carry a default
+  # (ToolSpec forbids it).
+  keep_default_only_if_type_checks: true
+
+tool_names:
+  # OMP's programmatic tool proxy is attribute based (`tool.<name>(…)`) and the
+  # PTC extractor only accepts an identifier callee, so a dotted upstream name
+  # such as `math.gcd` is unreachable: `tool.math` resolves first and fails.
+  # Every tool name is therefore sanitised to a Python identifier.
+  sanitize_regex: '[^0-9A-Za-z_]'
+  replacement: '_'
+  # A sanitised name starting with a digit gets this prefix.
+  digit_prefix: t_
+  # Collisions inside one prompt's tool surface get `_2`, `_3`, … assigned by
+  # walking the sorted upstream names, so the mapping depends only on the set
+  # of upstream names and never on file order.
+  collision_suffix: numeric_from_2_over_sorted_upstream_names
+  # The upstream spelling is preserved verbatim in ToolDecl.original_name and
+  # in meta.tool_name_map, and is registered as a registry ALIAS of the
+  # sanitised name so both spellings canonicalise to one identity.  An alias
+  # that collides with another tool's canonical name or alias in the same
+  # prompt is skipped (EffectRegistry.register rejects duplicates) and counted
+  # in meta.skipped_aliases.
+  register_original_as_alias: true
+
+effects:
+  # Effect classification is a case-insensitive regex search over the BFCL
+  # function name, first match wins in the order below.  It is applied to the
+  # ORIGINAL upstream function name, which is what the rule was declared
+  # against, never to the sanitised identifier.
+  classify_on: original_name
+  write_regex: '(?i)(send|post|create|delete|remove|update|set_|book|order|purchase|buy|pay|transfer|cancel|schedule|reserve|add_|insert|write|upload|submit|register|reset|move|rename|start|stop|launch|execute|run_|install|subscribe|unsubscribe|login|logout|sign|toggle|enable|disable|mute|archive|restore|share|invite|assign|apply|save)'
+  live_read_regex: '(?i)(current|live|now|realtime|real_time|today|latest|weather|traffic|stock_price|price|quote|exchange_rate|news|trending|status|available|nearby|location)'
+  order: [Write, LiveRead]
+  fallback: Pure
+
+tools:
+  # Dominant resource class for every BFCL tool: the stubs do no I/O.
+  resource: cpu
+  # BFCL stubs are instantaneous.  Latency regimes are injected by the replay
+  # simulator (crystalcall.replay.LATENCY_CONDITIONS_MS) and by the
+  # deterministic-duration harness, never by this table.
+  expected_duration_ms: 0.0
+
+ground_truth:
+  # BFCL `possible_answer` maps each parameter to a list of acceptable values.
+  # Keep the first alternative; every alternative is preserved in
+  # meta.answer_alternatives.
+  first_alternative: true
+  # BFCL's own AST checker treats `""` among a parameter's alternatives as
+  # "the model may omit this parameter"
+  # (bfcl_eval/eval_checker/ast_eval/ast_checker.py: `if param not in
+  # model_params and "" not in possible_answer[param]`).  A non-required
+  # parameter that admits omission is therefore omitted from expected_calls,
+  # which is the minimal canonical call.
+  omit_optional_when_empty_alternative: true
+  # Hard filter: every ground-truth argument value must be a statically closed
+  # literal.  A string that parses as a call expression is treated as a nested
+  # call and drops the prompt (reason `non_literal_argument`).
+  call_expression_regex: '^[A-Za-z_][A-Za-z0-9_.]*\(.*\)$'
+  # Every prompt must satisfy all of these or it is dropped.
+  require_min_calls: 1
+  require_non_empty_user_message: true
+  require_min_tools: 1
+  # Every expected call must canonicalise against registry_for(record)
+  # (reason `canonicalize:<CanonicalizationError.reason>`).
+  require_canonicalizable: true
+
+selection:
+  seed: 20260903
+  dev_per_category: 25
+  test_per_category: 75
+  # Per category: sort candidate prompt ids lexicographically, draw
+  # dev+test ids with random.Random(seed).sample over that sorted list in
+  # sorted category order, assign the first dev_per_category draws to dev and
+  # the remainder to test.  Dev and test are disjoint by construction.
+  method: sorted_ids_then_random_sample
+
+toolsandbox:
+  # Path of the ToolSandbox checkout, relative to --vendor-dir.
+  checkout_dir: toolsandbox/checkout
+  scenarios_subdir: tool_sandbox/scenarios
+  categories_source: tool_sandbox/common/execution_context.py
+  source: toolsandbox
+  # Scenario registry modules aggregated by tool_sandbox.scenarios.named_scenarios,
+  # with the ScenarioCategories each module's named_* builder appends to every
+  # extension it defines.  Read statically with `ast`; ToolSandbox is never run.
+  scenario_modules:
+    insufficient_information_scenarios.py: [INSUFFICIENT_INFORMATION]
+    multiple_tool_call_scenarios.py: [MULTIPLE_TOOL_CALL, SINGLE_USER_TURN]
+    multiple_user_turn_scenarios.py: [MULTIPLE_TOOL_CALL, MULTIPLE_USER_TURN]
+    single_tool_call_scenarios.py: [SINGLE_TOOL_CALL, SINGLE_USER_TURN]
+  # Tool-count variants that named_scenarios() derives from every base
+  # scenario.  The empty suffix is the base (NO_DISTRACTION_TOOLS) variant.
+  # The four *_scrambled variants are deliberately excluded: they perturb the
+  # tool representation, which must stay fixed across CrystalCall arms.
+  variants:
+    - {suffix: '', tag: NO_DISTRACTION_TOOLS}
+    - {suffix: _3_distraction_tools, tag: THREE_DISTRACTION_TOOLS}
+    - {suffix: _10_distraction_tools, tag: TEN_DISTRACTION_TOOLS}
+    - {suffix: _all_tools, tag: ALL_TOOLS_AVAILABLE}
+  # Family membership comes from the scenario's own declared ScenarioCategories
+  # tags (the `categories=[...]` literal of its ScenarioExtension plus the
+  # defaults its module appends).  First matching row wins, so families are
+  # disjoint and the rule is most-specific-first: unsatisfiable task, then
+  # world-state precondition, then surface-form canonicalisation, then plain
+  # multi-call workflow.
+  family_precedence:
+    - {family: insufficient_information, category: INSUFFICIENT_INFORMATION}
+    - {family: state_dependencies, category: STATE_DEPENDENCY}
+    - {family: canonicalization, category: CANONICALIZATION}
+    - {family: multi_tool_workflows, category: MULTIPLE_TOOL_CALL}
+  per_family: 16
+  # Per family: draw a full deterministic permutation of the family's base
+  # scenario names (sorted, then random.Random(seed).sample), then fill the
+  # quota by walking the variant list outermost -> the base variant of every
+  # base first, then the next variant, maximising distinct base scenarios.
+  method: sorted_bases_then_random_permutation_then_variant_rounds

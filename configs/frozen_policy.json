@@ -1,0 +1,23 @@
+{
+  "costs": {
+    "contention_ms_per_launch": {},
+    "parse_ms_per_revision": 0.0,
+    "schedule_ms_per_launch": 0.0,
+    "trace_ms_per_revision": 0.0
+  },
+  "frozen_unix_ns": 1788714602918072795,
+  "gate": {
+    "confidence_mode": "min",
+    "k": 2,
+    "min_overlap_ms": 50.0,
+    "tau": 0.9
+  },
+  "min_precision": null,
+  "remaining_decode": {
+    "default_step_ms": 40.0,
+    "expected_canvases": 1.0,
+    "expected_steps_per_canvas": 24.0
+  },
+  "schema_version": "crystalcall-policy/1",
+  "selected_on": "library defaults GatePolicy(name='full_gate'): k=2, tau=0.9, min_overlap_ms=50 (the values every reported replay used); pilot attempt 2 decided stop, so no pilot-selected file existed. Costs are zero so replay stays identical to the published numbers."
+}

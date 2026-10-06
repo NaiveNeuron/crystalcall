@@ -1,0 +1,866 @@
+# CrystalCall: the ToolSandbox validation arm, declared as data.
+#
+# Everything a ToolSandbox episode needs that is NOT a measurement lives here and
+# is frozen before any run: the tool surface with its read/write footprint, the
+# effect-assignment rule, the initial world state, the frozen clock, the
+# deterministic substitutions for the upstream tools that would otherwise reach
+# the network or a non-vendored library, and the speculation policy.
+#
+# ToolSandbox itself is NEVER imported and NEVER pip-installed.  The `reads` /
+# `writes` / `declared_class` / `external` fields in the `tools:` table were
+# derived statically from the checkout named under `checkout:` by walking each
+# registered tool's call graph and recording which `ExecutionContext` database
+# methods it reaches.  `crystalcall.toolsandbox.verify_against_checkout()`
+# re-derives them from the checkout and reports any drift, so this file cannot
+# silently disagree with its source.  See `docs/toolsandbox.md`.
+schema: 1
+
+checkout:
+  repo: https://github.com/apple/ToolSandbox
+  commit: 165848b9a78cead7ca7fe7c89c688b58e6501219
+  path: experiments/vendor/toolsandbox/checkout
+  imported: false
+  # Module:symbol paths this adapter reads statically or reimplements.
+  symbols:
+    scenario_declaration: tool_sandbox/common/scenario.py:ScenarioExtension
+    scenario_container: tool_sandbox/common/scenario.py:Scenario
+    world_state: tool_sandbox/common/execution_context.py:ExecutionContext
+    world_namespaces: tool_sandbox/common/execution_context.py:DatabaseNamespace
+    world_schemas: tool_sandbox/common/execution_context.py:ExecutionContext.dbs_schemas
+    world_reader: tool_sandbox/common/execution_context.py:ExecutionContext.get_database
+    world_writers:
+      - tool_sandbox/common/execution_context.py:ExecutionContext.add_to_database
+      - tool_sandbox/common/execution_context.py:ExecutionContext.remove_from_database
+      - tool_sandbox/common/execution_context.py:ExecutionContext.update_database
+    categories: tool_sandbox/common/execution_context.py:ScenarioCategories
+    roles: tool_sandbox/common/execution_context.py:RoleType
+    milestone: tool_sandbox/common/evaluation.py:Milestone
+    minefield: tool_sandbox/common/evaluation.py:Minefield
+    snapshot_constraint: tool_sandbox/common/evaluation.py:SnapshotConstraint
+    constraint_measures:
+      - tool_sandbox/common/evaluation.py:snapshot_similarity
+      - tool_sandbox/common/evaluation.py:addition_similarity
+      - tool_sandbox/common/evaluation.py:removal_similarity
+      - tool_sandbox/common/evaluation.py:update_similarity
+      - tool_sandbox/common/evaluation.py:tool_trace_dependant_similarity
+    tool_registration: tool_sandbox/common/utils.py:register_as_tool
+    tool_discovery: tool_sandbox/common/tool_discovery.py:find_tools_by_module
+    dataframe_filters: tool_sandbox/common/utils.py:filter_dataframe
+    deterministic_uuid: tool_sandbox/common/utils.py:deterministic_uuid
+    base_world: tool_sandbox/scenarios/base_scenarios.py:named_base_scenarios
+    user_instruction: tool_sandbox/scenarios/user_simulator_few_shot_examples.py:USER_INSTRUCTION
+    scenario_modules:
+      - tool_sandbox/scenarios/multiple_tool_call_scenarios.py
+      - tool_sandbox/scenarios/multiple_user_turn_scenarios.py
+      - tool_sandbox/scenarios/insufficient_information_scenarios.py
+    tool_modules:
+      - tool_sandbox/tools/contact.py
+      - tool_sandbox/tools/messaging.py
+      - tool_sandbox/tools/reminder.py
+      - tool_sandbox/tools/setting.py
+      - tool_sandbox/tools/utilities.py
+      - tool_sandbox/tools/rapid_api_search_tools.py
+      - tool_sandbox/tools/user_tools.py
+
+# --------------------------------------------------------------------------- #
+# effect assignment
+# --------------------------------------------------------------------------- #
+# The rule is total over the scenario tool surface and is evaluated *per
+# scenario*, because eligibility depends on what that scenario can write.
+# Precedence is top to bottom; the first matching row wins.  The rows are
+# mutually exclusive given `declared_class`, so there are no ties, and there is
+# no fallback that lands on an eligible effect.
+effect_rule:
+  derivation:
+    writer_methods: [add_to_database, remove_from_database, update_database]
+    reader_methods: [get_database]
+    # `datetime.datetime.now()` in an upstream body becomes a read of the frozen
+    # `clock` namespace (see `world.epoch_unix`), which no tool ever writes.
+    clock_marker: datetime.datetime.now
+    # `requests.get` in an upstream body marks the tool externally backed.
+    external_marker: requests.get
+    call_graph: transitive, over module-level functions of the tool modules
+  precedence:
+    - id: write
+      when: declared_class == write
+      effect: Write
+    - id: external
+      when: external == true
+      effect: LiveRead
+    - id: conflict
+      when: reads intersects the union of the writes of the scenario's tool surface
+      effect: LiveRead
+    - id: immutable
+      when: reads is non-empty and disjoint from every in-scenario write
+      effect: SnapshotRead
+    - id: pure
+      when: reads is empty
+      effect: Pure
+  unresolved: raise
+
+# --------------------------------------------------------------------------- #
+# snapshot identity
+# --------------------------------------------------------------------------- #
+snapshot:
+  # id = "<prefix><sorted namespaces joined by '+'>@<digest>", where <digest> is
+  # the first `digest_chars` hex chars of sha256 over the canonical JSON of
+  # exactly those namespaces' rows -- the content digest of the immutable
+  # sub-view and nothing else.
+  prefix: "tsbx:"
+  digest_chars: 16
+  # The resolver reads the live WorldState at canonicalisation time, so the id of
+  # a call issued before a write can never equal the id of the same call after
+  # it, and a future launched against one world version can never be claimed
+  # against another.
+  resolver: crystalcall.toolsandbox.WorldState.snapshot_id
+
+# --------------------------------------------------------------------------- #
+# world
+# --------------------------------------------------------------------------- #
+world:
+  # Frozen clock.  Upstream calls datetime.datetime.now(); a wall clock would
+  # make every episode irreproducible and would make `get_current_timestamp` a
+  # live read.  1711065600 = 2024-03-22T00:00:00Z, the date the frozen reminder
+  # milestone targets were authored against.
+  epoch_unix: 1711065600.0
+  timezone: UTC
+  namespaces: [clock, setting, contact, messaging, reminder]
+  # Upstream row ids come from uuid4(); we substitute
+  # uuid5(NAMESPACE_URL, "<namespace>:<write_seq>"), a deterministic function of
+  # the authoritative call order.
+  new_row_id: uuid5(NAMESPACE_URL, '<namespace>:<write_seq>')
+  setting_defaults:
+    device_id_payload: my_phone
+    cellular: true
+    wifi: true
+    location_service: true
+    low_battery_mode: false
+    latitude: 37.334606
+    longitude: -122.009102
+  # `named_base_scenarios` flips these columns relative to the base row; the base
+  # key each ScenarioExtension names encodes the flips.
+  base_variants:
+    base: {}
+    base_cellular_off: {cellular: false}
+    base_wifi_off: {wifi: false}
+    base_location_service_off: {location_service: false}
+    base_low_battery_mode_on_wifi_off_location_service_off_cellular_off:
+      {low_battery_mode: true, wifi: false, location_service: false, cellular: false}
+  contacts:
+    - {payload: Tomas Haake, name: Tomas Haake, phone_number: "+11233344455", relationship: self, is_self: true}
+    - {payload: Fredrik Thordendal, name: Fredrik Thordendal, phone_number: "+12453344098", relationship: friend, is_self: false}
+    - {payload: John Petrucci, name: John Petrucci, phone_number: "+1234560987", relationship: friend, is_self: false}
+    - {payload: Homer S, name: Homer S, phone_number: "+10000000000", relationship: boss, is_self: false}
+  # `offset_seconds` replaces upstream's `datetime.now() - timedelta(...)`; row
+  # order and the duplicated `message_4` payload are upstream's, kept verbatim.
+  messages:
+    - {payload: message_0, sender: null, sender_phone_number: "+18307976530",
+       recipient: Tomas Haake, recipient_phone_number: "+11233344455",
+       content: "Hey kid, you want some GPU?", offset_seconds: -273906}
+    - {payload: message_1, sender: Tomas Haake, sender_phone_number: "+11233344455",
+       recipient: null, recipient_phone_number: "+18307976530",
+       content: "No leave me alone", offset_seconds: -270306}
+    - {payload: message_4, sender: Homer S, sender_phone_number: "+10000000000",
+       recipient: Tomas Haake, recipient_phone_number: "+11233344455",
+       content: "How's it going", offset_seconds: -3783}
+    - {payload: message_2, sender: Tomas Haake, sender_phone_number: "+11233344455",
+       recipient: Homer S, recipient_phone_number: "+10000000000",
+       content: "Things are proceeding as expected", offset_seconds: -3723}
+    - {payload: message_4, sender: Homer S, sender_phone_number: "+10000000000",
+       recipient: Tomas Haake, recipient_phone_number: "+11233344455",
+       content: "Good, keep me posted", offset_seconds: -62}
+  reminders:
+    - {payload: reminder_0, content: "Look for Company SF tickets",
+       creation_offset_seconds: -259200, reminder_offset_seconds: -86400,
+       latitude: null, longitude: null}
+    - {payload: reminder_1, content: "Buy tickets for Merrily next week",
+       creation_offset_seconds: -86400, reminder_offset_seconds: -60,
+       latitude: null, longitude: null}
+    - {payload: reminder_2, content: "Buy a nice rich navy bathing dress",
+       creation_offset_seconds: -3600, reminder_offset_seconds: 3600,
+       latitude: 37.3237926356735, longitude: -122.03961770355414}
+
+# --------------------------------------------------------------------------- #
+# deterministic substitutions for non-vendored dependencies
+# --------------------------------------------------------------------------- #
+# ToolSandbox's tool bodies reach `rapidfuzz`, `pint`, `geopy`, `holidays` and
+# the RapidAPI web service.  None of those is a CrystalCall runtime dependency
+# and the web service is neither reachable nor reproducible, so the adapter
+# reimplements each tool's contract with the deterministic rules declared here.
+substitutions:
+  fuzzy_match:
+    matcher: difflib.SequenceMatcher.ratio * 100 over casefolded, punctuation-stripped, space-normalised strings
+    default_threshold: 90
+    content_threshold: 50
+  distance:
+    method: haversine
+    earth_radius_km: 6371.0088
+  units:
+    # value -> base: base = value * scale + offset;  base -> value: inverse.
+    base:
+      temperature: kelvin
+      length: meter
+      speed: meter_per_second
+      mass: kilogram
+    table:
+      celsius: {dimension: temperature, scale: 1.0, offset: 273.15}
+      fahrenheit: {dimension: temperature, scale: 0.5555555555555556, offset: 255.3722222222222}
+      kelvin: {dimension: temperature, scale: 1.0, offset: 0.0}
+      meter: {dimension: length, scale: 1.0, offset: 0.0}
+      kilometer: {dimension: length, scale: 1000.0, offset: 0.0}
+      centimeter: {dimension: length, scale: 0.01, offset: 0.0}
+      mile: {dimension: length, scale: 1609.344, offset: 0.0}
+      yard: {dimension: length, scale: 0.9144, offset: 0.0}
+      foot: {dimension: length, scale: 0.3048, offset: 0.0}
+      inch: {dimension: length, scale: 0.0254, offset: 0.0}
+      meter_per_second: {dimension: speed, scale: 1.0, offset: 0.0}
+      kilometer_per_hour: {dimension: speed, scale: 0.2777777777777778, offset: 0.0}
+      mile_per_hour: {dimension: speed, scale: 0.44704, offset: 0.0}
+      kilogram: {dimension: mass, scale: 1.0, offset: 0.0}
+      gram: {dimension: mass, scale: 0.001, offset: 0.0}
+      pound: {dimension: mass, scale: 0.45359237, offset: 0.0}
+      ounce: {dimension: mass, scale: 0.028349523125, offset: 0.0}
+    aliases:
+      c: celsius
+      degc: celsius
+      degree_celsius: celsius
+      f: fahrenheit
+      degf: fahrenheit
+      degree_fahrenheit: fahrenheit
+      k: kelvin
+      m: meter
+      km: kilometer
+      cm: centimeter
+      mi: mile
+      miles: mile
+      yd: yard
+      ft: foot
+      feet: foot
+      "in": inch
+      inches: inch
+      mps: meter_per_second
+      kph: kilometer_per_hour
+      kmh: kilometer_per_hour
+      mph: mile_per_hour
+      kg: kilogram
+      g: gram
+      lb: pound
+      lbs: pound
+      pounds: pound
+      oz: ounce
+  holidays:
+    country: US
+    table:
+      2024:
+        - {name: "New Year's Day", date: 2024-01-01}
+        - {name: "Martin Luther King Jr. Day", date: 2024-01-15}
+        - {name: "Washington's Birthday", date: 2024-02-19}
+        - {name: "Memorial Day", date: 2024-05-27}
+        - {name: "Juneteenth National Independence Day", date: 2024-06-19}
+        - {name: "Independence Day", date: 2024-07-04}
+        - {name: "Labor Day", date: 2024-09-02}
+        - {name: "Columbus Day", date: 2024-10-14}
+        - {name: "Veterans Day", date: 2024-11-11}
+        - {name: "Thanksgiving", date: 2024-11-28}
+        - {name: "Christmas Day", date: 2024-12-25}
+      2025:
+        - {name: "New Year's Day", date: 2025-01-01}
+        - {name: "Martin Luther King Jr. Day", date: 2025-01-20}
+        - {name: "Washington's Birthday", date: 2025-02-17}
+        - {name: "Memorial Day", date: 2025-05-26}
+        - {name: "Juneteenth National Independence Day", date: 2025-06-19}
+        - {name: "Independence Day", date: 2025-07-04}
+        - {name: "Labor Day", date: 2025-09-01}
+        - {name: "Columbus Day", date: 2025-10-13}
+        - {name: "Veterans Day", date: 2025-11-11}
+        - {name: "Thanksgiving", date: 2025-11-27}
+        - {name: "Christmas Day", date: 2025-12-25}
+  # The three externally backed tools.  Every value below is fixed data or a
+  # declared deterministic formula; nothing depends on the network or the clock.
+  # These tools remain `LiveRead` regardless: an externally backed read is never
+  # a function of any snapshot we can name.
+  geocode:
+    default_address_template: "{latitude:.4f}, {longitude:.4f}, United States"
+    table:
+      "37.334606,-122.009102": "1 Apple Park Way, Cupertino, CA 95014, United States"
+      "37.819900,-122.478300": "Golden Gate Bridge, San Francisco, CA 94129, United States"
+      "36.236860,-112.191470": "Grand Canyon Village, AZ 86023, United States"
+  places:
+    # Unlisted queries synthesise one result whose coordinates are the search
+    # origin offset by (sha256(query)[0:4] / 65535 - 0.5) degrees on each axis,
+    # rounded to 6 places; the name and address echo the query.
+    table:
+      golden gate bridge:
+        - {name: Golden Gate Bridge, address: "Golden Gate Brg, San Francisco, CA 94129",
+           latitude: 37.8199, longitude: -122.4783, type: tourist_attraction,
+           phone_number: "+14154215000"}
+      grand canyon:
+        - {name: Grand Canyon National Park, address: "Grand Canyon Village, AZ 86023",
+           latitude: 36.23686, longitude: -112.19147, type: national_park,
+           phone_number: "+19286387888"}
+      apple park:
+        - {name: Apple Park, address: "1 Apple Park Way, Cupertino, CA 95014",
+           latitude: 37.334606, longitude: -122.009102, type: corporate_office,
+           phone_number: "+14089961010"}
+      whole foods:
+        - {name: Whole Foods Market, address: "20955 Stevens Creek Blvd, Cupertino, CA 95014",
+           latitude: 37.32293, longitude: -122.03187, type: grocery_store,
+           phone_number: "+14082574700"}
+  weather:
+    # Declared deterministic forecast: a fixed base plus an integer per-day and
+    # per-cell offset derived from the rounded coordinates, so the same query
+    # always returns the same numbers and different days differ.
+    base:
+      min_temperature: 11.0
+      max_temperature: 23.0
+      average_temperature: 17.0
+      average_humidity: 61
+      max_wind_speed: 18.0
+      average_visibility_distance: 10.0
+      barometric_pressure: 1013.0
+      condition: Partly cloudy
+      temperature_unit: Celsius
+      distance_unit: Kilometer
+    per_day_delta_c: 1.5
+    coordinate_cell_degrees: 0.25
+    coordinate_delta_c: 0.5
+
+# --------------------------------------------------------------------------- #
+# user turns
+# --------------------------------------------------------------------------- #
+user_turns:
+  source: ScenarioExtension.messages, USER -> AGENT contents in declaration order
+  # Upstream drives follow-up user turns with a live user-simulator LLM reading
+  # the SYSTEM -> USER instruction.  We drive OMP, not their agent loop, so for
+  # MULTIPLE_USER_TURN scenarios we append exactly one scripted follow-up: the
+  # task text of that instruction with the simulator-facing preamble
+  # (USER_INSTRUCTION) dropped, the prefixes below stripped and any sentence
+  # matching `drop_sentences` removed.  No other turn is ever synthesised.
+  multi_turn_categories: [MULTIPLE_USER_TURN]
+  strip_prefixes:
+    - "Ask User B to "
+    - "Ask User B: "
+    - "Ask User B "
+  drop_sentences:
+    - "You do not have any more information"
+    - "You do not have more information"
+    - "You do not have information"
+    - "You do not know who the person is"
+    - "You don not have more information"
+    - "You do not any more information"
+    - "You don't have the current datetime information"
+    - "You do not have information of current datetime or location"
+    - "You only know"
+    - "Do not leak this information"
+    - "It should be"
+    - "Make sure it's right"
+
+# --------------------------------------------------------------------------- #
+# milestone evaluation
+# --------------------------------------------------------------------------- #
+milestones:
+  source: ScenarioExtension.milestones / .minefields, read statically
+  # A milestone is hit when every one of its snapshot constraints is satisfied.
+  # We evaluate each milestone against the final world plus the full episode
+  # transcript and do NOT enforce upstream's snapshot-index DAG ordering; that is
+  # a documented weakening, recorded per episode as `milestone_order_enforced`.
+  constraint_kinds:
+    tool_trace: an authoritative call to the named tool whose canonical arguments agree on every declared key
+    assistant_text: ROUGE-L F1 of the declared content against the concatenated assistant text
+    addition_similarity: a row matching every declared literal column exists in the final namespace
+    update_similarity: with a target, as addition_similarity; without a target, the namespace differs from the initial world
+    removal_similarity: no row matching every declared literal column exists in the final namespace
+    tool_trace_dependant_similarity: not reproducible without upstream's extractors -> the milestone is indeterminate
+  rouge_l_threshold: 0.4
+  # Numeric target columns are POSIX timestamps; they compare within this many
+  # seconds.  Booleans compare exactly (see `_row_matches`), never numerically.
+  numeric_tolerance: 1.0
+  # A minefield names a tool the agent must not call; it is hit when the
+  # transcript contains a call to that tool.
+  minefield_kind: forbidden_tool_call
+  order_enforced: false
+
+# --------------------------------------------------------------------------- #
+# speculation policy
+# --------------------------------------------------------------------------- #
+speculation:
+  policy: turn_boundary_eligible_prefetch
+  # At each turn boundary, against the world version current at that instant,
+  # the arm launches (a) every speculation-eligible tool of the scenario surface
+  # whose canonical form needs no supplied argument and (b) every
+  # speculation-eligible canonical call observed authoritatively in the previous
+  # turn.  Writes and live reads are never launched: `FutureTable.launch`
+  # refuses them and `assert_no_write_speculation` is asserted at the launch
+  # site.  A launched future is consumable only on an exact
+  # (request_id, canonical_tool, canonical_arguments, immutable_snapshot_id)
+  # match, so any write between launch and use moves the snapshot id and the
+  # claim misses.
+  max_launches_per_turn: 16
+  claim_timeout_s: 60.0
+  concurrency_per_resource: 4
+
+# --------------------------------------------------------------------------- #
+# GPU-free stub mode
+# --------------------------------------------------------------------------- #
+stub:
+  # `--stub` replaces the model with a fixed OpenAI-compatible server that
+  # returns exactly one `eval` program per user turn and then a final text.  The
+  # program is derived from the scenario's own milestone declarations: each
+  # `tool_trace` target names a tool and the arguments upstream expects, and
+  # each state-namespace constraint names a mutation, which `state_tools` maps
+  # back onto the tool that performs it.  Any required argument a milestone
+  # leaves open is filled from `required_args` below, and every scenario's
+  # program additionally calls each argument-free eligible read once before and
+  # once after the writes so that the trace genuinely interleaves writes, live
+  # reads and eligible snapshot reads.  Nothing is invented at run time.
+  model_id: diffusiongemma-26b-a4b-it
+  digest_marker: RESULTDIGEST
+  # (namespace, constraint measure) -> the tool that produces that mutation, and
+  # how declared target columns map onto that tool's parameters.  `id_column`
+  # names a row identifier: when the milestone declares it, it is passed
+  # through; otherwise the program resolves it at run time via `id_source`.
+  state_tools:
+    reminder:
+      addition_similarity:
+        tool: add_reminder
+        columns: {content: content, reminder_timestamp: reminder_timestamp, latitude: latitude, longitude: longitude}
+      update_similarity:
+        tool: modify_reminder
+        id_column: reminder_id
+        id_source: search_reminder
+        columns: {content: content, reminder_timestamp: reminder_timestamp, latitude: latitude, longitude: longitude}
+      removal_similarity:
+        tool: remove_reminder
+        id_column: reminder_id
+        id_source: search_reminder
+        columns: {}
+    contact:
+      update_similarity:
+        tool: modify_contact
+        id_column: person_id
+        id_source: search_contacts
+        columns: {name: name, phone_number: phone_number, relationship: relationship, is_self: is_self}
+      removal_similarity:
+        tool: remove_contact
+        id_column: person_id
+        id_source: search_contacts
+        columns: {}
+    messaging:
+      addition_similarity:
+        tool: send_message_with_phone_number
+        columns: {recipient_phone_number: phone_number, content: content}
+  # The SETTING namespace has one tool per boolean column; the declared target
+  # value becomes the `on` argument.
+  setting_column_tools:
+    wifi: set_wifi_status
+    cellular: set_cellular_service_status
+    location_service: set_location_service_status
+    low_battery_mode: set_low_battery_mode_status
+  required_args:
+    add_reminder: {content: Buy chocolate milk, reminder_timestamp: 1711152000.0}
+    modify_reminder: {content: Buy chocolate milk}
+    remove_reminder: {}
+    modify_contact: {relationship: enemy}
+    remove_contact: {}
+    send_message_with_phone_number: {phone_number: "+12453344098", content: "How's the new album coming along"}
+    set_cellular_service_status: {"on": true}
+    set_location_service_status: {"on": true}
+    set_low_battery_mode_status: {"on": false}
+    set_wifi_status: {"on": true}
+    search_contacts: {is_self: true}
+    search_messages: {creation_timestamp_lowerbound: 0.0}
+    search_reminder: {creation_timestamp_lowerbound: 0.0}
+    search_holiday: {holiday_name: Christmas Day}
+    search_lat_lon: {latitude: 37.334606, longitude: -122.009102}
+    search_location_around_lat_lon: {location: Golden Gate Bridge}
+    search_weather_around_lat_lon: {days: 0}
+    calculate_lat_lon_distance: {latitude_0: 37.334606, longitude_0: -122.009102, latitude_1: 37.8199, longitude_1: -122.4783}
+    datetime_info_to_timestamp: {year: 2024, month: 3, day: 23, hour: 17, minute: 0, second: 0}
+    shift_timestamp: {timestamp: 1711065600.0, days: 1}
+    timestamp_diff: {timestamp_0: 1711065600.0, timestamp_1: 1711152000.0}
+    timestamp_to_datetime_info: {timestamp: 1711065600.0}
+    unit_conversion: {amount: 11.0, from_unit: celsius, to_unit: fahrenheit}
+    get_current_location: {}
+    get_current_timestamp: {}
+    get_cellular_service_status: {}
+    get_location_service_status: {}
+    get_low_battery_mode_status: {}
+    get_wifi_status: {}
+
+# --------------------------------------------------------------------------- #
+# the losslessness check
+# --------------------------------------------------------------------------- #
+divergence:
+  method: one_generation_replayed_against_a_cloned_world
+  # The model is sampled EXACTLY ONCE per episode.  DiffusionGemma's sampler
+  # renoises the canvas with Gumbel noise and ignores the request temperature,
+  # so two sequential requests are not identical even at a
+  # pinned server seed; comparing two generations would confound sampling noise
+  # with scheduling and could either invent a divergence or hide a real one.
+  # Instead the recorded authoritative canonical call sequence is re-executed,
+  # in execution order, with no future table at all, against
+  # WorldState.clone() of the episode's initial world.  The generation is held
+  # fixed by construction, so a mismatch can only come from scheduling.
+  compare:
+    - per-call result_digest, in execution order, with tool and canonical arguments
+    - per-call error and canonicalization_error
+    - WorldState.digest() of the final world, and of the initial world
+    - evaluate_milestones(scenario, world, transcript)
+  # Deliberately NOT compared: `claimed_speculative` (the replay claims nothing
+  # by construction) and `snapshot_id` (a content digest of the world at the
+  # moment of the call, implied by reproducing the world).
+  excluded: [claimed_speculative, snapshot_id]
+
+# --------------------------------------------------------------------------- #
+# arms
+# --------------------------------------------------------------------------- #
+# Both arms run one generation per episode and then the same replay check; they
+# differ only in whether the generation runs with the speculative launch gate.
+arms:
+  toolsandbox_baseline:
+    speculate: false
+    description: No speculation launched; ordinary scheduling generates.
+  toolsandbox_crystalcall:
+    speculate: true
+    description: Turn-boundary eligible prefetch with exact-key claiming.
+
+# --------------------------------------------------------------------------- #
+# tool surface (derived from the checkout; see the header)
+# --------------------------------------------------------------------------- #
+tools:
+  - name: add_reminder
+    declared_class: write
+    reads: [clock]
+    writes: [reminder]
+    external: false
+    resource: cpu
+    expected_duration_ms: 1.0
+    concurrency_limit: 1
+    params:
+      - {name: content, kind: str, required: true}
+      - {name: reminder_timestamp, kind: float, required: true}
+      - {name: latitude, kind: float, required: false, default: null}
+      - {name: longitude, kind: float, required: false, default: null}
+  - name: calculate_lat_lon_distance
+    declared_class: pure
+    reads: []
+    writes: []
+    external: false
+    resource: cpu
+    expected_duration_ms: 0.5
+    concurrency_limit: 8
+    params:
+      - {name: latitude_0, kind: float, required: true}
+      - {name: longitude_0, kind: float, required: true}
+      - {name: latitude_1, kind: float, required: true}
+      - {name: longitude_1, kind: float, required: true}
+  - name: datetime_info_to_timestamp
+    declared_class: pure
+    reads: []
+    writes: []
+    external: false
+    resource: cpu
+    expected_duration_ms: 0.5
+    concurrency_limit: 8
+    params:
+      - {name: year, kind: int, required: true}
+      - {name: month, kind: int, required: true}
+      - {name: day, kind: int, required: true}
+      - {name: hour, kind: int, required: true}
+      - {name: minute, kind: int, required: true}
+      - {name: second, kind: int, required: true}
+  - name: get_cellular_service_status
+    declared_class: read
+    reads: [setting]
+    writes: []
+    external: false
+    resource: cpu
+    expected_duration_ms: 0.5
+    concurrency_limit: 8
+    params: []
+  - name: get_current_location
+    declared_class: read
+    reads: [setting]
+    writes: []
+    external: false
+    resource: cpu
+    expected_duration_ms: 0.5
+    concurrency_limit: 8
+    params: []
+  - name: get_current_timestamp
+    declared_class: read
+    reads: [clock]
+    writes: []
+    external: false
+    resource: cpu
+    expected_duration_ms: 0.5
+    concurrency_limit: 8
+    params: []
+  - name: get_location_service_status
+    declared_class: read
+    reads: [setting]
+    writes: []
+    external: false
+    resource: cpu
+    expected_duration_ms: 0.5
+    concurrency_limit: 8
+    params: []
+  - name: get_low_battery_mode_status
+    declared_class: read
+    reads: [setting]
+    writes: []
+    external: false
+    resource: cpu
+    expected_duration_ms: 0.5
+    concurrency_limit: 8
+    params: []
+  - name: get_wifi_status
+    declared_class: read
+    reads: [setting]
+    writes: []
+    external: false
+    resource: cpu
+    expected_duration_ms: 0.5
+    concurrency_limit: 8
+    params: []
+  - name: modify_contact
+    declared_class: write
+    reads: [contact]
+    writes: [contact]
+    external: false
+    resource: cpu
+    expected_duration_ms: 1.0
+    concurrency_limit: 1
+    params:
+      - {name: person_id, kind: str, required: true}
+      - {name: name, kind: str, required: false, default: null}
+      - {name: phone_number, kind: str, required: false, default: null}
+      - {name: relationship, kind: str, required: false, default: null}
+      - {name: is_self, kind: bool, required: false, default: null}
+  - name: modify_reminder
+    declared_class: write
+    reads: [clock, reminder]
+    writes: [reminder]
+    external: false
+    resource: cpu
+    expected_duration_ms: 1.0
+    concurrency_limit: 1
+    params:
+      - {name: reminder_id, kind: str, required: true}
+      - {name: content, kind: str, required: false, default: null}
+      - {name: reminder_timestamp, kind: float, required: false, default: null}
+      - {name: latitude, kind: float, required: false, default: null}
+      - {name: longitude, kind: float, required: false, default: null}
+  - name: remove_contact
+    declared_class: write
+    reads: []
+    writes: [contact]
+    external: false
+    resource: cpu
+    expected_duration_ms: 1.0
+    concurrency_limit: 1
+    params:
+      - {name: person_id, kind: str, required: true}
+  - name: remove_reminder
+    declared_class: write
+    reads: []
+    writes: [reminder]
+    external: false
+    resource: cpu
+    expected_duration_ms: 1.0
+    concurrency_limit: 1
+    params:
+      - {name: reminder_id, kind: str, required: true}
+  - name: search_contacts
+    declared_class: read
+    reads: [contact]
+    writes: []
+    external: false
+    resource: cpu
+    expected_duration_ms: 0.5
+    concurrency_limit: 8
+    params:
+      - {name: person_id, kind: str, required: false, default: null}
+      - {name: name, kind: str, required: false, default: null}
+      - {name: phone_number, kind: str, required: false, default: null}
+      - {name: relationship, kind: str, required: false, default: null}
+      - {name: is_self, kind: bool, required: false, default: null}
+  - name: search_holiday
+    declared_class: read
+    reads: [clock, setting]
+    writes: []
+    external: false
+    resource: cpu
+    expected_duration_ms: 0.5
+    concurrency_limit: 8
+    params:
+      - {name: holiday_name, kind: str, required: true}
+      - {name: year, kind: int, required: false, default: null}
+  - name: search_lat_lon
+    declared_class: read
+    reads: [setting]
+    writes: []
+    external: true
+    resource: network
+    expected_duration_ms: 5.0
+    concurrency_limit: 8
+    params:
+      - {name: latitude, kind: float, required: true}
+      - {name: longitude, kind: float, required: true}
+  - name: search_location_around_lat_lon
+    declared_class: read
+    reads: [setting]
+    writes: []
+    external: true
+    resource: network
+    expected_duration_ms: 5.0
+    concurrency_limit: 8
+    params:
+      - {name: location, kind: str, required: true}
+      - {name: latitude, kind: float, required: false, default: null}
+      - {name: longitude, kind: float, required: false, default: null}
+  - name: search_messages
+    declared_class: read
+    reads: [messaging]
+    writes: []
+    external: false
+    resource: cpu
+    expected_duration_ms: 0.5
+    concurrency_limit: 8
+    params:
+      - {name: message_id, kind: str, required: false, default: null}
+      - {name: sender_person_id, kind: str, required: false, default: null}
+      - {name: sender_phone_number, kind: str, required: false, default: null}
+      - {name: recipient_person_id, kind: str, required: false, default: null}
+      - {name: recipient_phone_number, kind: str, required: false, default: null}
+      - {name: content, kind: str, required: false, default: null}
+      - {name: creation_timestamp_lowerbound, kind: float, required: false, default: null}
+      - {name: creation_timestamp_upperbound, kind: float, required: false, default: null}
+  - name: search_reminder
+    declared_class: read
+    reads: [reminder]
+    writes: []
+    external: false
+    resource: cpu
+    expected_duration_ms: 0.5
+    concurrency_limit: 8
+    params:
+      - {name: reminder_id, kind: str, required: false, default: null}
+      - {name: content, kind: str, required: false, default: null}
+      - {name: creation_timestamp_lowerbound, kind: float, required: false, default: null}
+      - {name: creation_timestamp_upperbound, kind: float, required: false, default: null}
+      - {name: reminder_timestamp_lowerbound, kind: float, required: false, default: null}
+      - {name: reminder_timestamp_upperbound, kind: float, required: false, default: null}
+      - {name: latitude, kind: float, required: false, default: null}
+      - {name: longitude, kind: float, required: false, default: null}
+  - name: search_weather_around_lat_lon
+    declared_class: read
+    reads: [setting]
+    writes: []
+    external: true
+    resource: network
+    expected_duration_ms: 5.0
+    concurrency_limit: 8
+    params:
+      - {name: days, kind: int, required: false, default: 0}
+      - {name: latitude, kind: float, required: false, default: null}
+      - {name: longitude, kind: float, required: false, default: null}
+  - name: send_message_with_phone_number
+    declared_class: write
+    reads: [clock, contact, setting]
+    writes: [messaging]
+    external: false
+    resource: cpu
+    expected_duration_ms: 1.0
+    concurrency_limit: 1
+    params:
+      - {name: phone_number, kind: str, required: true}
+      - {name: content, kind: str, required: true}
+  - name: set_cellular_service_status
+    declared_class: write
+    reads: [setting]
+    writes: [setting]
+    external: false
+    resource: cpu
+    expected_duration_ms: 1.0
+    concurrency_limit: 1
+    params:
+      - {name: "on", kind: bool, required: true}
+  - name: set_location_service_status
+    declared_class: write
+    reads: [setting]
+    writes: [setting]
+    external: false
+    resource: cpu
+    expected_duration_ms: 1.0
+    concurrency_limit: 1
+    params:
+      - {name: "on", kind: bool, required: true}
+  - name: set_low_battery_mode_status
+    declared_class: write
+    reads: [setting]
+    writes: [setting]
+    external: false
+    resource: cpu
+    expected_duration_ms: 1.0
+    concurrency_limit: 1
+    params:
+      - {name: "on", kind: bool, required: true}
+  - name: set_wifi_status
+    declared_class: write
+    reads: [setting]
+    writes: [setting]
+    external: false
+    resource: cpu
+    expected_duration_ms: 1.0
+    concurrency_limit: 1
+    params:
+      - {name: "on", kind: bool, required: true}
+  - name: shift_timestamp
+    declared_class: pure
+    reads: []
+    writes: []
+    external: false
+    resource: cpu
+    expected_duration_ms: 0.5
+    concurrency_limit: 8
+    params:
+      - {name: timestamp, kind: float, required: true}
+      - {name: weeks, kind: int, required: false, default: 0}
+      - {name: days, kind: int, required: false, default: 0}
+      - {name: hours, kind: int, required: false, default: 0}
+      - {name: minutes, kind: int, required: false, default: 0}
+      - {name: seconds, kind: int, required: false, default: 0}
+  - name: timestamp_diff
+    declared_class: pure
+    reads: []
+    writes: []
+    external: false
+    resource: cpu
+    expected_duration_ms: 0.5
+    concurrency_limit: 8
+    params:
+      - {name: timestamp_0, kind: float, required: true}
+      - {name: timestamp_1, kind: float, required: true}
+  - name: timestamp_to_datetime_info
+    declared_class: pure
+    reads: []
+    writes: []
+    external: false
+    resource: cpu
+    expected_duration_ms: 0.5
+    concurrency_limit: 8
+    params:
+      - {name: timestamp, kind: float, required: true}
+  - name: unit_conversion
+    declared_class: pure
+    reads: []
+    writes: []
+    external: false
+    resource: cpu
+    expected_duration_ms: 0.5
+    concurrency_limit: 8
+    params:
+      - {name: amount, kind: float, required: true}
+      - {name: from_unit, kind: str, required: true}
+      - {name: to_unit, kind: str, required: true}

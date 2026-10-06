@@ -1,0 +1,25 @@
+{
+  "bytes": 640269,
+  "final_chain": "cda98331996cd18b7c21f7254d5dcdc5de633bbd2e4e22efcecb60d6d482a5b0",
+  "meta": {
+    "arm": "toolsandbox_baseline",
+    "checkout_commit": "165848b9a78cead7ca7fe7c89c688b58e6501219",
+    "config": "configs/toolsandbox.yml",
+    "config_sha256": "e0015f5e244ebc4d88d12b56bbacbc621bd4f7f1594a4843c0699ead9f015060",
+    "divergence_method": "one_generation_replayed_against_a_cloned_world",
+    "manifest": "experiments/manifests/toolsandbox.jsonl",
+    "manifest_sha256": "e5f0214f234bc123f0d711f0f54f5e9a07cc07c5ee04f49cf73c68f2e991ad90",
+    "model": "vllm/diffusiongemma-26b-a4b-it",
+    "profile_fingerprint": "984ad76b947db6664dd2c33e15007ae409e2990c9710ea18de1acc4002f31682",
+    "scenarios": 64,
+    "schema_version": "crystalcall-toolsandbox/1",
+    "seed": 1,
+    "speculate": false,
+    "speculation_policy": "turn_boundary_eligible_prefetch",
+    "stub": true
+  },
+  "records": 337,
+  "schema_version": "crystalcall-trace/1",
+  "sha256": "4cce9fda244bcf14aa89cd5d10defd8f6317ae38c28dfbd5039ea8068feeb594",
+  "shard": "toolsandbox_baseline-seed1.jsonl"
+}

@@ -1,0 +1,24 @@
+# Environments
+.venv/
+__pycache__/
+*.pyc
+
+# Large artifacts: never commit model weights, benchmark caches, or raw traces
+experiments/raw/**/*.jsonl
+experiments/raw/**/*.jsonl.zst
+experiments/raw/**/*.parquet
+experiments/vendor/
+models/
+*.safetensors
+
+# Keep checksum manifests and small derived data
+!experiments/raw/**/MANIFEST.sha256
+!experiments/raw/**/*.meta.json
+
+# Logs
+logs/
+*.log
+
+# Output directory of `scripts/paper_numbers.py` (numbers.tex and the
+# appendix tables of the paper).
+paper/

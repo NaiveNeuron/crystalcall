@@ -1,0 +1,81 @@
+# CrystalCall / DenoisePTC pinned serving + sampler configuration.
+#
+# Read by `crystalcall doctor`. Keys are flat and literal on purpose: every
+# value here is a pin, not a default to be recomputed. Anything that is derived
+# from the checkpoint is marked with its source.
+schema: crystalcall-serving/1
+
+# ---- container / engine ---------------------------------------------------- #
+image: vllm/vllm-openai:gemma
+image_digest: sha256:9c719fc0c869092c7d0533f8357d6985a38d5ff03b20ffb6a4620c2b4806dd4b
+image_id: sha256:de71fdd23e93ac46abf251e56992fd91547746010e0256c32551b6660a879589
+vllm_version: 0.22.1rc1.dev357+g74b5964f0
+site_packages: /usr/local/lib/python3.12/dist-packages
+sampler_module: vllm/model_executor/models/diffusion_gemma.py
+
+# ---- model ----------------------------------------------------------------- #
+model: google/diffusiongemma-26B-A4B-it
+served_model_name: diffusiongemma-26b-a4b-it
+model_revision: f7f5b7f5fa82ffc52addd066915886d497f5517b
+architecture: DiffusionGemmaForBlockDiffusion
+model_type: diffusion_gemma
+dtype: bfloat16              # config.json dtype
+vocab_size: 262144           # config.json text_config.vocab_size
+hidden_size: 2816            # config.json text_config.hidden_size
+final_logit_softcapping: 30.0
+
+# ---- diffusion sampler (generation_config.json is the source of truth) ----- #
+sampler: entropy_bound
+canvas_length: 256
+max_denoising_steps: 48
+entropy_bound: 0.1
+confidence_threshold: 0.005
+stability_threshold: 1       # as written in generation_config.json
+t_min: 0.4
+t_max: 0.8
+max_new_tokens: 256
+# NOTE: this pinned build passes `stability_threshold` straight through to the
+# history buffer (upstream main adds +1 because the buffer includes the current
+# step). Recorded here as the checkpoint value; the sampler reports the
+# effective value in each `request_begin` event.
+
+# ---- server flags ---------------------------------------------------------- #
+max_model_len: 32768
+max_num_seqs: 1              # CrystalCall requires exactly one in-flight request
+gpu_memory_utilization: 0.80
+generation_config: vllm      # do not apply the checkpoint's default sampling params
+tool_call_parser: gemma4
+reasoning_parser: gemma4
+enable_auto_tool_choice: true
+host: 127.0.0.1
+port: 8000
+seed: 12345                  # engine seed: the canvas renoise is stochastic
+hf_overrides: '{"diffusion_sampler":"entropy_bound","diffusion_entropy_bound":0.1}'
+diffusion_config: '{"canvas_length": 256}'
+attention_backend: TRITON_ATTN   # forced by the engine: heterogeneous head dims
+async_scheduling: true           # engine default on this build
+
+# ---- host / placement ------------------------------------------------------ #
+cpuset: 5-9,15-19            # Cortex-X925 cores (0xd87); A725 (0xd85) are 0-4,10-14
+docker_flags: --gpus all --ipc=host --network host
+gpu: NVIDIA GB10 (sm_121, Blackwell)
+driver: 580.173.02
+cuda: "13.0"
+arch: aarch64
+cores: 20
+unified_memory_gb: 121
+
+# ---- side channel ---------------------------------------------------------- #
+trace_schema: crystalcall-revision/2
+trace_env: CRYSTALCALL_TRACE
+trace_sink_env: CRYSTALCALL_TRACE_SINK
+trace_level_env: CRYSTALCALL_TRACE_LEVEL
+trace_queue_default: 4096
+trace_emitter: /opt/crystalcall/crystalcall_trace.py
+trace_stats_path: /tmp/cc-trace/stats.json
+
+# ---- ar control arm -------------------------------------------------------- #
+control_model: google/gemma-4-26B-A4B-it
+control_served_model_name: gemma-4-26b-a4b-it
+control_model_revision: 4d7ae4984b7db7de8f8457170b3f1a419ee76d52
+control_port: 8001

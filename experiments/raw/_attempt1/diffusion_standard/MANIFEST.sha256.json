@@ -1,0 +1,46 @@
+{
+  "directory": "experiments/raw/_attempt1/diffusion_standard",
+  "schema_version": "crystalcall-trace/1",
+  "shards": {
+    "diffusion_standard-seed0.jsonl": {
+      "final_chain": "5d14905929ffa63ddc72d41f0ac428a2d30aea7a7ddb387b4d50dbbaf1aaeed6",
+      "meta": {
+        "arm": "diffusion_standard",
+        "doctor_digest": "4c1f900236dc2406039a31011e3bb3509e497ead2a8d39ba5a74214ae053b782",
+        "frozen_policy": {
+          "path": "configs/frozen_policy.json",
+          "status": "absent"
+        },
+        "instrumentation": "parse",
+        "manifest": "experiments/manifests/dev.jsonl",
+        "manifest_sha256": "bcac80d20775dddbbf667b29e81a5c8765545b6f4ff19abdcbab10d36f4a4188",
+        "model": null,
+        "policy": {
+          "allowed_resources": [
+            "cpu",
+            "gpu",
+            "storage"
+          ],
+          "confidence_mode": "min",
+          "fixed_step": null,
+          "k": 2,
+          "max_inflight": 4,
+          "min_overlap_ms": 50.0,
+          "name": "full_gate",
+          "oracle": null,
+          "random_rate": null,
+          "tau": 0.9,
+          "use_confidence": true,
+          "use_overlap": true,
+          "use_persistence": true,
+          "use_resource": true
+        },
+        "profile_fingerprint": "355644b578caf43eb00d897f6b3928ccb981b5e428cef9056cd40ed84f7b277d",
+        "seed": 0,
+        "tool_sleep_ms": 0.0
+      },
+      "records": 1100,
+      "sha256": "07ff46de67163c8b372a04c717ab8cad072e5b70ad49eaecdf475f1fbc418334"
+    }
+  }
+}

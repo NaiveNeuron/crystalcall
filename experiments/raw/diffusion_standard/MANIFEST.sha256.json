@@ -1,0 +1,136 @@
+{
+  "directory": "experiments/raw/diffusion_standard",
+  "schema_version": "crystalcall-trace/1",
+  "shards": {
+    "diffusion_standard-seed0.jsonl": {
+      "final_chain": "93ce851ae9b3a91da805145e36b99aab40682a9c9c20a96f403b614af1e53c97",
+      "meta": {
+        "arm": "diffusion_standard",
+        "doctor_digest": "4c1f900236dc2406039a31011e3bb3509e497ead2a8d39ba5a74214ae053b782",
+        "frozen_policy": {
+          "path": "configs/frozen_policy.json",
+          "status": "absent"
+        },
+        "instrumentation": "parse",
+        "manifest": "experiments/manifests/dev.jsonl",
+        "manifest_sha256": "bcac80d20775dddbbf667b29e81a5c8765545b6f4ff19abdcbab10d36f4a4188",
+        "model": null,
+        "policy": {
+          "allowed_resources": [
+            "cpu",
+            "gpu",
+            "storage"
+          ],
+          "confidence_mode": "min",
+          "fixed_step": null,
+          "k": 2,
+          "max_inflight": 4,
+          "min_overlap_ms": 50.0,
+          "name": "full_gate",
+          "oracle": null,
+          "random_rate": null,
+          "tau": 0.9,
+          "use_confidence": true,
+          "use_overlap": true,
+          "use_persistence": true,
+          "use_resource": true
+        },
+        "profile_fingerprint": "984ad76b947db6664dd2c33e15007ae409e2990c9710ea18de1acc4002f31682",
+        "seed": 0,
+        "tool_sleep_ms": 0.0
+      },
+      "records": 1111,
+      "sha256": "20afef35148613e302d6da2a5da70e00c9f34573a782d278be1cd14451e5ad4d"
+    },
+    "diffusion_standard-seed1.jsonl": {
+      "final_chain": "316c4b9f8c18657f7c4d34f0e72c6dba35ad1857559e9b2ef120323407b3dfe6",
+      "meta": {
+        "arm": "diffusion_standard",
+        "doctor_digest": "547bc22144f46c0ac6cf9c902346ae04e4f69e8595811eb56ebc8151d095cf09",
+        "frozen_policy": {
+          "path": "configs/frozen_policy.json",
+          "status": "absent"
+        },
+        "instrumentation": "parse",
+        "manifest": "experiments/manifests/dev.jsonl",
+        "manifest_sha256": "bcac80d20775dddbbf667b29e81a5c8765545b6f4ff19abdcbab10d36f4a4188",
+        "model": null,
+        "policy": {
+          "allowed_resources": [
+            "cpu",
+            "gpu",
+            "storage"
+          ],
+          "confidence_mode": "min",
+          "fixed_step": null,
+          "k": 2,
+          "max_inflight": 4,
+          "min_overlap_ms": 50.0,
+          "name": "full_gate",
+          "oracle": null,
+          "random_rate": null,
+          "tau": 0.9,
+          "use_acceptance": false,
+          "use_confidence": true,
+          "use_overlap": true,
+          "use_persistence": true,
+          "use_resource": true
+        },
+        "profile_fingerprint": "984ad76b947db6664dd2c33e15007ae409e2990c9710ea18de1acc4002f31682",
+        "seed": 1,
+        "tool_sleep_ms": 0.0
+      },
+      "records": 1113,
+      "sha256": "e0196db1931bdf2dfd56f78b9dac4a8f08189753f635f66c91bdcbf89a752732"
+    },
+    "diffusion_standard-seed2.jsonl": {
+      "final_chain": "2fe51ad08da4792918e0f6e85650b700db9c505286011ec23e3e8a25d18e8b16",
+      "meta": {
+        "arm": "diffusion_standard",
+        "doctor_digest": "547bc22144f46c0ac6cf9c902346ae04e4f69e8595811eb56ebc8151d095cf09",
+        "frozen_policy": {
+          "gate": {
+            "confidence_mode": "min",
+            "k": 2,
+            "min_overlap_ms": 50.0,
+            "tau": 0.9
+          },
+          "path": "configs/frozen_policy.json",
+          "selected_on": "library defaults GatePolicy(name='full_gate'): k=2, tau=0.9, min_overlap_ms=50 (the values every reported replay used); pilot attempt 2 decided stop, so no pilot-selected file existed. Costs are zero so replay stays identical to the published numbers.",
+          "sha256": "2d094b84d25d772117e572f0317064f21e26382272a42bc69c8f355b007d816b",
+          "status": "applied"
+        },
+        "instrumentation": "parse",
+        "manifest": "experiments/manifests/dev.jsonl",
+        "manifest_sha256": "bcac80d20775dddbbf667b29e81a5c8765545b6f4ff19abdcbab10d36f4a4188",
+        "model": null,
+        "policy": {
+          "allowed_resources": [
+            "cpu",
+            "gpu",
+            "storage"
+          ],
+          "confidence_mode": "min",
+          "fixed_step": null,
+          "k": 2,
+          "max_inflight": 4,
+          "min_overlap_ms": 50.0,
+          "name": "full_gate",
+          "oracle": null,
+          "random_rate": null,
+          "tau": 0.9,
+          "use_acceptance": false,
+          "use_confidence": true,
+          "use_overlap": true,
+          "use_persistence": true,
+          "use_resource": true
+        },
+        "profile_fingerprint": "984ad76b947db6664dd2c33e15007ae409e2990c9710ea18de1acc4002f31682",
+        "seed": 2,
+        "tool_sleep_ms": 0.0
+      },
+      "records": 1095,
+      "sha256": "6a61e48922c9f50be6bd770911fa67864de901c8a9ce528c728c6c9edfea274b"
+    }
+  }
+}

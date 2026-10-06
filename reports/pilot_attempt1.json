@@ -1,0 +1,1838 @@
+{
+  "attempt": 1,
+  "conservative_gate": {
+    "coverage": 0.9299065420560748,
+    "covered_final_calls": 199,
+    "eligible_final_calls": 214,
+    "false_launches": 37,
+    "launches": 161,
+    "policy": {
+      "allowed_resources": [
+        "cpu",
+        "gpu",
+        "storage"
+      ],
+      "confidence_mode": "min",
+      "fixed_step": null,
+      "k": 2,
+      "max_inflight": 4,
+      "min_overlap_ms": 50.0,
+      "name": "pilot_conservative",
+      "oracle": null,
+      "random_rate": null,
+      "tau": 0.9,
+      "use_confidence": true,
+      "use_overlap": true,
+      "use_persistence": true,
+      "use_resource": true
+    },
+    "policy_fingerprint": "e695eb5f11679bd8e0126cbfe6480614e754497a01679135a14f9bf896f6aa9e",
+    "precision": 0.7701863354037267,
+    "speedups": {
+      "100ms": {
+        "baseline_p50_ms": 1882.0420815,
+        "completion_p50_ms": 1805.4969685,
+        "median_gain": 0.04308062370704721,
+        "n": 100,
+        "p95_gain": 0.062263503561554905
+      },
+      "2000ms": {
+        "baseline_p50_ms": 3733.0942015,
+        "completion_p50_ms": 3301.4204849999996,
+        "median_gain": 0.10326158720643283,
+        "n": 100,
+        "p95_gain": 0.1840679238923032
+      },
+      "5000ms": {
+        "baseline_p50_ms": 6733.0942015,
+        "completion_p50_ms": 6301.420485000001,
+        "median_gain": 0.05997543382792532,
+        "n": 100,
+        "p95_gain": 0.12501159796597996
+      },
+      "500ms": {
+        "baseline_p50_ms": 2242.998256,
+        "completion_p50_ms": 1959.6297395,
+        "median_gain": 0.14548462014576158,
+        "n": 100,
+        "p95_gain": 0.21534957650929482
+      }
+    },
+    "true_launches": 124
+  },
+  "costs": {
+    "contention_ms_per_launch": {},
+    "parse_ms_per_revision": 0.0,
+    "schedule_ms_per_launch": 0.0,
+    "trace_ms_per_revision": 0.0
+  },
+  "crystallization": {
+    "by_category": {
+      "multiple": {
+        "final_calls": 34,
+        "lead_ms_p50": 219.753071,
+        "trajectories": 25,
+        "valid_parse": 20,
+        "valid_parse_rate": 0.8
+      },
+      "parallel": {
+        "final_calls": 78,
+        "lead_ms_p50": 217.291651,
+        "trajectories": 25,
+        "valid_parse": 23,
+        "valid_parse_rate": 0.92
+      },
+      "parallel_multiple": {
+        "final_calls": 94,
+        "lead_ms_p50": 224.623502,
+        "trajectories": 25,
+        "valid_parse": 24,
+        "valid_parse_rate": 0.96
+      },
+      "simple": {
+        "final_calls": 32,
+        "lead_ms_p50": 221.109407,
+        "trajectories": 25,
+        "valid_parse": 25,
+        "valid_parse_rate": 1.0
+      }
+    },
+    "decode_ms": {
+      "p50": 1786.1181885,
+      "p95": 2586.697255
+    },
+    "eligible_final_calls": 214,
+    "final_calls": 238,
+    "first_canvas_only_fraction": 0.9789915966386554,
+    "milestones_ms_before_response": {
+      "canvas_completion": {
+        "mean": 417.7534272394958,
+        "n": 238,
+        "p50": 207.097601,
+        "p95": 215.297847
+      },
+      "first_executable_final_match": {
+        "mean": 1180.3046183721974,
+        "n": 223,
+        "p50": 862.065923,
+        "p95": 1535.732678
+      },
+      "first_final_arguments": {
+        "mean": 1189.7115323066666,
+        "n": 225,
+        "p50": 866.654731,
+        "p95": 1571.307501
+      },
+      "first_final_name": {
+        "mean": 1276.1540947312774,
+        "n": 227,
+        "p50": 886.716174,
+        "p95": 1571.307501
+      },
+      "first_fully_committed": {
+        "mean": 830.8504110420168,
+        "n": 238,
+        "p50": 628.281772,
+        "p95": 1331.339837
+      },
+      "first_invariant_through_final": {
+        "mean": 1143.0027355829595,
+        "n": 223,
+        "p50": 858.446681,
+        "p95": 1351.433398
+      }
+    },
+    "mutations": {
+      "p50": 2.0,
+      "p95": 4
+    },
+    "precommit_lead_fraction_of_remaining": {
+      "n": 223,
+      "p50": 0.3306239513017261
+    },
+    "precommit_lead_ms": {
+      "eligible_p50": 219.9953355,
+      "n": 223,
+      "p50": 220.250422,
+      "p95": 644.709072
+    },
+    "trajectories": 100
+  },
+  "decision": "stop",
+  "decoder_fallbacks": 0,
+  "excluded": [],
+  "gates": [
+    {
+      "description": "Valid final PTC programs",
+      "gate": "valid_final_ptc_rate",
+      "passed": true,
+      "threshold": 0.7,
+      "value": 0.92
+    },
+    {
+      "description": "Median oracle pre-commit lead >= 200 ms OR >= 15% of remaining decode",
+      "gate": "oracle_precommit_lead_ok",
+      "passed": true,
+      "threshold": 1.0,
+      "value": 1.0
+    },
+    {
+      "description": "Conservative launch precision",
+      "gate": "gate_precision",
+      "passed": false,
+      "threshold": 0.98,
+      "value": 0.7701863354037267
+    },
+    {
+      "description": "Coverage of eligible final calls",
+      "gate": "eligible_coverage",
+      "passed": true,
+      "threshold": 0.35,
+      "value": 0.9299065420560748
+    },
+    {
+      "description": "Projected median speedup at 500 ms tools",
+      "gate": "median_speedup_500ms",
+      "passed": false,
+      "threshold": 0.15,
+      "value": 0.14548462014576158
+    },
+    {
+      "description": "Projected median speedup at 2 s tools",
+      "gate": "median_speedup_2s",
+      "passed": false,
+      "threshold": 0.25,
+      "value": 0.10326158720643283
+    }
+  ],
+  "remaining_decode_model": {
+    "default_step_ms": 215.6016305,
+    "expected_canvases": 2.02,
+    "expected_steps_per_canvas": 3.9405940594059405
+  },
+  "schema_version": "crystalcall-pilot/1",
+  "shards": [
+    "experiments/raw/diffusion_standard/diffusion_standard-seed0.jsonl"
+  ],
+  "system_prompt_sha256": "73e1020d7ee0216845d760166afb1161a884e27a0bb1af20bcc9e0903488b69c",
+  "system_prompt_sha256_backfilled": true,
+  "system_prompt_sha256_source": "configs/system_prompt_attempt1.md",
+  "threshold_selection": {
+    "grid": [
+      {
+        "coverage": 0.9392523364485982,
+        "k": 1,
+        "launches": 174,
+        "median_gain_2000ms": 0.15936109711531082,
+        "median_gain_500ms": 0.18424002827441005,
+        "min_overlap_ms": 0.0,
+        "precision": 0.7241379310344828,
+        "tau": 0.0
+      },
+      {
+        "coverage": 0.9392523364485982,
+        "k": 1,
+        "launches": 174,
+        "median_gain_2000ms": 0.15936109711531082,
+        "median_gain_500ms": 0.18424002827441005,
+        "min_overlap_ms": 25.0,
+        "precision": 0.7241379310344828,
+        "tau": 0.0
+      },
+      {
+        "coverage": 0.9392523364485982,
+        "k": 1,
+        "launches": 174,
+        "median_gain_2000ms": 0.15936109711531082,
+        "median_gain_500ms": 0.18424002827441005,
+        "min_overlap_ms": 50.0,
+        "precision": 0.7241379310344828,
+        "tau": 0.0
+      },
+      {
+        "coverage": 0.9392523364485982,
+        "k": 1,
+        "launches": 174,
+        "median_gain_2000ms": 0.15936109711531082,
+        "median_gain_500ms": 0.18424002827441005,
+        "min_overlap_ms": 100.0,
+        "precision": 0.7241379310344828,
+        "tau": 0.0
+      },
+      {
+        "coverage": 0.9392523364485982,
+        "k": 1,
+        "launches": 174,
+        "median_gain_2000ms": 0.15936109711531082,
+        "median_gain_500ms": 0.18424002827441005,
+        "min_overlap_ms": 200.0,
+        "precision": 0.7241379310344828,
+        "tau": 0.0
+      },
+      {
+        "coverage": 0.9392523364485982,
+        "k": 1,
+        "launches": 169,
+        "median_gain_2000ms": 0.15620625122103288,
+        "median_gain_500ms": 0.18424002827441005,
+        "min_overlap_ms": 0.0,
+        "precision": 0.7455621301775148,
+        "tau": 0.5
+      },
+      {
+        "coverage": 0.9392523364485982,
+        "k": 1,
+        "launches": 169,
+        "median_gain_2000ms": 0.15620625122103288,
+        "median_gain_500ms": 0.18424002827441005,
+        "min_overlap_ms": 25.0,
+        "precision": 0.7455621301775148,
+        "tau": 0.5
+      },
+      {
+        "coverage": 0.9392523364485982,
+        "k": 1,
+        "launches": 169,
+        "median_gain_2000ms": 0.15620625122103288,
+        "median_gain_500ms": 0.18424002827441005,
+        "min_overlap_ms": 50.0,
+        "precision": 0.7455621301775148,
+        "tau": 0.5
+      },
+      {
+        "coverage": 0.9392523364485982,
+        "k": 1,
+        "launches": 169,
+        "median_gain_2000ms": 0.15620625122103288,
+        "median_gain_500ms": 0.18424002827441005,
+        "min_overlap_ms": 100.0,
+        "precision": 0.7455621301775148,
+        "tau": 0.5
+      },
+      {
+        "coverage": 0.9392523364485982,
+        "k": 1,
+        "launches": 169,
+        "median_gain_2000ms": 0.15620625122103288,
+        "median_gain_500ms": 0.18424002827441005,
+        "min_overlap_ms": 200.0,
+        "precision": 0.7455621301775148,
+        "tau": 0.5
+      },
+      {
+        "coverage": 0.9532710280373832,
+        "k": 1,
+        "launches": 166,
+        "median_gain_2000ms": 0.13744936526150422,
+        "median_gain_500ms": 0.18424002827441005,
+        "min_overlap_ms": 0.0,
+        "precision": 0.7650602409638554,
+        "tau": 0.7
+      },
+      {
+        "coverage": 0.9532710280373832,
+        "k": 1,
+        "launches": 166,
+        "median_gain_2000ms": 0.13744936526150422,
+        "median_gain_500ms": 0.18424002827441005,
+        "min_overlap_ms": 25.0,
+        "precision": 0.7650602409638554,
+        "tau": 0.7
+      },
+      {
+        "coverage": 0.9532710280373832,
+        "k": 1,
+        "launches": 166,
+        "median_gain_2000ms": 0.13744936526150422,
+        "median_gain_500ms": 0.18424002827441005,
+        "min_overlap_ms": 50.0,
+        "precision": 0.7650602409638554,
+        "tau": 0.7
+      },
+      {
+        "coverage": 0.9532710280373832,
+        "k": 1,
+        "launches": 166,
+        "median_gain_2000ms": 0.13744936526150422,
+        "median_gain_500ms": 0.18424002827441005,
+        "min_overlap_ms": 100.0,
+        "precision": 0.7650602409638554,
+        "tau": 0.7
+      },
+      {
+        "coverage": 0.9532710280373832,
+        "k": 1,
+        "launches": 166,
+        "median_gain_2000ms": 0.13744936526150422,
+        "median_gain_500ms": 0.18424002827441005,
+        "min_overlap_ms": 200.0,
+        "precision": 0.7650602409638554,
+        "tau": 0.7
+      },
+      {
+        "coverage": 0.9439252336448598,
+        "k": 1,
+        "launches": 165,
+        "median_gain_2000ms": 0.12100864696948563,
+        "median_gain_500ms": 0.18374037568497342,
+        "min_overlap_ms": 0.0,
+        "precision": 0.7636363636363637,
+        "tau": 0.8
+      },
+      {
+        "coverage": 0.9439252336448598,
+        "k": 1,
+        "launches": 165,
+        "median_gain_2000ms": 0.12100864696948563,
+        "median_gain_500ms": 0.18374037568497342,
+        "min_overlap_ms": 25.0,
+        "precision": 0.7636363636363637,
+        "tau": 0.8
+      },
+      {
+        "coverage": 0.9439252336448598,
+        "k": 1,
+        "launches": 165,
+        "median_gain_2000ms": 0.12100864696948563,
+        "median_gain_500ms": 0.18374037568497342,
+        "min_overlap_ms": 50.0,
+        "precision": 0.7636363636363637,
+        "tau": 0.8
+      },
+      {
+        "coverage": 0.9439252336448598,
+        "k": 1,
+        "launches": 165,
+        "median_gain_2000ms": 0.12100864696948563,
+        "median_gain_500ms": 0.18374037568497342,
+        "min_overlap_ms": 100.0,
+        "precision": 0.7636363636363637,
+        "tau": 0.8
+      },
+      {
+        "coverage": 0.9439252336448598,
+        "k": 1,
+        "launches": 165,
+        "median_gain_2000ms": 0.12100864696948563,
+        "median_gain_500ms": 0.18374037568497342,
+        "min_overlap_ms": 200.0,
+        "precision": 0.7636363636363637,
+        "tau": 0.8
+      },
+      {
+        "coverage": 0.9439252336448598,
+        "k": 1,
+        "launches": 164,
+        "median_gain_2000ms": 0.11788211219610749,
+        "median_gain_500ms": 0.18350412663955248,
+        "min_overlap_ms": 0.0,
+        "precision": 0.7682926829268293,
+        "tau": 0.9
+      },
+      {
+        "coverage": 0.9439252336448598,
+        "k": 1,
+        "launches": 164,
+        "median_gain_2000ms": 0.11788211219610749,
+        "median_gain_500ms": 0.18350412663955248,
+        "min_overlap_ms": 25.0,
+        "precision": 0.7682926829268293,
+        "tau": 0.9
+      },
+      {
+        "coverage": 0.9439252336448598,
+        "k": 1,
+        "launches": 164,
+        "median_gain_2000ms": 0.11788211219610749,
+        "median_gain_500ms": 0.18350412663955248,
+        "min_overlap_ms": 50.0,
+        "precision": 0.7682926829268293,
+        "tau": 0.9
+      },
+      {
+        "coverage": 0.9439252336448598,
+        "k": 1,
+        "launches": 164,
+        "median_gain_2000ms": 0.11788211219610749,
+        "median_gain_500ms": 0.18350412663955248,
+        "min_overlap_ms": 100.0,
+        "precision": 0.7682926829268293,
+        "tau": 0.9
+      },
+      {
+        "coverage": 0.9439252336448598,
+        "k": 1,
+        "launches": 164,
+        "median_gain_2000ms": 0.11788211219610749,
+        "median_gain_500ms": 0.18350412663955248,
+        "min_overlap_ms": 200.0,
+        "precision": 0.7682926829268293,
+        "tau": 0.9
+      },
+      {
+        "coverage": 0.9439252336448598,
+        "k": 1,
+        "launches": 164,
+        "median_gain_2000ms": 0.11457377154238096,
+        "median_gain_500ms": 0.18202336048471246,
+        "min_overlap_ms": 0.0,
+        "precision": 0.7682926829268293,
+        "tau": 0.95
+      },
+      {
+        "coverage": 0.9439252336448598,
+        "k": 1,
+        "launches": 164,
+        "median_gain_2000ms": 0.11457377154238096,
+        "median_gain_500ms": 0.18202336048471246,
+        "min_overlap_ms": 25.0,
+        "precision": 0.7682926829268293,
+        "tau": 0.95
+      },
+      {
+        "coverage": 0.9439252336448598,
+        "k": 1,
+        "launches": 164,
+        "median_gain_2000ms": 0.11457377154238096,
+        "median_gain_500ms": 0.18202336048471246,
+        "min_overlap_ms": 50.0,
+        "precision": 0.7682926829268293,
+        "tau": 0.95
+      },
+      {
+        "coverage": 0.9439252336448598,
+        "k": 1,
+        "launches": 164,
+        "median_gain_2000ms": 0.11457377154238096,
+        "median_gain_500ms": 0.18202336048471246,
+        "min_overlap_ms": 100.0,
+        "precision": 0.7682926829268293,
+        "tau": 0.95
+      },
+      {
+        "coverage": 0.9439252336448598,
+        "k": 1,
+        "launches": 164,
+        "median_gain_2000ms": 0.11457377154238096,
+        "median_gain_500ms": 0.18202336048471246,
+        "min_overlap_ms": 200.0,
+        "precision": 0.7682926829268293,
+        "tau": 0.95
+      },
+      {
+        "coverage": 0.9299065420560748,
+        "k": 1,
+        "launches": 163,
+        "median_gain_2000ms": 0.11331477203318688,
+        "median_gain_500ms": 0.17992694413607407,
+        "min_overlap_ms": 0.0,
+        "precision": 0.7668711656441718,
+        "tau": 0.98
+      },
+      {
+        "coverage": 0.9299065420560748,
+        "k": 1,
+        "launches": 163,
+        "median_gain_2000ms": 0.11331477203318688,
+        "median_gain_500ms": 0.17992694413607407,
+        "min_overlap_ms": 25.0,
+        "precision": 0.7668711656441718,
+        "tau": 0.98
+      },
+      {
+        "coverage": 0.9299065420560748,
+        "k": 1,
+        "launches": 163,
+        "median_gain_2000ms": 0.11331477203318688,
+        "median_gain_500ms": 0.17992694413607407,
+        "min_overlap_ms": 50.0,
+        "precision": 0.7668711656441718,
+        "tau": 0.98
+      },
+      {
+        "coverage": 0.9299065420560748,
+        "k": 1,
+        "launches": 163,
+        "median_gain_2000ms": 0.11331477203318688,
+        "median_gain_500ms": 0.17992694413607407,
+        "min_overlap_ms": 100.0,
+        "precision": 0.7668711656441718,
+        "tau": 0.98
+      },
+      {
+        "coverage": 0.9299065420560748,
+        "k": 1,
+        "launches": 163,
+        "median_gain_2000ms": 0.11331477203318688,
+        "median_gain_500ms": 0.17992694413607407,
+        "min_overlap_ms": 200.0,
+        "precision": 0.7668711656441718,
+        "tau": 0.98
+      },
+      {
+        "coverage": 0.9299065420560748,
+        "k": 1,
+        "launches": 162,
+        "median_gain_2000ms": 0.11221217733332073,
+        "median_gain_500ms": 0.17577552419397685,
+        "min_overlap_ms": 0.0,
+        "precision": 0.7716049382716049,
+        "tau": 0.99
+      },
+      {
+        "coverage": 0.9299065420560748,
+        "k": 1,
+        "launches": 162,
+        "median_gain_2000ms": 0.11221217733332073,
+        "median_gain_500ms": 0.17577552419397685,
+        "min_overlap_ms": 25.0,
+        "precision": 0.7716049382716049,
+        "tau": 0.99
+      },
+      {
+        "coverage": 0.9299065420560748,
+        "k": 1,
+        "launches": 162,
+        "median_gain_2000ms": 0.11221217733332073,
+        "median_gain_500ms": 0.17577552419397685,
+        "min_overlap_ms": 50.0,
+        "precision": 0.7716049382716049,
+        "tau": 0.99
+      },
+      {
+        "coverage": 0.9299065420560748,
+        "k": 1,
+        "launches": 162,
+        "median_gain_2000ms": 0.11221217733332073,
+        "median_gain_500ms": 0.17577552419397685,
+        "min_overlap_ms": 100.0,
+        "precision": 0.7716049382716049,
+        "tau": 0.99
+      },
+      {
+        "coverage": 0.9299065420560748,
+        "k": 1,
+        "launches": 162,
+        "median_gain_2000ms": 0.11221217733332073,
+        "median_gain_500ms": 0.17577552419397685,
+        "min_overlap_ms": 200.0,
+        "precision": 0.7716049382716049,
+        "tau": 0.99
+      },
+      {
+        "coverage": 0.9532710280373832,
+        "k": 2,
+        "launches": 165,
+        "median_gain_2000ms": 0.10326158720643283,
+        "median_gain_500ms": 0.14548462014576158,
+        "min_overlap_ms": 0.0,
+        "precision": 0.7696969696969697,
+        "tau": 0.0
+      },
+      {
+        "coverage": 0.9532710280373832,
+        "k": 2,
+        "launches": 165,
+        "median_gain_2000ms": 0.10326158720643283,
+        "median_gain_500ms": 0.14548462014576158,
+        "min_overlap_ms": 25.0,
+        "precision": 0.7696969696969697,
+        "tau": 0.0
+      },
+      {
+        "coverage": 0.9532710280373832,
+        "k": 2,
+        "launches": 165,
+        "median_gain_2000ms": 0.10326158720643283,
+        "median_gain_500ms": 0.14548462014576158,
+        "min_overlap_ms": 50.0,
+        "precision": 0.7696969696969697,
+        "tau": 0.0
+      },
+      {
+        "coverage": 0.9532710280373832,
+        "k": 2,
+        "launches": 165,
+        "median_gain_2000ms": 0.10326158720643283,
+        "median_gain_500ms": 0.14548462014576158,
+        "min_overlap_ms": 100.0,
+        "precision": 0.7696969696969697,
+        "tau": 0.0
+      },
+      {
+        "coverage": 0.9532710280373832,
+        "k": 2,
+        "launches": 165,
+        "median_gain_2000ms": 0.10326158720643283,
+        "median_gain_500ms": 0.14548462014576158,
+        "min_overlap_ms": 200.0,
+        "precision": 0.7696969696969697,
+        "tau": 0.0
+      },
+      {
+        "coverage": 0.9532710280373832,
+        "k": 2,
+        "launches": 165,
+        "median_gain_2000ms": 0.10326158720643283,
+        "median_gain_500ms": 0.14548462014576158,
+        "min_overlap_ms": 0.0,
+        "precision": 0.7696969696969697,
+        "tau": 0.5
+      },
+      {
+        "coverage": 0.9532710280373832,
+        "k": 2,
+        "launches": 165,
+        "median_gain_2000ms": 0.10326158720643283,
+        "median_gain_500ms": 0.14548462014576158,
+        "min_overlap_ms": 25.0,
+        "precision": 0.7696969696969697,
+        "tau": 0.5
+      },
+      {
+        "coverage": 0.9532710280373832,
+        "k": 2,
+        "launches": 165,
+        "median_gain_2000ms": 0.10326158720643283,
+        "median_gain_500ms": 0.14548462014576158,
+        "min_overlap_ms": 50.0,
+        "precision": 0.7696969696969697,
+        "tau": 0.5
+      },
+      {
+        "coverage": 0.9532710280373832,
+        "k": 2,
+        "launches": 165,
+        "median_gain_2000ms": 0.10326158720643283,
+        "median_gain_500ms": 0.14548462014576158,
+        "min_overlap_ms": 100.0,
+        "precision": 0.7696969696969697,
+        "tau": 0.5
+      },
+      {
+        "coverage": 0.9532710280373832,
+        "k": 2,
+        "launches": 165,
+        "median_gain_2000ms": 0.10326158720643283,
+        "median_gain_500ms": 0.14548462014576158,
+        "min_overlap_ms": 200.0,
+        "precision": 0.7696969696969697,
+        "tau": 0.5
+      },
+      {
+        "coverage": 0.9345794392523364,
+        "k": 2,
+        "launches": 163,
+        "median_gain_2000ms": 0.10326158720643283,
+        "median_gain_500ms": 0.14548462014576158,
+        "min_overlap_ms": 0.0,
+        "precision": 0.7668711656441718,
+        "tau": 0.7
+      },
+      {
+        "coverage": 0.9345794392523364,
+        "k": 2,
+        "launches": 163,
+        "median_gain_2000ms": 0.10326158720643283,
+        "median_gain_500ms": 0.14548462014576158,
+        "min_overlap_ms": 25.0,
+        "precision": 0.7668711656441718,
+        "tau": 0.7
+      },
+      {
+        "coverage": 0.9345794392523364,
+        "k": 2,
+        "launches": 163,
+        "median_gain_2000ms": 0.10326158720643283,
+        "median_gain_500ms": 0.14548462014576158,
+        "min_overlap_ms": 50.0,
+        "precision": 0.7668711656441718,
+        "tau": 0.7
+      },
+      {
+        "coverage": 0.9345794392523364,
+        "k": 2,
+        "launches": 163,
+        "median_gain_2000ms": 0.10326158720643283,
+        "median_gain_500ms": 0.14548462014576158,
+        "min_overlap_ms": 100.0,
+        "precision": 0.7668711656441718,
+        "tau": 0.7
+      },
+      {
+        "coverage": 0.9345794392523364,
+        "k": 2,
+        "launches": 163,
+        "median_gain_2000ms": 0.10326158720643283,
+        "median_gain_500ms": 0.14548462014576158,
+        "min_overlap_ms": 200.0,
+        "precision": 0.7668711656441718,
+        "tau": 0.7
+      },
+      {
+        "coverage": 0.9299065420560748,
+        "k": 2,
+        "launches": 161,
+        "median_gain_2000ms": 0.10326158720643283,
+        "median_gain_500ms": 0.14548462014576158,
+        "min_overlap_ms": 0.0,
+        "precision": 0.7701863354037267,
+        "tau": 0.8
+      },
+      {
+        "coverage": 0.9299065420560748,
+        "k": 2,
+        "launches": 161,
+        "median_gain_2000ms": 0.10326158720643283,
+        "median_gain_500ms": 0.14548462014576158,
+        "min_overlap_ms": 25.0,
+        "precision": 0.7701863354037267,
+        "tau": 0.8
+      },
+      {
+        "coverage": 0.9299065420560748,
+        "k": 2,
+        "launches": 161,
+        "median_gain_2000ms": 0.10326158720643283,
+        "median_gain_500ms": 0.14548462014576158,
+        "min_overlap_ms": 50.0,
+        "precision": 0.7701863354037267,
+        "tau": 0.8
+      },
+      {
+        "coverage": 0.9299065420560748,
+        "k": 2,
+        "launches": 161,
+        "median_gain_2000ms": 0.10326158720643283,
+        "median_gain_500ms": 0.14548462014576158,
+        "min_overlap_ms": 100.0,
+        "precision": 0.7701863354037267,
+        "tau": 0.8
+      },
+      {
+        "coverage": 0.9299065420560748,
+        "k": 2,
+        "launches": 161,
+        "median_gain_2000ms": 0.10326158720643283,
+        "median_gain_500ms": 0.14548462014576158,
+        "min_overlap_ms": 200.0,
+        "precision": 0.7701863354037267,
+        "tau": 0.8
+      },
+      {
+        "coverage": 0.9299065420560748,
+        "k": 2,
+        "launches": 161,
+        "median_gain_2000ms": 0.10326158720643283,
+        "median_gain_500ms": 0.14548462014576158,
+        "min_overlap_ms": 0.0,
+        "precision": 0.7701863354037267,
+        "tau": 0.9
+      },
+      {
+        "coverage": 0.9299065420560748,
+        "k": 2,
+        "launches": 161,
+        "median_gain_2000ms": 0.10326158720643283,
+        "median_gain_500ms": 0.14548462014576158,
+        "min_overlap_ms": 25.0,
+        "precision": 0.7701863354037267,
+        "tau": 0.9
+      },
+      {
+        "coverage": 0.9299065420560748,
+        "k": 2,
+        "launches": 161,
+        "median_gain_2000ms": 0.10326158720643283,
+        "median_gain_500ms": 0.14548462014576158,
+        "min_overlap_ms": 50.0,
+        "precision": 0.7701863354037267,
+        "tau": 0.9
+      },
+      {
+        "coverage": 0.9299065420560748,
+        "k": 2,
+        "launches": 161,
+        "median_gain_2000ms": 0.10326158720643283,
+        "median_gain_500ms": 0.14548462014576158,
+        "min_overlap_ms": 100.0,
+        "precision": 0.7701863354037267,
+        "tau": 0.9
+      },
+      {
+        "coverage": 0.9299065420560748,
+        "k": 2,
+        "launches": 161,
+        "median_gain_2000ms": 0.10326158720643283,
+        "median_gain_500ms": 0.14548462014576158,
+        "min_overlap_ms": 200.0,
+        "precision": 0.7701863354037267,
+        "tau": 0.9
+      },
+      {
+        "coverage": 0.9112149532710281,
+        "k": 2,
+        "launches": 159,
+        "median_gain_2000ms": 0.10326158720643283,
+        "median_gain_500ms": 0.14548462014576158,
+        "min_overlap_ms": 0.0,
+        "precision": 0.7672955974842768,
+        "tau": 0.95
+      },
+      {
+        "coverage": 0.9112149532710281,
+        "k": 2,
+        "launches": 159,
+        "median_gain_2000ms": 0.10326158720643283,
+        "median_gain_500ms": 0.14548462014576158,
+        "min_overlap_ms": 25.0,
+        "precision": 0.7672955974842768,
+        "tau": 0.95
+      },
+      {
+        "coverage": 0.9112149532710281,
+        "k": 2,
+        "launches": 159,
+        "median_gain_2000ms": 0.10326158720643283,
+        "median_gain_500ms": 0.14548462014576158,
+        "min_overlap_ms": 50.0,
+        "precision": 0.7672955974842768,
+        "tau": 0.95
+      },
+      {
+        "coverage": 0.9112149532710281,
+        "k": 2,
+        "launches": 159,
+        "median_gain_2000ms": 0.10326158720643283,
+        "median_gain_500ms": 0.14548462014576158,
+        "min_overlap_ms": 100.0,
+        "precision": 0.7672955974842768,
+        "tau": 0.95
+      },
+      {
+        "coverage": 0.9112149532710281,
+        "k": 2,
+        "launches": 159,
+        "median_gain_2000ms": 0.10326158720643283,
+        "median_gain_500ms": 0.14548462014576158,
+        "min_overlap_ms": 200.0,
+        "precision": 0.7672955974842768,
+        "tau": 0.95
+      },
+      {
+        "coverage": 0.9112149532710281,
+        "k": 2,
+        "launches": 159,
+        "median_gain_2000ms": 0.10326158720643283,
+        "median_gain_500ms": 0.14548462014576158,
+        "min_overlap_ms": 0.0,
+        "precision": 0.7672955974842768,
+        "tau": 0.98
+      },
+      {
+        "coverage": 0.9112149532710281,
+        "k": 2,
+        "launches": 159,
+        "median_gain_2000ms": 0.10326158720643283,
+        "median_gain_500ms": 0.14548462014576158,
+        "min_overlap_ms": 25.0,
+        "precision": 0.7672955974842768,
+        "tau": 0.98
+      },
+      {
+        "coverage": 0.9112149532710281,
+        "k": 2,
+        "launches": 159,
+        "median_gain_2000ms": 0.10326158720643283,
+        "median_gain_500ms": 0.14548462014576158,
+        "min_overlap_ms": 50.0,
+        "precision": 0.7672955974842768,
+        "tau": 0.98
+      },
+      {
+        "coverage": 0.9112149532710281,
+        "k": 2,
+        "launches": 159,
+        "median_gain_2000ms": 0.10326158720643283,
+        "median_gain_500ms": 0.14548462014576158,
+        "min_overlap_ms": 100.0,
+        "precision": 0.7672955974842768,
+        "tau": 0.98
+      },
+      {
+        "coverage": 0.9112149532710281,
+        "k": 2,
+        "launches": 159,
+        "median_gain_2000ms": 0.10326158720643283,
+        "median_gain_500ms": 0.14548462014576158,
+        "min_overlap_ms": 200.0,
+        "precision": 0.7672955974842768,
+        "tau": 0.98
+      },
+      {
+        "coverage": 0.9112149532710281,
+        "k": 2,
+        "launches": 158,
+        "median_gain_2000ms": 0.10179720140809959,
+        "median_gain_500ms": 0.13789449928697667,
+        "min_overlap_ms": 0.0,
+        "precision": 0.7721518987341772,
+        "tau": 0.99
+      },
+      {
+        "coverage": 0.9112149532710281,
+        "k": 2,
+        "launches": 158,
+        "median_gain_2000ms": 0.10179720140809959,
+        "median_gain_500ms": 0.13789449928697667,
+        "min_overlap_ms": 25.0,
+        "precision": 0.7721518987341772,
+        "tau": 0.99
+      },
+      {
+        "coverage": 0.9112149532710281,
+        "k": 2,
+        "launches": 158,
+        "median_gain_2000ms": 0.10179720140809959,
+        "median_gain_500ms": 0.13789449928697667,
+        "min_overlap_ms": 50.0,
+        "precision": 0.7721518987341772,
+        "tau": 0.99
+      },
+      {
+        "coverage": 0.9112149532710281,
+        "k": 2,
+        "launches": 158,
+        "median_gain_2000ms": 0.10179720140809959,
+        "median_gain_500ms": 0.13789449928697667,
+        "min_overlap_ms": 100.0,
+        "precision": 0.7721518987341772,
+        "tau": 0.99
+      },
+      {
+        "coverage": 0.9112149532710281,
+        "k": 2,
+        "launches": 158,
+        "median_gain_2000ms": 0.10179720140809959,
+        "median_gain_500ms": 0.13789449928697667,
+        "min_overlap_ms": 200.0,
+        "precision": 0.7721518987341772,
+        "tau": 0.99
+      },
+      {
+        "coverage": 0.8738317757009346,
+        "k": 3,
+        "launches": 152,
+        "median_gain_2000ms": 0.04933998318029276,
+        "median_gain_500ms": 0.07625273760380122,
+        "min_overlap_ms": 0.0,
+        "precision": 0.756578947368421,
+        "tau": 0.0
+      },
+      {
+        "coverage": 0.8738317757009346,
+        "k": 3,
+        "launches": 152,
+        "median_gain_2000ms": 0.04933998318029276,
+        "median_gain_500ms": 0.07625273760380122,
+        "min_overlap_ms": 25.0,
+        "precision": 0.756578947368421,
+        "tau": 0.0
+      },
+      {
+        "coverage": 0.8738317757009346,
+        "k": 3,
+        "launches": 152,
+        "median_gain_2000ms": 0.04933998318029276,
+        "median_gain_500ms": 0.07625273760380122,
+        "min_overlap_ms": 50.0,
+        "precision": 0.756578947368421,
+        "tau": 0.0
+      },
+      {
+        "coverage": 0.8738317757009346,
+        "k": 3,
+        "launches": 152,
+        "median_gain_2000ms": 0.04933998318029276,
+        "median_gain_500ms": 0.07625273760380122,
+        "min_overlap_ms": 100.0,
+        "precision": 0.756578947368421,
+        "tau": 0.0
+      },
+      {
+        "coverage": 0.8738317757009346,
+        "k": 3,
+        "launches": 152,
+        "median_gain_2000ms": 0.04933998318029276,
+        "median_gain_500ms": 0.07625273760380122,
+        "min_overlap_ms": 200.0,
+        "precision": 0.756578947368421,
+        "tau": 0.0
+      },
+      {
+        "coverage": 0.8738317757009346,
+        "k": 3,
+        "launches": 152,
+        "median_gain_2000ms": 0.04933998318029276,
+        "median_gain_500ms": 0.07625273760380122,
+        "min_overlap_ms": 0.0,
+        "precision": 0.756578947368421,
+        "tau": 0.5
+      },
+      {
+        "coverage": 0.8738317757009346,
+        "k": 3,
+        "launches": 152,
+        "median_gain_2000ms": 0.04933998318029276,
+        "median_gain_500ms": 0.07625273760380122,
+        "min_overlap_ms": 25.0,
+        "precision": 0.756578947368421,
+        "tau": 0.5
+      },
+      {
+        "coverage": 0.8738317757009346,
+        "k": 3,
+        "launches": 152,
+        "median_gain_2000ms": 0.04933998318029276,
+        "median_gain_500ms": 0.07625273760380122,
+        "min_overlap_ms": 50.0,
+        "precision": 0.756578947368421,
+        "tau": 0.5
+      },
+      {
+        "coverage": 0.8738317757009346,
+        "k": 3,
+        "launches": 152,
+        "median_gain_2000ms": 0.04933998318029276,
+        "median_gain_500ms": 0.07625273760380122,
+        "min_overlap_ms": 100.0,
+        "precision": 0.756578947368421,
+        "tau": 0.5
+      },
+      {
+        "coverage": 0.8738317757009346,
+        "k": 3,
+        "launches": 152,
+        "median_gain_2000ms": 0.04933998318029276,
+        "median_gain_500ms": 0.07625273760380122,
+        "min_overlap_ms": 200.0,
+        "precision": 0.756578947368421,
+        "tau": 0.5
+      },
+      {
+        "coverage": 0.8551401869158879,
+        "k": 3,
+        "launches": 148,
+        "median_gain_2000ms": 0.04896499657791973,
+        "median_gain_500ms": 0.06093862073972652,
+        "min_overlap_ms": 0.0,
+        "precision": 0.7567567567567568,
+        "tau": 0.7
+      },
+      {
+        "coverage": 0.8551401869158879,
+        "k": 3,
+        "launches": 148,
+        "median_gain_2000ms": 0.04896499657791973,
+        "median_gain_500ms": 0.06093862073972652,
+        "min_overlap_ms": 25.0,
+        "precision": 0.7567567567567568,
+        "tau": 0.7
+      },
+      {
+        "coverage": 0.8551401869158879,
+        "k": 3,
+        "launches": 148,
+        "median_gain_2000ms": 0.04896499657791973,
+        "median_gain_500ms": 0.06093862073972652,
+        "min_overlap_ms": 50.0,
+        "precision": 0.7567567567567568,
+        "tau": 0.7
+      },
+      {
+        "coverage": 0.8551401869158879,
+        "k": 3,
+        "launches": 148,
+        "median_gain_2000ms": 0.04896499657791973,
+        "median_gain_500ms": 0.06093862073972652,
+        "min_overlap_ms": 100.0,
+        "precision": 0.7567567567567568,
+        "tau": 0.7
+      },
+      {
+        "coverage": 0.8551401869158879,
+        "k": 3,
+        "launches": 148,
+        "median_gain_2000ms": 0.04896499657791973,
+        "median_gain_500ms": 0.06093862073972652,
+        "min_overlap_ms": 200.0,
+        "precision": 0.7567567567567568,
+        "tau": 0.7
+      },
+      {
+        "coverage": 0.8411214953271028,
+        "k": 3,
+        "launches": 144,
+        "median_gain_2000ms": 0.02436425549187385,
+        "median_gain_500ms": 0.023170625023203877,
+        "min_overlap_ms": 0.0,
+        "precision": 0.7638888888888888,
+        "tau": 0.8
+      },
+      {
+        "coverage": 0.8411214953271028,
+        "k": 3,
+        "launches": 144,
+        "median_gain_2000ms": 0.02436425549187385,
+        "median_gain_500ms": 0.023170625023203877,
+        "min_overlap_ms": 25.0,
+        "precision": 0.7638888888888888,
+        "tau": 0.8
+      },
+      {
+        "coverage": 0.8411214953271028,
+        "k": 3,
+        "launches": 144,
+        "median_gain_2000ms": 0.02436425549187385,
+        "median_gain_500ms": 0.023170625023203877,
+        "min_overlap_ms": 50.0,
+        "precision": 0.7638888888888888,
+        "tau": 0.8
+      },
+      {
+        "coverage": 0.8411214953271028,
+        "k": 3,
+        "launches": 144,
+        "median_gain_2000ms": 0.02436425549187385,
+        "median_gain_500ms": 0.023170625023203877,
+        "min_overlap_ms": 100.0,
+        "precision": 0.7638888888888888,
+        "tau": 0.8
+      },
+      {
+        "coverage": 0.8411214953271028,
+        "k": 3,
+        "launches": 144,
+        "median_gain_2000ms": 0.02436425549187385,
+        "median_gain_500ms": 0.023170625023203877,
+        "min_overlap_ms": 200.0,
+        "precision": 0.7638888888888888,
+        "tau": 0.8
+      },
+      {
+        "coverage": 0.8364485981308412,
+        "k": 3,
+        "launches": 143,
+        "median_gain_2000ms": 0.0,
+        "median_gain_500ms": 0.0,
+        "min_overlap_ms": 0.0,
+        "precision": 0.7622377622377622,
+        "tau": 0.9
+      },
+      {
+        "coverage": 0.8364485981308412,
+        "k": 3,
+        "launches": 143,
+        "median_gain_2000ms": 0.0,
+        "median_gain_500ms": 0.0,
+        "min_overlap_ms": 25.0,
+        "precision": 0.7622377622377622,
+        "tau": 0.9
+      },
+      {
+        "coverage": 0.8364485981308412,
+        "k": 3,
+        "launches": 143,
+        "median_gain_2000ms": 0.0,
+        "median_gain_500ms": 0.0,
+        "min_overlap_ms": 50.0,
+        "precision": 0.7622377622377622,
+        "tau": 0.9
+      },
+      {
+        "coverage": 0.8364485981308412,
+        "k": 3,
+        "launches": 143,
+        "median_gain_2000ms": 0.0,
+        "median_gain_500ms": 0.0,
+        "min_overlap_ms": 100.0,
+        "precision": 0.7622377622377622,
+        "tau": 0.9
+      },
+      {
+        "coverage": 0.8364485981308412,
+        "k": 3,
+        "launches": 143,
+        "median_gain_2000ms": 0.0,
+        "median_gain_500ms": 0.0,
+        "min_overlap_ms": 200.0,
+        "precision": 0.7622377622377622,
+        "tau": 0.9
+      },
+      {
+        "coverage": 0.8177570093457944,
+        "k": 3,
+        "launches": 139,
+        "median_gain_2000ms": 0.0,
+        "median_gain_500ms": 0.0,
+        "min_overlap_ms": 0.0,
+        "precision": 0.762589928057554,
+        "tau": 0.95
+      },
+      {
+        "coverage": 0.8177570093457944,
+        "k": 3,
+        "launches": 139,
+        "median_gain_2000ms": 0.0,
+        "median_gain_500ms": 0.0,
+        "min_overlap_ms": 25.0,
+        "precision": 0.762589928057554,
+        "tau": 0.95
+      },
+      {
+        "coverage": 0.8177570093457944,
+        "k": 3,
+        "launches": 139,
+        "median_gain_2000ms": 0.0,
+        "median_gain_500ms": 0.0,
+        "min_overlap_ms": 50.0,
+        "precision": 0.762589928057554,
+        "tau": 0.95
+      },
+      {
+        "coverage": 0.8177570093457944,
+        "k": 3,
+        "launches": 139,
+        "median_gain_2000ms": 0.0,
+        "median_gain_500ms": 0.0,
+        "min_overlap_ms": 100.0,
+        "precision": 0.762589928057554,
+        "tau": 0.95
+      },
+      {
+        "coverage": 0.8177570093457944,
+        "k": 3,
+        "launches": 139,
+        "median_gain_2000ms": 0.0,
+        "median_gain_500ms": 0.0,
+        "min_overlap_ms": 200.0,
+        "precision": 0.762589928057554,
+        "tau": 0.95
+      },
+      {
+        "coverage": 0.8037383177570093,
+        "k": 3,
+        "launches": 137,
+        "median_gain_2000ms": 0.0,
+        "median_gain_500ms": 0.0,
+        "min_overlap_ms": 0.0,
+        "precision": 0.7591240875912408,
+        "tau": 0.98
+      },
+      {
+        "coverage": 0.8037383177570093,
+        "k": 3,
+        "launches": 137,
+        "median_gain_2000ms": 0.0,
+        "median_gain_500ms": 0.0,
+        "min_overlap_ms": 25.0,
+        "precision": 0.7591240875912408,
+        "tau": 0.98
+      },
+      {
+        "coverage": 0.8037383177570093,
+        "k": 3,
+        "launches": 137,
+        "median_gain_2000ms": 0.0,
+        "median_gain_500ms": 0.0,
+        "min_overlap_ms": 50.0,
+        "precision": 0.7591240875912408,
+        "tau": 0.98
+      },
+      {
+        "coverage": 0.8037383177570093,
+        "k": 3,
+        "launches": 137,
+        "median_gain_2000ms": 0.0,
+        "median_gain_500ms": 0.0,
+        "min_overlap_ms": 100.0,
+        "precision": 0.7591240875912408,
+        "tau": 0.98
+      },
+      {
+        "coverage": 0.8037383177570093,
+        "k": 3,
+        "launches": 137,
+        "median_gain_2000ms": 0.0,
+        "median_gain_500ms": 0.0,
+        "min_overlap_ms": 200.0,
+        "precision": 0.7591240875912408,
+        "tau": 0.98
+      },
+      {
+        "coverage": 0.7616822429906542,
+        "k": 3,
+        "launches": 130,
+        "median_gain_2000ms": 0.0,
+        "median_gain_500ms": 0.0,
+        "min_overlap_ms": 0.0,
+        "precision": 0.7538461538461538,
+        "tau": 0.99
+      },
+      {
+        "coverage": 0.7616822429906542,
+        "k": 3,
+        "launches": 130,
+        "median_gain_2000ms": 0.0,
+        "median_gain_500ms": 0.0,
+        "min_overlap_ms": 25.0,
+        "precision": 0.7538461538461538,
+        "tau": 0.99
+      },
+      {
+        "coverage": 0.7616822429906542,
+        "k": 3,
+        "launches": 130,
+        "median_gain_2000ms": 0.0,
+        "median_gain_500ms": 0.0,
+        "min_overlap_ms": 50.0,
+        "precision": 0.7538461538461538,
+        "tau": 0.99
+      },
+      {
+        "coverage": 0.7616822429906542,
+        "k": 3,
+        "launches": 130,
+        "median_gain_2000ms": 0.0,
+        "median_gain_500ms": 0.0,
+        "min_overlap_ms": 100.0,
+        "precision": 0.7538461538461538,
+        "tau": 0.99
+      },
+      {
+        "coverage": 0.7616822429906542,
+        "k": 3,
+        "launches": 130,
+        "median_gain_2000ms": 0.0,
+        "median_gain_500ms": 0.0,
+        "min_overlap_ms": 200.0,
+        "precision": 0.7538461538461538,
+        "tau": 0.99
+      },
+      {
+        "coverage": 0.5700934579439252,
+        "k": 4,
+        "launches": 89,
+        "median_gain_2000ms": 0.0,
+        "median_gain_500ms": 0.0,
+        "min_overlap_ms": 0.0,
+        "precision": 0.7752808988764045,
+        "tau": 0.0
+      },
+      {
+        "coverage": 0.5700934579439252,
+        "k": 4,
+        "launches": 89,
+        "median_gain_2000ms": 0.0,
+        "median_gain_500ms": 0.0,
+        "min_overlap_ms": 25.0,
+        "precision": 0.7752808988764045,
+        "tau": 0.0
+      },
+      {
+        "coverage": 0.5700934579439252,
+        "k": 4,
+        "launches": 89,
+        "median_gain_2000ms": 0.0,
+        "median_gain_500ms": 0.0,
+        "min_overlap_ms": 50.0,
+        "precision": 0.7752808988764045,
+        "tau": 0.0
+      },
+      {
+        "coverage": 0.5700934579439252,
+        "k": 4,
+        "launches": 89,
+        "median_gain_2000ms": 0.0,
+        "median_gain_500ms": 0.0,
+        "min_overlap_ms": 100.0,
+        "precision": 0.7752808988764045,
+        "tau": 0.0
+      },
+      {
+        "coverage": 0.5700934579439252,
+        "k": 4,
+        "launches": 89,
+        "median_gain_2000ms": 0.0,
+        "median_gain_500ms": 0.0,
+        "min_overlap_ms": 200.0,
+        "precision": 0.7752808988764045,
+        "tau": 0.0
+      },
+      {
+        "coverage": 0.5607476635514018,
+        "k": 4,
+        "launches": 88,
+        "median_gain_2000ms": 0.0,
+        "median_gain_500ms": 0.0,
+        "min_overlap_ms": 0.0,
+        "precision": 0.7727272727272727,
+        "tau": 0.5
+      },
+      {
+        "coverage": 0.5607476635514018,
+        "k": 4,
+        "launches": 88,
+        "median_gain_2000ms": 0.0,
+        "median_gain_500ms": 0.0,
+        "min_overlap_ms": 25.0,
+        "precision": 0.7727272727272727,
+        "tau": 0.5
+      },
+      {
+        "coverage": 0.5607476635514018,
+        "k": 4,
+        "launches": 88,
+        "median_gain_2000ms": 0.0,
+        "median_gain_500ms": 0.0,
+        "min_overlap_ms": 50.0,
+        "precision": 0.7727272727272727,
+        "tau": 0.5
+      },
+      {
+        "coverage": 0.5607476635514018,
+        "k": 4,
+        "launches": 88,
+        "median_gain_2000ms": 0.0,
+        "median_gain_500ms": 0.0,
+        "min_overlap_ms": 100.0,
+        "precision": 0.7727272727272727,
+        "tau": 0.5
+      },
+      {
+        "coverage": 0.5607476635514018,
+        "k": 4,
+        "launches": 88,
+        "median_gain_2000ms": 0.0,
+        "median_gain_500ms": 0.0,
+        "min_overlap_ms": 200.0,
+        "precision": 0.7727272727272727,
+        "tau": 0.5
+      },
+      {
+        "coverage": 0.5373831775700935,
+        "k": 4,
+        "launches": 85,
+        "median_gain_2000ms": 0.0,
+        "median_gain_500ms": 0.0,
+        "min_overlap_ms": 0.0,
+        "precision": 0.7647058823529411,
+        "tau": 0.7
+      },
+      {
+        "coverage": 0.5373831775700935,
+        "k": 4,
+        "launches": 85,
+        "median_gain_2000ms": 0.0,
+        "median_gain_500ms": 0.0,
+        "min_overlap_ms": 25.0,
+        "precision": 0.7647058823529411,
+        "tau": 0.7
+      },
+      {
+        "coverage": 0.5373831775700935,
+        "k": 4,
+        "launches": 85,
+        "median_gain_2000ms": 0.0,
+        "median_gain_500ms": 0.0,
+        "min_overlap_ms": 50.0,
+        "precision": 0.7647058823529411,
+        "tau": 0.7
+      },
+      {
+        "coverage": 0.5373831775700935,
+        "k": 4,
+        "launches": 85,
+        "median_gain_2000ms": 0.0,
+        "median_gain_500ms": 0.0,
+        "min_overlap_ms": 100.0,
+        "precision": 0.7647058823529411,
+        "tau": 0.7
+      },
+      {
+        "coverage": 0.5373831775700935,
+        "k": 4,
+        "launches": 85,
+        "median_gain_2000ms": 0.0,
+        "median_gain_500ms": 0.0,
+        "min_overlap_ms": 200.0,
+        "precision": 0.7647058823529411,
+        "tau": 0.7
+      },
+      {
+        "coverage": 0.5373831775700935,
+        "k": 4,
+        "launches": 84,
+        "median_gain_2000ms": 0.0,
+        "median_gain_500ms": 0.0,
+        "min_overlap_ms": 0.0,
+        "precision": 0.7738095238095238,
+        "tau": 0.8
+      },
+      {
+        "coverage": 0.5373831775700935,
+        "k": 4,
+        "launches": 84,
+        "median_gain_2000ms": 0.0,
+        "median_gain_500ms": 0.0,
+        "min_overlap_ms": 25.0,
+        "precision": 0.7738095238095238,
+        "tau": 0.8
+      },
+      {
+        "coverage": 0.5373831775700935,
+        "k": 4,
+        "launches": 84,
+        "median_gain_2000ms": 0.0,
+        "median_gain_500ms": 0.0,
+        "min_overlap_ms": 50.0,
+        "precision": 0.7738095238095238,
+        "tau": 0.8
+      },
+      {
+        "coverage": 0.5373831775700935,
+        "k": 4,
+        "launches": 84,
+        "median_gain_2000ms": 0.0,
+        "median_gain_500ms": 0.0,
+        "min_overlap_ms": 100.0,
+        "precision": 0.7738095238095238,
+        "tau": 0.8
+      },
+      {
+        "coverage": 0.5373831775700935,
+        "k": 4,
+        "launches": 84,
+        "median_gain_2000ms": 0.0,
+        "median_gain_500ms": 0.0,
+        "min_overlap_ms": 200.0,
+        "precision": 0.7738095238095238,
+        "tau": 0.8
+      },
+      {
+        "coverage": 0.5327102803738317,
+        "k": 4,
+        "launches": 83,
+        "median_gain_2000ms": 0.0,
+        "median_gain_500ms": 0.0,
+        "min_overlap_ms": 0.0,
+        "precision": 0.7710843373493976,
+        "tau": 0.9
+      },
+      {
+        "coverage": 0.5327102803738317,
+        "k": 4,
+        "launches": 83,
+        "median_gain_2000ms": 0.0,
+        "median_gain_500ms": 0.0,
+        "min_overlap_ms": 25.0,
+        "precision": 0.7710843373493976,
+        "tau": 0.9
+      },
+      {
+        "coverage": 0.5327102803738317,
+        "k": 4,
+        "launches": 83,
+        "median_gain_2000ms": 0.0,
+        "median_gain_500ms": 0.0,
+        "min_overlap_ms": 50.0,
+        "precision": 0.7710843373493976,
+        "tau": 0.9
+      },
+      {
+        "coverage": 0.5327102803738317,
+        "k": 4,
+        "launches": 83,
+        "median_gain_2000ms": 0.0,
+        "median_gain_500ms": 0.0,
+        "min_overlap_ms": 100.0,
+        "precision": 0.7710843373493976,
+        "tau": 0.9
+      },
+      {
+        "coverage": 0.5327102803738317,
+        "k": 4,
+        "launches": 83,
+        "median_gain_2000ms": 0.0,
+        "median_gain_500ms": 0.0,
+        "min_overlap_ms": 200.0,
+        "precision": 0.7710843373493976,
+        "tau": 0.9
+      },
+      {
+        "coverage": 0.514018691588785,
+        "k": 4,
+        "launches": 81,
+        "median_gain_2000ms": 0.0,
+        "median_gain_500ms": 0.0,
+        "min_overlap_ms": 0.0,
+        "precision": 0.7654320987654321,
+        "tau": 0.95
+      },
+      {
+        "coverage": 0.514018691588785,
+        "k": 4,
+        "launches": 81,
+        "median_gain_2000ms": 0.0,
+        "median_gain_500ms": 0.0,
+        "min_overlap_ms": 25.0,
+        "precision": 0.7654320987654321,
+        "tau": 0.95
+      },
+      {
+        "coverage": 0.514018691588785,
+        "k": 4,
+        "launches": 81,
+        "median_gain_2000ms": 0.0,
+        "median_gain_500ms": 0.0,
+        "min_overlap_ms": 50.0,
+        "precision": 0.7654320987654321,
+        "tau": 0.95
+      },
+      {
+        "coverage": 0.514018691588785,
+        "k": 4,
+        "launches": 81,
+        "median_gain_2000ms": 0.0,
+        "median_gain_500ms": 0.0,
+        "min_overlap_ms": 100.0,
+        "precision": 0.7654320987654321,
+        "tau": 0.95
+      },
+      {
+        "coverage": 0.514018691588785,
+        "k": 4,
+        "launches": 81,
+        "median_gain_2000ms": 0.0,
+        "median_gain_500ms": 0.0,
+        "min_overlap_ms": 200.0,
+        "precision": 0.7654320987654321,
+        "tau": 0.95
+      },
+      {
+        "coverage": 0.49065420560747663,
+        "k": 4,
+        "launches": 77,
+        "median_gain_2000ms": 0.0,
+        "median_gain_500ms": 0.0,
+        "min_overlap_ms": 0.0,
+        "precision": 0.7532467532467533,
+        "tau": 0.98
+      },
+      {
+        "coverage": 0.49065420560747663,
+        "k": 4,
+        "launches": 77,
+        "median_gain_2000ms": 0.0,
+        "median_gain_500ms": 0.0,
+        "min_overlap_ms": 25.0,
+        "precision": 0.7532467532467533,
+        "tau": 0.98
+      },
+      {
+        "coverage": 0.49065420560747663,
+        "k": 4,
+        "launches": 77,
+        "median_gain_2000ms": 0.0,
+        "median_gain_500ms": 0.0,
+        "min_overlap_ms": 50.0,
+        "precision": 0.7532467532467533,
+        "tau": 0.98
+      },
+      {
+        "coverage": 0.49065420560747663,
+        "k": 4,
+        "launches": 77,
+        "median_gain_2000ms": 0.0,
+        "median_gain_500ms": 0.0,
+        "min_overlap_ms": 100.0,
+        "precision": 0.7532467532467533,
+        "tau": 0.98
+      },
+      {
+        "coverage": 0.49065420560747663,
+        "k": 4,
+        "launches": 77,
+        "median_gain_2000ms": 0.0,
+        "median_gain_500ms": 0.0,
+        "min_overlap_ms": 200.0,
+        "precision": 0.7532467532467533,
+        "tau": 0.98
+      },
+      {
+        "coverage": 0.48598130841121495,
+        "k": 4,
+        "launches": 75,
+        "median_gain_2000ms": 0.0,
+        "median_gain_500ms": 0.0,
+        "min_overlap_ms": 0.0,
+        "precision": 0.76,
+        "tau": 0.99
+      },
+      {
+        "coverage": 0.48598130841121495,
+        "k": 4,
+        "launches": 75,
+        "median_gain_2000ms": 0.0,
+        "median_gain_500ms": 0.0,
+        "min_overlap_ms": 25.0,
+        "precision": 0.76,
+        "tau": 0.99
+      },
+      {
+        "coverage": 0.48598130841121495,
+        "k": 4,
+        "launches": 75,
+        "median_gain_2000ms": 0.0,
+        "median_gain_500ms": 0.0,
+        "min_overlap_ms": 50.0,
+        "precision": 0.76,
+        "tau": 0.99
+      },
+      {
+        "coverage": 0.48598130841121495,
+        "k": 4,
+        "launches": 75,
+        "median_gain_2000ms": 0.0,
+        "median_gain_500ms": 0.0,
+        "min_overlap_ms": 100.0,
+        "precision": 0.76,
+        "tau": 0.99
+      },
+      {
+        "coverage": 0.48598130841121495,
+        "k": 4,
+        "launches": 75,
+        "median_gain_2000ms": 0.0,
+        "median_gain_500ms": 0.0,
+        "min_overlap_ms": 200.0,
+        "precision": 0.76,
+        "tau": 0.99
+      }
+    ],
+    "min_precision": 0.99,
+    "selected": {
+      "coverage": 0.9532710280373832,
+      "k": 1,
+      "launches": 166,
+      "median_gain_2000ms": 0.13744936526150422,
+      "median_gain_500ms": 0.18424002827441005,
+      "min_overlap_ms": 0.0,
+      "precision": 0.7650602409638554,
+      "tau": 0.7
+    },
+    "status": "precision_target_unreachable"
+  },
+  "trajectories": 100,
+  "unix_ns": 1788423577142024784
+}

@@ -1,0 +1,218 @@
+{
+  "arms": {
+    "diffusion_standard": {
+      "per_seed": {
+        "0": {
+          "aggregate_tokens_per_s": 47.58365752988211,
+          "n_empty_final_text": 1,
+          "n_trajectories": 100,
+          "seconds": {
+            "mean": 1.77602993101,
+            "p50": 1.7101298484999998
+          },
+          "seeds": [
+            0
+          ],
+          "shard": "experiments/raw/diffusion_standard/diffusion_standard-seed0.jsonl",
+          "shard_sha256": "20afef35148613e302d6da2a5da70e00c9f34573a782d278be1cd14451e5ad4d",
+          "tokens": {
+            "mean": 84.51,
+            "p50": 42.0
+          },
+          "tokens_per_s": {
+            "mean": 51.66652530463647,
+            "p50": 24.11787962665489
+          },
+          "total_seconds": 177.602993101,
+          "total_tokens": 8451
+        },
+        "1": {
+          "aggregate_tokens_per_s": 35.496826395235075,
+          "n_empty_final_text": 1,
+          "n_trajectories": 100,
+          "seconds": {
+            "mean": 1.9970799420399998,
+            "p50": 1.796289403
+          },
+          "seeds": [
+            1
+          ],
+          "shard": "experiments/raw/diffusion_standard/diffusion_standard-seed1.jsonl",
+          "shard_sha256": "e0196db1931bdf2dfd56f78b9dac4a8f08189753f635f66c91bdcbf89a752732",
+          "tokens": {
+            "mean": 70.89,
+            "p50": 39.0
+          },
+          "tokens_per_s": {
+            "mean": 35.495114997775424,
+            "p50": 21.849230693555114
+          },
+          "total_seconds": 199.707994204,
+          "total_tokens": 7089
+        },
+        "2": {
+          "aggregate_tokens_per_s": 24.290460971345535,
+          "n_empty_final_text": 0,
+          "n_trajectories": 100,
+          "seconds": {
+            "mean": 1.95179498882,
+            "p50": 1.7956127524999999
+          },
+          "seeds": [
+            2
+          ],
+          "shard": "experiments/raw/diffusion_standard/diffusion_standard-seed2.jsonl",
+          "shard_sha256": "6a61e48922c9f50be6bd770911fa67864de901c8a9ce528c728c6c9edfea274b",
+          "tokens": {
+            "mean": 47.41,
+            "p50": 35.0
+          },
+          "tokens_per_s": {
+            "mean": 24.77912206720782,
+            "p50": 20.069091011671453
+          },
+          "total_seconds": 195.179498882,
+          "total_tokens": 4741
+        }
+      },
+      "pooled": {
+        "aggregate_tokens_per_s": 35.4259162192878,
+        "n_empty_final_text": 2,
+        "n_trajectories": 300,
+        "seconds": {
+          "mean": 1.9083016206233332,
+          "p50": 1.7712376545
+        },
+        "tokens": {
+          "mean": 67.60333333333334,
+          "p50": 38.5
+        },
+        "tokens_per_s": {
+          "mean": 37.313587456539906,
+          "p50": 22.02373494311368
+        },
+        "total_seconds": 572.490486187,
+        "total_tokens": 20281
+      },
+      "serving": {
+        "canvas_length": "256",
+        "denoising_steps": null,
+        "denoising_steps_note": "not a server flag: the entropy_bound sampler decides step count at run time",
+        "diffusion_flags": [
+          "--hf-overrides \"$HF_OVERRIDES\"",
+          "--diffusion-config \"{\\\"canvas_length\\\": $CANVAS_LENGTH}\""
+        ],
+        "engine_seed": "12345",
+        "entropy_bound": "0.1",
+        "generation_config": "vllm",
+        "gpu_memory_utilization": "0.80",
+        "hf_overrides_effective": "{\"diffusion_sampler\":\"entropy_bound\",\"diffusion_entropy_bound\":0.1}",
+        "hf_overrides_template": "{\"diffusion_sampler\":\"entropy_bound\",\"diffusion_entropy_bound\":$ENTROPY_BOUND",
+        "image": "vllm/vllm-openai:gemma",
+        "image_digest": "vllm/vllm-openai@sha256:9c719fc0c869092c7d0533f8357d6985a38d5ff03b20ffb6a4620c2b4806dd4b",
+        "image_source": "patches/build/image-env.sh",
+        "max_model_len": "32768",
+        "max_num_seqs": "1",
+        "script": "scripts/serve_diffusiongemma.sh"
+      },
+      "shards": [
+        {
+          "n_trajectories": 100,
+          "seeds": [
+            0
+          ],
+          "sha256": "20afef35148613e302d6da2a5da70e00c9f34573a782d278be1cd14451e5ad4d",
+          "shard": "experiments/raw/diffusion_standard/diffusion_standard-seed0.jsonl"
+        },
+        {
+          "n_trajectories": 100,
+          "seeds": [
+            1
+          ],
+          "sha256": "e0196db1931bdf2dfd56f78b9dac4a8f08189753f635f66c91bdcbf89a752732",
+          "shard": "experiments/raw/diffusion_standard/diffusion_standard-seed1.jsonl"
+        },
+        {
+          "n_trajectories": 100,
+          "seeds": [
+            2
+          ],
+          "sha256": "6a61e48922c9f50be6bd770911fa67864de901c8a9ce528c728c6c9edfea274b",
+          "shard": "experiments/raw/diffusion_standard/diffusion_standard-seed2.jsonl"
+        }
+      ],
+      "tokenizer_dir": "~/.cache/huggingface/hub/models--google--diffusiongemma-26B-A4B-it/snapshots/f7f5b7f5fa82ffc52addd066915886d497f5517b",
+      "tokenizer_model_id": "google/diffusiongemma-26B-A4B-it"
+    },
+    "gemma4_ar": {
+      "per_seed": {
+        "0": {
+          "aggregate_tokens_per_s": 26.831193825963666,
+          "n_empty_final_text": 0,
+          "n_trajectories": 100,
+          "seconds": {
+            "mean": 3.8872664659100002,
+            "p50": 3.0880683925
+          },
+          "seeds": [
+            0
+          ],
+          "shard": "experiments/raw/gemma4_ar/gemma4_ar-seed0.jsonl",
+          "shard_sha256": "09f0929b4c2eddf5fce1710207b5c73928ea18ad4ebc03c91e16aa9ddcb7448d",
+          "tokens": {
+            "mean": 104.3,
+            "p50": 40.5
+          },
+          "tokens_per_s": {
+            "mean": 33.911759825390725,
+            "p50": 14.54474888219655
+          },
+          "total_seconds": 388.726646591,
+          "total_tokens": 10430
+        }
+      },
+      "pooled": {
+        "aggregate_tokens_per_s": 26.831193825963666,
+        "n_empty_final_text": 0,
+        "n_trajectories": 100,
+        "seconds": {
+          "mean": 3.8872664659100002,
+          "p50": 3.0880683925
+        },
+        "tokens": {
+          "mean": 104.3,
+          "p50": 40.5
+        },
+        "tokens_per_s": {
+          "mean": 33.911759825390725,
+          "p50": 14.54474888219655
+        },
+        "total_seconds": 388.726646591,
+        "total_tokens": 10430
+      },
+      "serving": {
+        "gpu_memory_utilization": "0.80",
+        "image": "vllm/vllm-openai:gemma",
+        "image_source": "script default (CRYSTALCALL_VLLM_IMAGE override)",
+        "max_model_len": "32768",
+        "max_num_seqs": "1",
+        "script": "scripts/serve_gemma4.sh"
+      },
+      "shards": [
+        {
+          "n_trajectories": 100,
+          "seeds": [
+            0
+          ],
+          "sha256": "09f0929b4c2eddf5fce1710207b5c73928ea18ad4ebc03c91e16aa9ddcb7448d",
+          "shard": "experiments/raw/gemma4_ar/gemma4_ar-seed0.jsonl"
+        }
+      ],
+      "tokenizer_dir": "~/.cache/huggingface/hub/models--google--gemma-4-26B-A4B-it/snapshots/4d7ae4984b7db7de8f8457170b3f1a419ee76d52",
+      "tokenizer_model_id": "google/gemma-4-26B-A4B-it"
+    }
+  },
+  "seconds_definition": "(response_done_ns - request_start_ns)/1e9 of the program-producing request, the same boundary as Trajectory.decode_ms (src/crystalcall/replay.py:136-137)",
+  "token_quantity": "retokenized_final_output_tokens",
+  "token_quantity_note": "tokens = len(tokenizer.encode(final_text, add_special_tokens=False)) under the arm's own tokenizer; this is a post-hoc re-tokenisation of the final text, NOT the engine's emitted-token count (the side channel records no emitted-token counter)."
+}

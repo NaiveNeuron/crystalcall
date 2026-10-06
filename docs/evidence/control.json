@@ -1,0 +1,63 @@
+{
+  "model": "diffusiongemma-26b-a4b-it",
+  "results": [
+    {
+      "prompt": "Name the capital of France in one word.",
+      "server_request_id": "chatcmpl-9d24865ef70c99cd",
+      "content": "Paris",
+      "reasoning": "",
+      "tool_calls": [],
+      "finish_reason": "stop",
+      "completion_tokens": 6,
+      "prompt_tokens": 18,
+      "latency_s": 0.6264769798144698
+    },
+    {
+      "prompt": "What is 17 times 3? Answer with the number only.",
+      "server_request_id": "chatcmpl-bbacf722fdb47d11",
+      "content": "51",
+      "reasoning": "",
+      "tool_calls": [],
+      "finish_reason": "stop",
+      "completion_tokens": 7,
+      "prompt_tokens": 24,
+      "latency_s": 0.7415972310118377
+    },
+    {
+      "prompt": "List three primary colours, comma separated.",
+      "server_request_id": "chatcmpl-9099e08057877d37",
+      "content": "Red, blue, blue",
+      "reasoning": "",
+      "tool_calls": [],
+      "finish_reason": "stop",
+      "completion_tokens": 10,
+      "prompt_tokens": 17,
+      "latency_s": 1.1386151709593832
+    },
+    {
+      "prompt": "Explain in detail, in at least 400 words, how a bicycle derailleur shifts gears, covering the cable, the parallelogram, the jockey wheels and the chain.",
+      "server_request_id": "chatcmpl-8853776bc954028c",
+      "content": "The bicycle derailleur is a marvel of mechanical engineering that translates a rider\u2019s manual input into the precise lateral movement of a chain. To understand how it shifts gears, one must look at the synergy between the cable tension, the mechanical parallelogram structure, the jockey wheels, and the physics of the chain itself.\n\n### The Cable: The Input of Force\nThe process begins at the handlebars with the gear shifter. When the rider clicks the lever, it pulls or releases tension on a steel inner cable. This cable runs along the frame of the bike inside a housing and attaches to the derailleur. \n\nWhen the rider shifts to a larger cog (an \"easy\" gear), the lever pulls the cable taut. This tension pulls the derailleur inward toward the wheel. Conversely, when shifting to a smaller cog (a \"hard\" gear), the lever releases tension, allowing a built-in spring inside the derailleur to pull the mechanism back outward. The cable acts as the primary messenger that initiates the entire mechanical sequence.\n\n### The Parallelogram: The Mechanical Guide\nThe heart of the derailleur is the parallelogram\u2014a frame made of four metal links connected by pivots. This design is critical because it ensures that as the derailleur moves laterally (side-to-side), the pulley wheels remain perfectly parallel to the cassette cogs. \n\nIf the derailleur moved on a simple swinging arm, it would tilt at an angle, causing the chain to bind or drop. Because of the parallelogram geometry, the entire unit moves in a relatively straight horizontal line across the gears. This mechanical precision ensures that the jockey wheels are always pushed directly against the chain at the correct angle to facilitate a clean transition.\n\n### The Jockey Wheels: Maintaining Tension and Direction\nAttached to the moving parallelogram are two small sprockets known as jockey wheels: the guide pulley and the tension pulley. These wheels serve two vital purposes. First, they maintain the path of the chain, preventing it from sagging and hitting the frame. Second, the tension pulley is attached to a spring-loaded arm. When the chain shifts to a smaller cog, the excess length of chain is created; the tension pulley moves downward to take up that slack. When shifting to a larger cog, the pulley moves upward, pulling the chain tight and providing the force necessary to \"climb\" the chain up teeth of the larger gear.\n\n### The Chain: The Element of the Shift\nThe actual shift occurs when the chain interacts with the teeth of the cogs. As the derailleur moves laterally via the parallelogram, the guide jockey wheel pushes the inner face of the chain. Because the chain is under tension, it cannot simply move sideways; instead, the teeth of the larger cog \"catch\" the chain and pull it upward. \n\nThis is a process of controlled friction. The chain is forced over the side of one cog and onto the next. Once the chain is fully seated on the new cog, the guide wheel continues to guide it smoothly, and the tension pulley ensures the chain remains taut. This entire sequence happens in milliseconds, where the cable provides the force, the parallelogram provides the alignment, the jockey wheels manage the tension, and the chain performs the physical change in gear ratio.",
+      "reasoning": "",
+      "tool_calls": [],
+      "finish_reason": "stop",
+      "completion_tokens": 659,
+      "prompt_tokens": 44,
+      "latency_s": 10.486609741812572
+    }
+  ],
+  "reproducible_indices": [
+    0,
+    1,
+    2
+  ],
+  "diverged_indices": [
+    3
+  ],
+  "source_provenance": {
+    "git_commit": "754066f176fb1bfa01257cd819d4cf1cf76d9970",
+    "sampler_sha256": "dccfcfaf707423b6edf53ccf87f530c3fcc171ee3411a407a27fc241664a32c2",
+    "trace_patch_sha256": "a9279d6a051bcae9487b59994542025c891b272e925232c4a275d7e1cb0e416e",
+    "emitter_sha256": "438a8f1ea0c3a6b93ba60da78b3bc4e6986ed86c4e8dbe10c0d043b8ba98f758"
+  }
+}

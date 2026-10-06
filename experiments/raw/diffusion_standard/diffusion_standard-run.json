@@ -1,0 +1,113 @@
+{
+  "arm": "diffusion_standard",
+  "claimed": 0,
+  "doctor_digest": "547bc22144f46c0ac6cf9c902346ae04e4f69e8595811eb56ebc8151d095cf09",
+  "failures": 0,
+  "frozen_policy": {
+    "gate": {
+      "confidence_mode": "min",
+      "k": 2,
+      "min_overlap_ms": 50.0,
+      "tau": 0.9
+    },
+    "path": "configs/frozen_policy.json",
+    "selected_on": "library defaults GatePolicy(name='full_gate'): k=2, tau=0.9, min_overlap_ms=50 (the values every reported replay used); pilot attempt 2 decided stop, so no pilot-selected file existed. Costs are zero so replay stays identical to the published numbers.",
+    "sha256": "2d094b84d25d772117e572f0317064f21e26382272a42bc69c8f355b007d816b",
+    "status": "applied"
+  },
+  "instrumentation": "parse",
+  "manifest": "experiments/manifests/dev.jsonl",
+  "manifest_sha256": "bcac80d20775dddbbf667b29e81a5c8765545b6f4ff19abdcbab10d36f4a4188",
+  "policy": {
+    "allowed_resources": [
+      "cpu",
+      "gpu",
+      "storage"
+    ],
+    "confidence_mode": "min",
+    "fixed_step": null,
+    "k": 2,
+    "max_inflight": 4,
+    "min_overlap_ms": 50.0,
+    "name": "full_gate",
+    "oracle": null,
+    "random_rate": null,
+    "tau": 0.9,
+    "use_acceptance": false,
+    "use_confidence": true,
+    "use_overlap": true,
+    "use_persistence": true,
+    "use_resource": true
+  },
+  "policy_fingerprint": "0b3622314e37ec76c7317ec06435af022a39a96f9e789f6745368495f30eca9d",
+  "profile_fingerprint": "984ad76b947db6664dd2c33e15007ae409e2990c9710ea18de1acc4002f31682",
+  "prompts": 100,
+  "runtime_costs": {
+    "contention_ms_per_launch": {},
+    "parse_ms_per_revision": 0.4633582572509458,
+    "schedule_ms_per_launch": 0.0,
+    "trace_ms_per_revision": 0.3558114577553594
+  },
+  "seeds": [
+    2
+  ],
+  "semantic_divergence": 0,
+  "shards": [
+    {
+      "bytes": 4848242,
+      "final_chain": "2fe51ad08da4792918e0f6e85650b700db9c505286011ec23e3e8a25d18e8b16",
+      "meta": {
+        "arm": "diffusion_standard",
+        "doctor_digest": "547bc22144f46c0ac6cf9c902346ae04e4f69e8595811eb56ebc8151d095cf09",
+        "frozen_policy": {
+          "gate": {
+            "confidence_mode": "min",
+            "k": 2,
+            "min_overlap_ms": 50.0,
+            "tau": 0.9
+          },
+          "path": "configs/frozen_policy.json",
+          "selected_on": "library defaults GatePolicy(name='full_gate'): k=2, tau=0.9, min_overlap_ms=50 (the values every reported replay used); pilot attempt 2 decided stop, so no pilot-selected file existed. Costs are zero so replay stays identical to the published numbers.",
+          "sha256": "2d094b84d25d772117e572f0317064f21e26382272a42bc69c8f355b007d816b",
+          "status": "applied"
+        },
+        "instrumentation": "parse",
+        "manifest": "experiments/manifests/dev.jsonl",
+        "manifest_sha256": "bcac80d20775dddbbf667b29e81a5c8765545b6f4ff19abdcbab10d36f4a4188",
+        "model": null,
+        "policy": {
+          "allowed_resources": [
+            "cpu",
+            "gpu",
+            "storage"
+          ],
+          "confidence_mode": "min",
+          "fixed_step": null,
+          "k": 2,
+          "max_inflight": 4,
+          "min_overlap_ms": 50.0,
+          "name": "full_gate",
+          "oracle": null,
+          "random_rate": null,
+          "tau": 0.9,
+          "use_acceptance": false,
+          "use_confidence": true,
+          "use_overlap": true,
+          "use_persistence": true,
+          "use_resource": true
+        },
+        "profile_fingerprint": "984ad76b947db6664dd2c33e15007ae409e2990c9710ea18de1acc4002f31682",
+        "seed": 2,
+        "tool_sleep_ms": 0.0
+      },
+      "path": "experiments/raw/diffusion_standard/diffusion_standard-seed2.jsonl",
+      "records": 1095,
+      "schema_version": "crystalcall-trace/1",
+      "sha256": "6a61e48922c9f50be6bd770911fa67864de901c8a9ce528c728c6c9edfea274b",
+      "shard": "diffusion_standard-seed2.jsonl.partial"
+    }
+  ],
+  "turns": 379,
+  "verification_error": 0,
+  "verified_match": 0
+}

@@ -1,0 +1,8 @@
+{
+  "note": "verbatim decoded predicted-clean canvas from experiments/raw/diffusion_standard (prompt multiple_133, canvas 0 step 1). The payload is Gemma native wire format, not JSON.",
+  "prompt_id": "multiple_133",
+  "canvas_id": 0,
+  "step": 1,
+  "decoded_text": "<|channel>thought\n<channel|><|tool_call>call:eval{code:<|\"|>balance = calculate_mutual_fund_balance(annual_yield=0.05, investment_amount=50000, years=3)\ndisplaydisplaydisplay)))languagelanguagelanguagepypy<|\"|><|\"|><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos><eos>",
+  "final_program": "balance = calculate_mutual_fund_balance(investment_amount=50000, annual_yield=0.05, years=3)\ndisplay({\"balance\": balance})"
+}

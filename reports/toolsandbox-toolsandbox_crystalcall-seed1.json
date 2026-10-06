@@ -1,0 +1,18 @@
+{
+  "arm": "toolsandbox_crystalcall",
+  "derived": [
+    "experiments/derived/toolsandbox_episodes.jsonl",
+    "experiments/derived/toolsandbox_turns.jsonl"
+  ],
+  "divergence_method": "one_generation_replayed_against_a_cloned_world",
+  "episodes": 64,
+  "failures": 0,
+  "schema_version": "crystalcall-toolsandbox/1",
+  "seed": 1,
+  "semantic_divergence": 0,
+  "shard": "experiments/sweeps/toolsandbox_stub/toolsandbox_crystalcall-seed1.jsonl",
+  "shard_records": 337,
+  "shard_sha256": "dcfbf2df134914768dca255cf25b159a80a70dc6ff452a47525ea8b46849f217",
+  "stub": true,
+  "wall_s": 12.166
+}

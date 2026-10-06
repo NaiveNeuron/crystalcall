@@ -1,0 +1,2443 @@
+{
+  "bounds": [
+    0.05,
+    0.1,
+    0.2,
+    0.3,
+    0.45,
+    0.6
+  ],
+  "mode": "both",
+  "per_category": 3,
+  "prompt_ids": [
+    "multiple_101",
+    "multiple_126",
+    "multiple_129",
+    "parallel_110",
+    "parallel_111",
+    "parallel_12",
+    "parallel_multiple_0",
+    "parallel_multiple_110",
+    "parallel_multiple_115",
+    "simple_python_126",
+    "simple_python_134",
+    "simple_python_135"
+  ],
+  "reference": {
+    "by_prompt": {
+      "multiple_101": {
+        "calls": [
+          "math_gcd(num1=12,num2=18)"
+        ],
+        "category": "multiple",
+        "correct": true,
+        "decode_ms": 2570.51592,
+        "final_text_chars": 400,
+        "parse_ok": true,
+        "ready": [],
+        "revisions": 8
+      },
+      "multiple_126": {
+        "calls": [
+          "t_test(dataset_A=[12,24,36],dataset_B=[15,30,45])",
+          "t_test(dataset_A=[12,24,36],dataset_B=[15,30,45])"
+        ],
+        "category": "multiple",
+        "correct": false,
+        "decode_ms": 1762.305516,
+        "final_text_chars": 596,
+        "parse_ok": true,
+        "ready": [],
+        "revisions": 7
+      },
+      "multiple_129": {
+        "calls": [
+          "compound_interest(annual_rate=0.05,compounding_freq=\"monthly\",principal=10000,time_in_years=5)",
+          "compound_interest(annual_rate=0.05,compounding_freq=\"monthly\",principal=10000,time_in_years=5)"
+        ],
+        "category": "multiple",
+        "correct": false,
+        "decode_ms": 1790.578878,
+        "final_text_chars": 776,
+        "parse_ok": true,
+        "ready": [],
+        "revisions": 7
+      },
+      "parallel_110": {
+        "calls": [
+          "cell_biology_function_lookup(molecule=\"ATP\",organelle=\"mitochondria\",specific_function=true)",
+          "cell_biology_function_lookup(molecule=\"ATP\",organelle=\"mitochondria\",specific_function=true)",
+          "cell_biology_function_lookup(molecule=\"DNA\",organelle=\"nucleus\",specific_function=true)",
+          "cell_biology_function_lookup(molecule=\"DNA\",organelle=\"nucleus\",specific_function=true)"
+        ],
+        "category": "parallel",
+        "correct": false,
+        "decode_ms": 1709.193236,
+        "final_text_chars": 423,
+        "parse_ok": true,
+        "ready": [],
+        "revisions": 7
+      },
+      "parallel_111": {
+        "calls": [
+          "calculate_molecular_weight(compound=\"C12H22O11\",to_unit=\"grams/mole\")",
+          "calculate_molecular_weight(compound=\"C12H22O11\",to_unit=\"grams/mole\")",
+          "calculate_molecular_weight(compound=\"C6H12O6\",to_unit=\"grams/mole\")",
+          "calculate_molecular_weight(compound=\"C6H12O6\",to_unit=\"grams/mole\")"
+        ],
+        "category": "parallel",
+        "correct": false,
+        "decode_ms": 1500.900853,
+        "final_text_chars": 548,
+        "parse_ok": true,
+        "ready": [],
+        "revisions": 6
+      },
+      "parallel_12": {
+        "calls": [],
+        "category": "parallel",
+        "correct": false,
+        "decode_ms": 1495.223529,
+        "final_text_chars": 366,
+        "parse_ok": false,
+        "ready": [],
+        "revisions": 6
+      },
+      "parallel_multiple_0": {
+        "calls": [
+          "math_toolkit_product_of_primes(count=5)",
+          "math_toolkit_product_of_primes(count=5)",
+          "math_toolkit_sum_of_multiples(lower_limit=1,multiples=[3,5],upper_limit=1000)",
+          "math_toolkit_sum_of_multiples(lower_limit=1,multiples=[3,5],upper_limit=1000)"
+        ],
+        "category": "parallel_multiple",
+        "correct": false,
+        "decode_ms": 2008.135033,
+        "final_text_chars": 148,
+        "parse_ok": true,
+        "ready": [],
+        "revisions": 8
+      },
+      "parallel_multiple_110": {
+        "calls": [
+          "us_economy_gdp_by_state_year(adjustment=\"Real\",state=\"California\",year=1980)",
+          "us_economy_gdp_by_state_year(adjustment=\"Real\",state=\"California\",year=1990)",
+          "us_history_population_by_state_year(state=\"California\",year=1980)",
+          "us_history_population_by_state_year(state=\"California\",year=1990)"
+        ],
+        "category": "parallel_multiple",
+        "correct": true,
+        "decode_ms": 1771.244856,
+        "final_text_chars": 1774,
+        "parse_ok": true,
+        "ready": [],
+        "revisions": 7
+      },
+      "parallel_multiple_115": {
+        "calls": [
+          "artwork_search_find(location=\"New York\",type=\"modern art installation\")",
+          "artwork_search_find(location=\"New York\",type=\"modern art installation\")",
+          "park_search_find(facilities=[\"playground\",\"picnic area\"],location=\"New York\")",
+          "park_search_find(facilities=[\"playground\",\"picnic area\"],location=\"New York\")",
+          "tourist_attraction_find(attractionType=\"monument\",location=\"New York\")",
+          "tourist_attraction_find(attractionType=\"monument\",location=\"New York\")"
+        ],
+        "category": "parallel_multiple",
+        "correct": false,
+        "decode_ms": 2015.987518,
+        "final_text_chars": 533,
+        "parse_ok": true,
+        "ready": [],
+        "revisions": 8
+      },
+      "simple_python_126": {
+        "calls": [
+          "linear_regression_get_r_squared(dataset_path=\"C:/data/cars.csv\",dependent_variable=\"car_price\",independent_variables=[\"engine_size\",\"fuel_economy\"])"
+        ],
+        "category": "simple",
+        "correct": true,
+        "decode_ms": 1889.046603,
+        "final_text_chars": 248,
+        "parse_ok": true,
+        "ready": [],
+        "revisions": 8
+      },
+      "simple_python_134": {
+        "calls": [
+          "investment_predictProfit(annual_return=7,investment_amount=5000,years=5)"
+        ],
+        "category": "simple",
+        "correct": false,
+        "decode_ms": 1502.088061,
+        "final_text_chars": 82,
+        "parse_ok": true,
+        "ready": [],
+        "revisions": 6
+      },
+      "simple_python_135": {
+        "calls": [],
+        "category": "simple",
+        "correct": false,
+        "decode_ms": 1272.831228,
+        "final_text_chars": 73,
+        "parse_ok": true,
+        "ready": [],
+        "revisions": 5
+      }
+    },
+    "summary": {
+      "arm": "diffusion_standard",
+      "claimed": 0,
+      "doctor_digest": "4c1f900236dc2406039a31011e3bb3509e497ead2a8d39ba5a74214ae053b782",
+      "failures": 0,
+      "frozen_policy": {
+        "path": "configs/frozen_policy.json",
+        "status": "absent"
+      },
+      "instrumentation": "parse",
+      "manifest": "/tmp/crystalcall-bound-sweep-ih4voajb/dev_subset.jsonl",
+      "manifest_sha256": "ae477a257ae16684598e0f220491a4684f2210944d8637ae7aeaa4ecb06c6491",
+      "policy": {
+        "allowed_resources": [
+          "cpu",
+          "gpu",
+          "storage"
+        ],
+        "confidence_mode": "min",
+        "fixed_step": null,
+        "k": 2,
+        "max_inflight": 4,
+        "min_overlap_ms": 50.0,
+        "name": "full_gate",
+        "oracle": null,
+        "random_rate": null,
+        "tau": 0.9,
+        "use_confidence": true,
+        "use_overlap": true,
+        "use_persistence": true,
+        "use_resource": true
+      },
+      "policy_fingerprint": "ba6c5d6c138508b50af1d89a69db37427926ee6c20b96000fbec56ef3b251572",
+      "profile_fingerprint": "355644b578caf43eb00d897f6b3928ccb981b5e428cef9056cd40ed84f7b277d",
+      "prompts": 12,
+      "runtime_costs": {
+        "contention_ms_per_launch": {},
+        "parse_ms_per_revision": 0.1270285421686747,
+        "schedule_ms_per_launch": 0.0,
+        "trace_ms_per_revision": 0.1708025421686747
+      },
+      "seeds": [
+        0
+      ],
+      "semantic_divergence": 0,
+      "turns": 42,
+      "verification_error": 0,
+      "verified_match": 0
+    }
+  },
+  "reference_rates": {
+    "called_any": 10,
+    "called_any_rate": 0.8333333333333334,
+    "correct": 3,
+    "correct_rate": 0.25,
+    "incorrect_prompt_ids": [
+      "multiple_126",
+      "multiple_129",
+      "parallel_110",
+      "parallel_111",
+      "parallel_12",
+      "parallel_multiple_0",
+      "parallel_multiple_115",
+      "simple_python_134",
+      "simple_python_135"
+    ],
+    "n_prompts": 12,
+    "no_call_prompt_ids": [
+      "parallel_12",
+      "simple_python_135"
+    ],
+    "parse_ok": 11,
+    "parse_rate": 0.9166666666666666,
+    "prompts_with_ready": 0,
+    "ready_events": 0,
+    "unparsed_prompt_ids": [
+      "parallel_12"
+    ]
+  },
+  "rescored": true,
+  "rungs": [
+    {
+      "arm": {
+        "by_prompt": {
+          "multiple_101": {
+            "calls": [
+              "math_gcd(num1=12,num2=18)"
+            ],
+            "category": "multiple",
+            "correct": true,
+            "decode_ms": 2457.800297,
+            "final_text_chars": 516,
+            "parse_ok": true,
+            "ready": [
+              {
+                "canvas_id": 0,
+                "monotonic_ns": 1033474540956021,
+                "span_hi": 63,
+                "span_lo": 4,
+                "step": 5
+              }
+            ],
+            "revisions": 8
+          },
+          "multiple_126": {
+            "calls": [
+              "t_test(dataset_A=[12,24,36],dataset_B=[15,30,45])",
+              "t_test(dataset_A=[12,24,36],dataset_B=[15,30,45])"
+            ],
+            "category": "multiple",
+            "correct": false,
+            "decode_ms": 1570.94486,
+            "final_text_chars": 1399,
+            "parse_ok": true,
+            "ready": [
+              {
+                "canvas_id": 0,
+                "monotonic_ns": 1033483020701232,
+                "span_hi": 71,
+                "span_lo": 4,
+                "step": 4
+              }
+            ],
+            "revisions": 7
+          },
+          "multiple_129": {
+            "calls": [
+              "compound_interest(annual_rate=0.05,compounding_freq=\"monthly\",principal=10000,time_in_years=5)"
+            ],
+            "category": "multiple",
+            "correct": false,
+            "decode_ms": 1574.949456,
+            "final_text_chars": 158,
+            "parse_ok": true,
+            "ready": [],
+            "revisions": 7
+          },
+          "parallel_110": {
+            "calls": [
+              "cell_biology_function_lookup(molecule=\"ATP\",organelle=\"mitochondria\",specific_function=true)",
+              "cell_biology_function_lookup(molecule=\"ATP\",organelle=\"mitochondria\",specific_function=true)",
+              "cell_biology_function_lookup(molecule=\"DNA\",organelle=\"nucleus\",specific_function=true)",
+              "cell_biology_function_lookup(molecule=\"DNA\",organelle=\"nucleus\",specific_function=true)"
+            ],
+            "category": "parallel",
+            "correct": false,
+            "decode_ms": 1689.00874,
+            "final_text_chars": 677,
+            "parse_ok": true,
+            "ready": [],
+            "revisions": 8
+          },
+          "parallel_111": {
+            "calls": [
+              "calculate_molecular_weight(compound=\"C12H22O11\",to_unit=\"grams/mole\")",
+              "calculate_molecular_weight(compound=\"C12H22O11\",to_unit=\"grams/mole\")",
+              "calculate_molecular_weight(compound=\"C6H12O6\",to_unit=\"grams/mole\")",
+              "calculate_molecular_weight(compound=\"C6H12O6\",to_unit=\"grams/mole\")"
+            ],
+            "category": "parallel",
+            "correct": false,
+            "decode_ms": 1354.332841,
+            "final_text_chars": 213,
+            "parse_ok": true,
+            "ready": [],
+            "revisions": 6
+          },
+          "parallel_12": {
+            "calls": [],
+            "category": "parallel",
+            "correct": false,
+            "decode_ms": 1320.983646,
+            "final_text_chars": 180,
+            "parse_ok": false,
+            "ready": [],
+            "revisions": 6
+          },
+          "parallel_multiple_0": {
+            "calls": [
+              "math_toolkit_product_of_primes(count=5)",
+              "math_toolkit_product_of_primes(count=5)",
+              "math_toolkit_sum_of_multiples(lower_limit=1,multiples=[3,5],upper_limit=1000)",
+              "math_toolkit_sum_of_multiples(lower_limit=1,multiples=[3,5],upper_limit=1000)"
+            ],
+            "category": "parallel_multiple",
+            "correct": false,
+            "decode_ms": 1996.001665,
+            "final_text_chars": 145,
+            "parse_ok": true,
+            "ready": [
+              {
+                "canvas_id": 0,
+                "monotonic_ns": 1033549868484369,
+                "span_hi": 113,
+                "span_lo": 4,
+                "step": 6
+              }
+            ],
+            "revisions": 9
+          },
+          "parallel_multiple_110": {
+            "calls": [
+              "us_economy_gdp_by_state_year(adjustment=\"Real\",state=\"California\",year=1980)",
+              "us_economy_gdp_by_state_year(adjustment=\"Real\",state=\"California\",year=1980)",
+              "us_economy_gdp_by_state_year(adjustment=\"Real\",state=\"California\",year=1990)",
+              "us_economy_gdp_by_state_year(adjustment=\"Real\",state=\"California\",year=1990)",
+              "us_history_population_by_state_year(state=\"California\",year=1980)",
+              "us_history_population_by_state_year(state=\"California\",year=1980)",
+              "us_history_population_by_state_year(state=\"California\",year=1990)",
+              "us_history_population_by_state_year(state=\"California\",year=1990)"
+            ],
+            "category": "parallel_multiple",
+            "correct": false,
+            "decode_ms": 1580.755762,
+            "final_text_chars": 312,
+            "parse_ok": true,
+            "ready": [],
+            "revisions": 7
+          },
+          "parallel_multiple_115": {
+            "calls": [
+              "park_search_find(facilities=[\"playground\",\"picnic area\"],location=\"New York\")",
+              "tourist_attraction_find(attractionType=\"modern art installation\",location=\"New York\")",
+              "tourist_attraction_find(attractionType=\"popular monument\",location=\"New York\")"
+            ],
+            "category": "parallel_multiple",
+            "correct": false,
+            "decode_ms": 2031.081796,
+            "final_text_chars": 231,
+            "parse_ok": true,
+            "ready": [],
+            "revisions": 9
+          },
+          "simple_python_126": {
+            "calls": [
+              "linear_regression_get_r_squared(dataset_path=\"C:/data/cars.csv\",dependent_variable=\"car_price\",independent_variables=[\"engine_size\",\"fuel_economy\"])"
+            ],
+            "category": "simple",
+            "correct": true,
+            "decode_ms": 1293.252855,
+            "final_text_chars": 189,
+            "parse_ok": true,
+            "ready": [],
+            "revisions": 6
+          },
+          "simple_python_134": {
+            "calls": [
+              "investment_predictProfit(annual_return=7,investment_amount=5000,years=5)",
+              "investment_predictProfit(annual_return=7,investment_amount=5000,years=5)"
+            ],
+            "category": "simple",
+            "correct": false,
+            "decode_ms": 1514.867192,
+            "final_text_chars": 201,
+            "parse_ok": true,
+            "ready": [
+              {
+                "canvas_id": 0,
+                "monotonic_ns": 1033581165259636,
+                "span_hi": 61,
+                "span_lo": 4,
+                "step": 4
+              }
+            ],
+            "revisions": 7
+          },
+          "simple_python_135": {
+            "calls": [
+              "calculate_return_on_investment(dividend=2,purchase_price=20,sale_price=25)"
+            ],
+            "category": "simple",
+            "correct": true,
+            "decode_ms": 1708.292419,
+            "final_text_chars": 117,
+            "parse_ok": true,
+            "ready": [
+              {
+                "canvas_id": 0,
+                "monotonic_ns": 1033592332260837,
+                "span_hi": 61,
+                "span_lo": 4,
+                "step": 5
+              }
+            ],
+            "revisions": 8
+          }
+        },
+        "summary": {
+          "arm": "preact_style",
+          "claimed": 0,
+          "doctor_digest": "4c1f900236dc2406039a31011e3bb3509e497ead2a8d39ba5a74214ae053b782",
+          "failures": 0,
+          "frozen_policy": {
+            "path": "configs/frozen_policy.json",
+            "status": "absent"
+          },
+          "instrumentation": "parse",
+          "manifest": "/tmp/crystalcall-bound-sweep-ih4voajb/dev_subset.jsonl",
+          "manifest_sha256": "ae477a257ae16684598e0f220491a4684f2210944d8637ae7aeaa4ecb06c6491",
+          "policy": {
+            "allowed_resources": [
+              "cpu",
+              "gpu",
+              "storage"
+            ],
+            "confidence_mode": "min",
+            "fixed_step": null,
+            "k": 2,
+            "max_inflight": 4,
+            "min_overlap_ms": 50.0,
+            "name": "full_gate",
+            "oracle": null,
+            "random_rate": null,
+            "tau": 0.9,
+            "use_confidence": true,
+            "use_overlap": true,
+            "use_persistence": true,
+            "use_resource": true
+          },
+          "policy_fingerprint": "ba6c5d6c138508b50af1d89a69db37427926ee6c20b96000fbec56ef3b251572",
+          "profile_fingerprint": "355644b578caf43eb00d897f6b3928ccb981b5e428cef9056cd40ed84f7b277d",
+          "prompts": 12,
+          "runtime_costs": {
+            "contention_ms_per_launch": {},
+            "parse_ms_per_revision": 0.1051922159090909,
+            "schedule_ms_per_launch": 0.0,
+            "trace_ms_per_revision": 3.118451965909091
+          },
+          "seeds": [
+            0
+          ],
+          "semantic_divergence": 0,
+          "turns": 42,
+          "verification_error": 0,
+          "verified_match": 0
+        }
+      },
+      "bound": 0.05,
+      "score": {
+        "acceptable": true,
+        "divergence": {
+          "differ_rate": 0.4166666666666667,
+          "differing_calls": [
+            "multiple_129",
+            "parallel_multiple_110",
+            "parallel_multiple_115",
+            "simple_python_134",
+            "simple_python_135"
+          ],
+          "n_shared": 12
+        },
+        "rates": {
+          "called_any": 11,
+          "called_any_rate": 0.9166666666666666,
+          "correct": 3,
+          "correct_rate": 0.25,
+          "incorrect_prompt_ids": [
+            "multiple_126",
+            "multiple_129",
+            "parallel_110",
+            "parallel_111",
+            "parallel_12",
+            "parallel_multiple_0",
+            "parallel_multiple_110",
+            "parallel_multiple_115",
+            "simple_python_134"
+          ],
+          "n_prompts": 12,
+          "no_call_prompt_ids": [
+            "parallel_12"
+          ],
+          "parse_ok": 11,
+          "parse_rate": 0.9166666666666666,
+          "prompts_with_ready": 5,
+          "ready_events": 5,
+          "unparsed_prompt_ids": [
+            "parallel_12"
+          ]
+        },
+        "reference_rates": {
+          "called_any": 10,
+          "called_any_rate": 0.8333333333333334,
+          "correct": 3,
+          "correct_rate": 0.25,
+          "incorrect_prompt_ids": [
+            "multiple_126",
+            "multiple_129",
+            "parallel_110",
+            "parallel_111",
+            "parallel_12",
+            "parallel_multiple_0",
+            "parallel_multiple_115",
+            "simple_python_134",
+            "simple_python_135"
+          ],
+          "n_prompts": 12,
+          "no_call_prompt_ids": [
+            "parallel_12",
+            "simple_python_135"
+          ],
+          "parse_ok": 11,
+          "parse_rate": 0.9166666666666666,
+          "prompts_with_ready": 0,
+          "ready_events": 0,
+          "unparsed_prompt_ids": [
+            "parallel_12"
+          ]
+        },
+        "reject_reasons": []
+      }
+    },
+    {
+      "arm": {
+        "by_prompt": {
+          "multiple_101": {
+            "calls": [
+              "math_gcd(num1=12,num2=18)"
+            ],
+            "category": "multiple",
+            "correct": true,
+            "decode_ms": 2159.585466,
+            "final_text_chars": 465,
+            "parse_ok": true,
+            "ready": [],
+            "revisions": 6
+          },
+          "multiple_126": {
+            "calls": [
+              "t_test(dataset_A=[12,24,36],dataset_B=[15,30,45])",
+              "t_test(dataset_A=[12,24,36],dataset_B=[15,30,45])"
+            ],
+            "category": "multiple",
+            "correct": false,
+            "decode_ms": 1771.536628,
+            "final_text_chars": 816,
+            "parse_ok": true,
+            "ready": [
+              {
+                "canvas_id": 0,
+                "monotonic_ns": 1034108443004471,
+                "span_hi": 73,
+                "span_lo": 4,
+                "step": 4
+              }
+            ],
+            "revisions": 7
+          },
+          "multiple_129": {
+            "calls": [
+              "compound_interest(annual_rate=0.05,compounding_freq=\"monthly\",principal=10000,time_in_years=5)"
+            ],
+            "category": "multiple",
+            "correct": false,
+            "decode_ms": 1977.849356,
+            "final_text_chars": 175,
+            "parse_ok": true,
+            "ready": [
+              {
+                "canvas_id": 0,
+                "monotonic_ns": 1034128087387602,
+                "span_hi": 75,
+                "span_lo": 4,
+                "step": 5
+              }
+            ],
+            "revisions": 8
+          },
+          "parallel_110": {
+            "calls": [
+              "cell_biology_function_lookup(molecule=\"ATP\",organelle=\"mitochondria\",specific_function=true)",
+              "cell_biology_function_lookup(molecule=\"ATP\",organelle=\"mitochondria\",specific_function=true)",
+              "cell_biology_function_lookup(molecule=\"DNA\",organelle=\"nucleus\",specific_function=true)",
+              "cell_biology_function_lookup(molecule=\"DNA\",organelle=\"nucleus\",specific_function=true)"
+            ],
+            "category": "parallel",
+            "correct": false,
+            "decode_ms": 2149.989343,
+            "final_text_chars": 321,
+            "parse_ok": true,
+            "ready": [],
+            "revisions": 9
+          },
+          "parallel_111": {
+            "calls": [
+              "calculate_molecular_weight(compound=\"C12H22O11\",to_unit=\"grams/mole\")",
+              "calculate_molecular_weight(compound=\"C12H22O11\",to_unit=\"grams/mole\")",
+              "calculate_molecular_weight(compound=\"C6H12O6\",to_unit=\"grams/mole\")",
+              "calculate_molecular_weight(compound=\"C6H12O6\",to_unit=\"grams/mole\")"
+            ],
+            "category": "parallel",
+            "correct": false,
+            "decode_ms": 1937.211702,
+            "final_text_chars": 731,
+            "parse_ok": true,
+            "ready": [
+              {
+                "canvas_id": 0,
+                "monotonic_ns": 1034164601638909,
+                "span_hi": 110,
+                "span_lo": 4,
+                "step": 5
+              }
+            ],
+            "revisions": 8
+          },
+          "parallel_12": {
+            "calls": [],
+            "category": "parallel",
+            "correct": false,
+            "decode_ms": 1488.711098,
+            "final_text_chars": 228,
+            "parse_ok": false,
+            "ready": [],
+            "revisions": 6
+          },
+          "parallel_multiple_0": {
+            "calls": [
+              "math_toolkit_product_of_primes(count=5)",
+              "math_toolkit_product_of_primes(count=5)",
+              "math_toolkit_sum_of_multiples(lower_limit=1,multiples=[3,5],upper_limit=1000)",
+              "math_toolkit_sum_of_multiples(lower_limit=1,multiples=[3,5],upper_limit=1000)"
+            ],
+            "category": "parallel_multiple",
+            "correct": false,
+            "decode_ms": 1987.855214,
+            "final_text_chars": 124,
+            "parse_ok": true,
+            "ready": [
+              {
+                "canvas_id": 0,
+                "monotonic_ns": 1034188359622484,
+                "span_hi": 104,
+                "span_lo": 4,
+                "step": 5
+              }
+            ],
+            "revisions": 8
+          },
+          "parallel_multiple_110": {
+            "calls": [
+              "us_economy_gdp_by_state_year(adjustment=\"Real\",state=\"California\",year=1980)",
+              "us_economy_gdp_by_state_year(adjustment=\"Real\",state=\"California\",year=1980)",
+              "us_economy_gdp_by_state_year(adjustment=\"Real\",state=\"California\",year=1990)",
+              "us_economy_gdp_by_state_year(adjustment=\"Real\",state=\"California\",year=1990)",
+              "us_history_population_by_state_year(state=\"California\",year=1980)",
+              "us_history_population_by_state_year(state=\"California\",year=1980)",
+              "us_history_population_by_state_year(state=\"California\",year=1990)",
+              "us_history_population_by_state_year(state=\"California\",year=1990)"
+            ],
+            "category": "parallel_multiple",
+            "correct": false,
+            "decode_ms": 1767.887595,
+            "final_text_chars": 214,
+            "parse_ok": true,
+            "ready": [
+              {
+                "canvas_id": 0,
+                "monotonic_ns": 1034201603846954,
+                "span_hi": 230,
+                "span_lo": 4,
+                "step": 4
+              }
+            ],
+            "revisions": 7
+          },
+          "parallel_multiple_115": {
+            "calls": [
+              "artwork_search_find(location=\"New York\",type=\"modern art installation\")",
+              "park_search_find(facilities=[\"playground\",\"picnic area\"],location=\"New York\")",
+              "tourist_attraction_find(attractionType=\"monument\",location=\"New York\")"
+            ],
+            "category": "parallel_multiple",
+            "correct": false,
+            "decode_ms": 2659.428222,
+            "final_text_chars": 214,
+            "parse_ok": true,
+            "ready": [],
+            "revisions": 11
+          },
+          "simple_python_126": {
+            "calls": [
+              "linear_regression_get_r_squared(dataset_path=\"C:/data/cars.csv\",dependent_variable=\"car_price\",independent_variables=[\"engine size\",\"fuel_economy\"])"
+            ],
+            "category": "simple",
+            "correct": false,
+            "decode_ms": 1682.963422,
+            "final_text_chars": 1545,
+            "parse_ok": true,
+            "ready": [
+              {
+                "canvas_id": 0,
+                "monotonic_ns": 1034216584167013,
+                "span_hi": 80,
+                "span_lo": 4,
+                "step": 4
+              }
+            ],
+            "revisions": 7
+          },
+          "simple_python_134": {
+            "calls": [
+              "investment_predictProfit(annual_return=7,investment_amount=5000,years=5)"
+            ],
+            "category": "simple",
+            "correct": false,
+            "decode_ms": 1708.160665,
+            "final_text_chars": 65,
+            "parse_ok": false,
+            "ready": [],
+            "revisions": 7
+          },
+          "simple_python_135": {
+            "calls": [],
+            "category": "simple",
+            "correct": false,
+            "decode_ms": 1273.736138,
+            "final_text_chars": 73,
+            "parse_ok": true,
+            "ready": [],
+            "revisions": 5
+          }
+        },
+        "summary": {
+          "arm": "preact_style",
+          "claimed": 0,
+          "doctor_digest": "4c1f900236dc2406039a31011e3bb3509e497ead2a8d39ba5a74214ae053b782",
+          "failures": 0,
+          "frozen_policy": {
+            "path": "configs/frozen_policy.json",
+            "status": "absent"
+          },
+          "instrumentation": "parse",
+          "manifest": "/tmp/crystalcall-bound-sweep-ih4voajb/dev_subset.jsonl",
+          "manifest_sha256": "ae477a257ae16684598e0f220491a4684f2210944d8637ae7aeaa4ecb06c6491",
+          "policy": {
+            "allowed_resources": [
+              "cpu",
+              "gpu",
+              "storage"
+            ],
+            "confidence_mode": "min",
+            "fixed_step": null,
+            "k": 2,
+            "max_inflight": 4,
+            "min_overlap_ms": 50.0,
+            "name": "full_gate",
+            "oracle": null,
+            "random_rate": null,
+            "tau": 0.9,
+            "use_confidence": true,
+            "use_overlap": true,
+            "use_persistence": true,
+            "use_resource": true
+          },
+          "policy_fingerprint": "ba6c5d6c138508b50af1d89a69db37427926ee6c20b96000fbec56ef3b251572",
+          "profile_fingerprint": "355644b578caf43eb00d897f6b3928ccb981b5e428cef9056cd40ed84f7b277d",
+          "prompts": 12,
+          "runtime_costs": {
+            "contention_ms_per_launch": {},
+            "parse_ms_per_revision": 1.0448094831460675,
+            "schedule_ms_per_launch": 0.0,
+            "trace_ms_per_revision": 1.8862840224719102
+          },
+          "seeds": [
+            0
+          ],
+          "semantic_divergence": 0,
+          "turns": 40,
+          "verification_error": 0,
+          "verified_match": 0
+        }
+      },
+      "bound": 0.1,
+      "score": {
+        "acceptable": false,
+        "divergence": {
+          "differ_rate": 0.3333333333333333,
+          "differing_calls": [
+            "multiple_129",
+            "parallel_multiple_110",
+            "parallel_multiple_115",
+            "simple_python_126"
+          ],
+          "n_shared": 12
+        },
+        "rates": {
+          "called_any": 10,
+          "called_any_rate": 0.8333333333333334,
+          "correct": 1,
+          "correct_rate": 0.08333333333333333,
+          "incorrect_prompt_ids": [
+            "multiple_126",
+            "multiple_129",
+            "parallel_110",
+            "parallel_111",
+            "parallel_12",
+            "parallel_multiple_0",
+            "parallel_multiple_110",
+            "parallel_multiple_115",
+            "simple_python_126",
+            "simple_python_134",
+            "simple_python_135"
+          ],
+          "n_prompts": 12,
+          "no_call_prompt_ids": [
+            "parallel_12",
+            "simple_python_135"
+          ],
+          "parse_ok": 10,
+          "parse_rate": 0.8333333333333334,
+          "prompts_with_ready": 6,
+          "ready_events": 6,
+          "unparsed_prompt_ids": [
+            "parallel_12",
+            "simple_python_134"
+          ]
+        },
+        "reference_rates": {
+          "called_any": 10,
+          "called_any_rate": 0.8333333333333334,
+          "correct": 3,
+          "correct_rate": 0.25,
+          "incorrect_prompt_ids": [
+            "multiple_126",
+            "multiple_129",
+            "parallel_110",
+            "parallel_111",
+            "parallel_12",
+            "parallel_multiple_0",
+            "parallel_multiple_115",
+            "simple_python_134",
+            "simple_python_135"
+          ],
+          "n_prompts": 12,
+          "no_call_prompt_ids": [
+            "parallel_12",
+            "simple_python_135"
+          ],
+          "parse_ok": 11,
+          "parse_rate": 0.9166666666666666,
+          "prompts_with_ready": 0,
+          "ready_events": 0,
+          "unparsed_prompt_ids": [
+            "parallel_12"
+          ]
+        },
+        "reject_reasons": [
+          "BFCL correctness degraded: 8% vs standard 25%",
+          "valid final parse degraded: 83% vs standard 92%"
+        ]
+      }
+    },
+    {
+      "arm": {
+        "by_prompt": {
+          "multiple_101": {
+            "calls": [
+              "math_gcd(num1=12,num2=18)"
+            ],
+            "category": "multiple",
+            "correct": true,
+            "decode_ms": 1995.783188,
+            "final_text_chars": 400,
+            "parse_ok": true,
+            "ready": [
+              {
+                "canvas_id": 0,
+                "monotonic_ns": 1034739899189071,
+                "span_hi": 63,
+                "span_lo": 4,
+                "step": 5
+              }
+            ],
+            "revisions": 8
+          },
+          "multiple_126": {
+            "calls": [
+              "t_test(dataset_A=[12,24,36],dataset_B=[15,30,45])",
+              "t_test(dataset_A=[12,24,36],dataset_B=[15,30,45])"
+            ],
+            "category": "multiple",
+            "correct": false,
+            "decode_ms": 1525.104468,
+            "final_text_chars": 191,
+            "parse_ok": true,
+            "ready": [
+              {
+                "canvas_id": 0,
+                "monotonic_ns": 1034748468668774,
+                "span_hi": 71,
+                "span_lo": 4,
+                "step": 4
+              }
+            ],
+            "revisions": 7
+          },
+          "multiple_129": {
+            "calls": [
+              "compound_interest(annual_rate=5,compounding_freq=\"monthly\",principal=10000,time_in_years=5)"
+            ],
+            "category": "multiple",
+            "correct": true,
+            "decode_ms": 1513.620662,
+            "final_text_chars": 185,
+            "parse_ok": true,
+            "ready": [
+              {
+                "canvas_id": 0,
+                "monotonic_ns": 1034758734749828,
+                "span_hi": 62,
+                "span_lo": 4,
+                "step": 4
+              }
+            ],
+            "revisions": 7
+          },
+          "parallel_110": {
+            "calls": [
+              "cell_biology_function_lookup(molecule=\"ATP\",organelle=\"mitochondria\",specific_function=true)",
+              "cell_biology_function_lookup(molecule=\"DNA\",organelle=\"nucleus\",specific_function=true)"
+            ],
+            "category": "parallel",
+            "correct": true,
+            "decode_ms": 2065.950381,
+            "final_text_chars": 314,
+            "parse_ok": true,
+            "ready": [
+              {
+                "canvas_id": 0,
+                "monotonic_ns": 1034767795610051,
+                "span_hi": 104,
+                "span_lo": 4,
+                "step": 7
+              }
+            ],
+            "revisions": 10
+          },
+          "parallel_111": {
+            "calls": [
+              "calculate_molecular_weight(compound=\"C12H22O11\",to_unit=\"grams/mole\")",
+              "calculate_molecular_weight(compound=\"C12H22O11\",to_unit=\"grams/mole\")",
+              "calculate_molecular_weight(compound=\"C6H12O6\",to_unit=\"grams/mole\")",
+              "calculate_molecular_weight(compound=\"C6H12O6\",to_unit=\"grams/mole\")"
+            ],
+            "category": "parallel",
+            "correct": false,
+            "decode_ms": 1740.368965,
+            "final_text_chars": 204,
+            "parse_ok": true,
+            "ready": [],
+            "revisions": 8
+          },
+          "parallel_12": {
+            "calls": [],
+            "category": "parallel",
+            "correct": false,
+            "decode_ms": 2453.105735,
+            "final_text_chars": 168,
+            "parse_ok": false,
+            "ready": [],
+            "revisions": 12
+          },
+          "parallel_multiple_0": {
+            "calls": [
+              "math_toolkit_product_of_primes(count=5)",
+              "math_toolkit_product_of_primes(count=5)",
+              "math_toolkit_sum_of_multiples(lower_limit=1,multiples=[3,5],upper_limit=1000)",
+              "math_toolkit_sum_of_multiples(lower_limit=1,multiples=[3,5],upper_limit=1000)"
+            ],
+            "category": "parallel_multiple",
+            "correct": false,
+            "decode_ms": 1512.184174,
+            "final_text_chars": 153,
+            "parse_ok": true,
+            "ready": [
+              {
+                "canvas_id": 0,
+                "monotonic_ns": 1034810397765010,
+                "span_hi": 100,
+                "span_lo": 4,
+                "step": 4
+              }
+            ],
+            "revisions": 7
+          },
+          "parallel_multiple_110": {
+            "calls": [
+              "us_economy_gdp_by_state_year(adjustment=\"Real\",state=\"California\",year=1980)",
+              "us_economy_gdp_by_state_year(adjustment=\"Real\",state=\"California\",year=1980)",
+              "us_economy_gdp_by_state_year(adjustment=\"Real\",state=\"California\",year=1990)",
+              "us_economy_gdp_by_state_year(adjustment=\"Real\",state=\"California\",year=1990)",
+              "us_history_population_by_state_year(state=\"California\",year=1980)",
+              "us_history_population_by_state_year(state=\"California\",year=1980)",
+              "us_history_population_by_state_year(state=\"California\",year=1990)",
+              "us_history_population_by_state_year(state=\"California\",year=1990)"
+            ],
+            "category": "parallel_multiple",
+            "correct": false,
+            "decode_ms": 1860.115002,
+            "final_text_chars": 281,
+            "parse_ok": true,
+            "ready": [
+              {
+                "canvas_id": 0,
+                "monotonic_ns": 1034823856136324,
+                "span_hi": 222,
+                "span_lo": 4,
+                "step": 6
+              }
+            ],
+            "revisions": 9
+          },
+          "parallel_multiple_115": {
+            "calls": [
+              "park_search_find(facilities=[\"playground\",\"picnic area\"],location=\"New York\")",
+              "park_search_find(facilities=[\"playground\",\"picnic area\"],location=\"New York\")",
+              "tourist_attraction_find(attractionType=\"modern art installation\",location=\"New York\")",
+              "tourist_attraction_find(attractionType=\"modern art installation\",location=\"New York\")",
+              "tourist_attraction_find(attractionType=\"popular monument\",location=\"New York\")",
+              "tourist_attraction_find(attractionType=\"popular monument\",location=\"New York\")"
+            ],
+            "category": "parallel_multiple",
+            "correct": false,
+            "decode_ms": 1751.914829,
+            "final_text_chars": 529,
+            "parse_ok": true,
+            "ready": [
+              {
+                "canvas_id": 0,
+                "monotonic_ns": 1034836583447052,
+                "span_hi": 107,
+                "span_lo": 4,
+                "step": 5
+              }
+            ],
+            "revisions": 8
+          },
+          "simple_python_126": {
+            "calls": [
+              "linear_regression_get_r_squared(dataset_path=\"C:/data/cars.csv\",dependent_variable=\"car_price\",independent_variables=[\"engine_size\",\"fuel_economy\"])"
+            ],
+            "category": "simple",
+            "correct": true,
+            "decode_ms": 1286.046748,
+            "final_text_chars": 177,
+            "parse_ok": true,
+            "ready": [
+              {
+                "canvas_id": 0,
+                "monotonic_ns": 1034846060057494,
+                "span_hi": 79,
+                "span_lo": 4,
+                "step": 3
+              }
+            ],
+            "revisions": 6
+          },
+          "simple_python_134": {
+            "calls": [
+              "investment_predictProfit(annual_return=7,investment_amount=5000,years=5)"
+            ],
+            "category": "simple",
+            "correct": false,
+            "decode_ms": 1509.689396,
+            "final_text_chars": 82,
+            "parse_ok": true,
+            "ready": [
+              {
+                "canvas_id": 0,
+                "monotonic_ns": 1034852978095990,
+                "span_hi": 54,
+                "span_lo": 4,
+                "step": 3
+              }
+            ],
+            "revisions": 7
+          },
+          "simple_python_135": {
+            "calls": [],
+            "category": "simple",
+            "correct": false,
+            "decode_ms": 1132.970177,
+            "final_text_chars": 68,
+            "parse_ok": true,
+            "ready": [
+              {
+                "canvas_id": 0,
+                "monotonic_ns": 1034859824400371,
+                "span_hi": 63,
+                "span_lo": 4,
+                "step": 2
+              }
+            ],
+            "revisions": 5
+          }
+        },
+        "summary": {
+          "arm": "preact_style",
+          "claimed": 0,
+          "doctor_digest": "4c1f900236dc2406039a31011e3bb3509e497ead2a8d39ba5a74214ae053b782",
+          "failures": 0,
+          "frozen_policy": {
+            "path": "configs/frozen_policy.json",
+            "status": "absent"
+          },
+          "instrumentation": "parse",
+          "manifest": "/tmp/crystalcall-bound-sweep-ih4voajb/dev_subset.jsonl",
+          "manifest_sha256": "ae477a257ae16684598e0f220491a4684f2210944d8637ae7aeaa4ecb06c6491",
+          "policy": {
+            "allowed_resources": [
+              "cpu",
+              "gpu",
+              "storage"
+            ],
+            "confidence_mode": "min",
+            "fixed_step": null,
+            "k": 2,
+            "max_inflight": 4,
+            "min_overlap_ms": 50.0,
+            "name": "full_gate",
+            "oracle": null,
+            "random_rate": null,
+            "tau": 0.9,
+            "use_confidence": true,
+            "use_overlap": true,
+            "use_persistence": true,
+            "use_resource": true
+          },
+          "policy_fingerprint": "ba6c5d6c138508b50af1d89a69db37427926ee6c20b96000fbec56ef3b251572",
+          "profile_fingerprint": "355644b578caf43eb00d897f6b3928ccb981b5e428cef9056cd40ed84f7b277d",
+          "prompts": 12,
+          "runtime_costs": {
+            "contention_ms_per_launch": {},
+            "parse_ms_per_revision": 0.6745663085106383,
+            "schedule_ms_per_launch": 0.0,
+            "trace_ms_per_revision": 0.305368585106383
+          },
+          "seeds": [
+            0
+          ],
+          "semantic_divergence": 0,
+          "turns": 47,
+          "verification_error": 0,
+          "verified_match": 0
+        }
+      },
+      "bound": 0.2,
+      "score": {
+        "acceptable": true,
+        "divergence": {
+          "differ_rate": 0.3333333333333333,
+          "differing_calls": [
+            "multiple_129",
+            "parallel_110",
+            "parallel_multiple_110",
+            "parallel_multiple_115"
+          ],
+          "n_shared": 12
+        },
+        "rates": {
+          "called_any": 10,
+          "called_any_rate": 0.8333333333333334,
+          "correct": 4,
+          "correct_rate": 0.3333333333333333,
+          "incorrect_prompt_ids": [
+            "multiple_126",
+            "parallel_111",
+            "parallel_12",
+            "parallel_multiple_0",
+            "parallel_multiple_110",
+            "parallel_multiple_115",
+            "simple_python_134",
+            "simple_python_135"
+          ],
+          "n_prompts": 12,
+          "no_call_prompt_ids": [
+            "parallel_12",
+            "simple_python_135"
+          ],
+          "parse_ok": 11,
+          "parse_rate": 0.9166666666666666,
+          "prompts_with_ready": 10,
+          "ready_events": 10,
+          "unparsed_prompt_ids": [
+            "parallel_12"
+          ]
+        },
+        "reference_rates": {
+          "called_any": 10,
+          "called_any_rate": 0.8333333333333334,
+          "correct": 3,
+          "correct_rate": 0.25,
+          "incorrect_prompt_ids": [
+            "multiple_126",
+            "multiple_129",
+            "parallel_110",
+            "parallel_111",
+            "parallel_12",
+            "parallel_multiple_0",
+            "parallel_multiple_115",
+            "simple_python_134",
+            "simple_python_135"
+          ],
+          "n_prompts": 12,
+          "no_call_prompt_ids": [
+            "parallel_12",
+            "simple_python_135"
+          ],
+          "parse_ok": 11,
+          "parse_rate": 0.9166666666666666,
+          "prompts_with_ready": 0,
+          "ready_events": 0,
+          "unparsed_prompt_ids": [
+            "parallel_12"
+          ]
+        },
+        "reject_reasons": []
+      }
+    },
+    {
+      "arm": {
+        "by_prompt": {
+          "multiple_101": {
+            "calls": [
+              "math_gcd(num1=12,num2=18)"
+            ],
+            "category": "multiple",
+            "correct": true,
+            "decode_ms": 2158.667654,
+            "final_text_chars": 465,
+            "parse_ok": true,
+            "ready": [
+              {
+                "canvas_id": 0,
+                "monotonic_ns": 1035342355390640,
+                "span_hi": 55,
+                "span_lo": 4,
+                "step": 3
+              }
+            ],
+            "revisions": 6
+          },
+          "multiple_126": {
+            "calls": [
+              "t_test(dataset_A=[12,24,36],dataset_B=[15,30,45])",
+              "t_test(dataset_A=[12,24,36],dataset_B=[15,30,45])"
+            ],
+            "category": "multiple",
+            "correct": false,
+            "decode_ms": 1770.397804,
+            "final_text_chars": 234,
+            "parse_ok": true,
+            "ready": [
+              {
+                "canvas_id": 0,
+                "monotonic_ns": 1035350730176968,
+                "span_hi": 73,
+                "span_lo": 4,
+                "step": 4
+              }
+            ],
+            "revisions": 7
+          },
+          "multiple_129": {
+            "calls": [
+              "compound_interest(annual_rate=0.05,compounding_freq=\"monthly\",principal=10000,time_in_years=5)"
+            ],
+            "category": "multiple",
+            "correct": false,
+            "decode_ms": 1554.711466,
+            "final_text_chars": 132,
+            "parse_ok": true,
+            "ready": [
+              {
+                "canvas_id": 0,
+                "monotonic_ns": 1035369804334097,
+                "span_hi": 73,
+                "span_lo": 4,
+                "step": 3
+              }
+            ],
+            "revisions": 6
+          },
+          "parallel_110": {
+            "calls": [
+              "cell_biology_function_lookup(molecule=\"ATP\",organelle=\"mitochondria\",specific_function=true)",
+              "cell_biology_function_lookup(molecule=\"ATP\",organelle=\"mitochondria\",specific_function=true)",
+              "cell_biology_function_lookup(molecule=\"DNA\",organelle=\"nucleus\",specific_function=true)",
+              "cell_biology_function_lookup(molecule=\"DNA\",organelle=\"nucleus\",specific_function=true)"
+            ],
+            "category": "parallel",
+            "correct": false,
+            "decode_ms": 2363.480859,
+            "final_text_chars": 618,
+            "parse_ok": true,
+            "ready": [],
+            "revisions": 10
+          },
+          "parallel_111": {
+            "calls": [
+              "calculate_molecular_weight(compound=\"C12H22O11\",to_unit=\"grams/mole\")",
+              "calculate_molecular_weight(compound=\"C12H22O11\",to_unit=\"grams/mole\")",
+              "calculate_molecular_weight(compound=\"C6H12O6\",to_unit=\"grams/mole\")",
+              "calculate_molecular_weight(compound=\"C6H12O6\",to_unit=\"grams/mole\")"
+            ],
+            "category": "parallel",
+            "correct": false,
+            "decode_ms": 1735.39666,
+            "final_text_chars": 204,
+            "parse_ok": true,
+            "ready": [
+              {
+                "canvas_id": 0,
+                "monotonic_ns": 1035394597524859,
+                "span_hi": 114,
+                "span_lo": 4,
+                "step": 4
+              }
+            ],
+            "revisions": 7
+          },
+          "parallel_12": {
+            "calls": [],
+            "category": "parallel",
+            "correct": false,
+            "decode_ms": 1704.925865,
+            "final_text_chars": 288,
+            "parse_ok": false,
+            "ready": [],
+            "revisions": 7
+          },
+          "parallel_multiple_0": {
+            "calls": [
+              "math_toolkit_product_of_primes(count=5)",
+              "math_toolkit_product_of_primes(count=5)",
+              "math_toolkit_sum_of_multiples(lower_limit=1,multiples=[3,5],upper_limit=1000)",
+              "math_toolkit_sum_of_multiples(lower_limit=1,multiples=[3,5],upper_limit=1000)"
+            ],
+            "category": "parallel_multiple",
+            "correct": false,
+            "decode_ms": 1791.319069,
+            "final_text_chars": 155,
+            "parse_ok": true,
+            "ready": [
+              {
+                "canvas_id": 0,
+                "monotonic_ns": 1035425561855734,
+                "span_hi": 114,
+                "span_lo": 4,
+                "step": 4
+              }
+            ],
+            "revisions": 7
+          },
+          "parallel_multiple_110": {
+            "calls": [
+              "us_economy_gdp_by_state_year(adjustment=\"Real\",state=\"California\",year=1980)",
+              "us_economy_gdp_by_state_year(adjustment=\"Real\",state=\"California\",year=1980)",
+              "us_economy_gdp_by_state_year(adjustment=\"Real\",state=\"California\",year=1990)",
+              "us_economy_gdp_by_state_year(adjustment=\"Real\",state=\"California\",year=1990)",
+              "us_history_population_by_state_year(state=\"California\",year=1980)",
+              "us_history_population_by_state_year(state=\"California\",year=1980)",
+              "us_history_population_by_state_year(state=\"California\",year=1990)",
+              "us_history_population_by_state_year(state=\"California\",year=1990)",
+              "us_history_population_by_state_year(state=\"Texas\",year=2000)"
+            ],
+            "category": "parallel_multiple",
+            "correct": false,
+            "decode_ms": 1768.870102,
+            "final_text_chars": 229,
+            "parse_ok": true,
+            "ready": [],
+            "revisions": 7
+          },
+          "parallel_multiple_115": {
+            "calls": [
+              "park_search_find(facilities=[\"playground\",\"picnic area\"],location=\"New York\")",
+              "tourist_attraction_find(attractionType=\"modern art installation\",location=\"New York\")",
+              "tourist_attraction_find(attractionType=\"monument\",location=\"New York\")"
+            ],
+            "category": "parallel_multiple",
+            "correct": false,
+            "decode_ms": 2022.174659,
+            "final_text_chars": 377,
+            "parse_ok": true,
+            "ready": [
+              {
+                "canvas_id": 0,
+                "monotonic_ns": 1035458173414763,
+                "span_hi": 124,
+                "span_lo": 4,
+                "step": 5
+              }
+            ],
+            "revisions": 8
+          },
+          "simple_python_126": {
+            "calls": [
+              "linear_regression_get_r_squared(dataset_path=\"C:/data/cars.csv\",dependent_variable=\"car_price\",independent_variables=[\"engine_size\",\"fuel_economy\"])",
+              "linear_regression_get_r_squared(dataset_path=\"C:/data/cars.csv\",dependent_variable=\"car_price\",independent_variables=[\"engine_size\",\"fuel_economy\"])"
+            ],
+            "category": "simple",
+            "correct": false,
+            "decode_ms": 1472.536942,
+            "final_text_chars": 255,
+            "parse_ok": true,
+            "ready": [
+              {
+                "canvas_id": 0,
+                "monotonic_ns": 1035462380032990,
+                "span_hi": 90,
+                "span_lo": 4,
+                "step": 3
+              }
+            ],
+            "revisions": 6
+          },
+          "simple_python_134": {
+            "calls": [
+              "investment_predictProfit(annual_return=7,investment_amount=5000,years=5)"
+            ],
+            "category": "simple",
+            "correct": false,
+            "decode_ms": 1505.814911,
+            "final_text_chars": 79,
+            "parse_ok": true,
+            "ready": [
+              {
+                "canvas_id": 0,
+                "monotonic_ns": 1035471802292639,
+                "span_hi": 61,
+                "span_lo": 4,
+                "step": 3
+              }
+            ],
+            "revisions": 6
+          },
+          "simple_python_135": {
+            "calls": [],
+            "category": "simple",
+            "correct": false,
+            "decode_ms": 1920.095464,
+            "final_text_chars": 73,
+            "parse_ok": true,
+            "ready": [
+              {
+                "canvas_id": 0,
+                "monotonic_ns": 1035480104110018,
+                "span_hi": 63,
+                "span_lo": 4,
+                "step": 5
+              }
+            ],
+            "revisions": 8
+          }
+        },
+        "summary": {
+          "arm": "preact_style",
+          "claimed": 0,
+          "doctor_digest": "4c1f900236dc2406039a31011e3bb3509e497ead2a8d39ba5a74214ae053b782",
+          "failures": 0,
+          "frozen_policy": {
+            "path": "configs/frozen_policy.json",
+            "status": "absent"
+          },
+          "instrumentation": "parse",
+          "manifest": "/tmp/crystalcall-bound-sweep-ih4voajb/dev_subset.jsonl",
+          "manifest_sha256": "ae477a257ae16684598e0f220491a4684f2210944d8637ae7aeaa4ecb06c6491",
+          "policy": {
+            "allowed_resources": [
+              "cpu",
+              "gpu",
+              "storage"
+            ],
+            "confidence_mode": "min",
+            "fixed_step": null,
+            "k": 2,
+            "max_inflight": 4,
+            "min_overlap_ms": 50.0,
+            "name": "full_gate",
+            "oracle": null,
+            "random_rate": null,
+            "tau": 0.9,
+            "use_confidence": true,
+            "use_overlap": true,
+            "use_persistence": true,
+            "use_resource": true
+          },
+          "policy_fingerprint": "ba6c5d6c138508b50af1d89a69db37427926ee6c20b96000fbec56ef3b251572",
+          "profile_fingerprint": "355644b578caf43eb00d897f6b3928ccb981b5e428cef9056cd40ed84f7b277d",
+          "prompts": 12,
+          "runtime_costs": {
+            "contention_ms_per_launch": {},
+            "parse_ms_per_revision": 1.2427305529411765,
+            "schedule_ms_per_launch": 0.0,
+            "trace_ms_per_revision": 1.0816264352941176
+          },
+          "seeds": [
+            0
+          ],
+          "semantic_divergence": 0,
+          "turns": 42,
+          "verification_error": 0,
+          "verified_match": 0
+        }
+      },
+      "bound": 0.3,
+      "score": {
+        "acceptable": false,
+        "divergence": {
+          "differ_rate": 0.3333333333333333,
+          "differing_calls": [
+            "multiple_129",
+            "parallel_multiple_110",
+            "parallel_multiple_115",
+            "simple_python_126"
+          ],
+          "n_shared": 12
+        },
+        "rates": {
+          "called_any": 10,
+          "called_any_rate": 0.8333333333333334,
+          "correct": 1,
+          "correct_rate": 0.08333333333333333,
+          "incorrect_prompt_ids": [
+            "multiple_126",
+            "multiple_129",
+            "parallel_110",
+            "parallel_111",
+            "parallel_12",
+            "parallel_multiple_0",
+            "parallel_multiple_110",
+            "parallel_multiple_115",
+            "simple_python_126",
+            "simple_python_134",
+            "simple_python_135"
+          ],
+          "n_prompts": 12,
+          "no_call_prompt_ids": [
+            "parallel_12",
+            "simple_python_135"
+          ],
+          "parse_ok": 11,
+          "parse_rate": 0.9166666666666666,
+          "prompts_with_ready": 9,
+          "ready_events": 9,
+          "unparsed_prompt_ids": [
+            "parallel_12"
+          ]
+        },
+        "reference_rates": {
+          "called_any": 10,
+          "called_any_rate": 0.8333333333333334,
+          "correct": 3,
+          "correct_rate": 0.25,
+          "incorrect_prompt_ids": [
+            "multiple_126",
+            "multiple_129",
+            "parallel_110",
+            "parallel_111",
+            "parallel_12",
+            "parallel_multiple_0",
+            "parallel_multiple_115",
+            "simple_python_134",
+            "simple_python_135"
+          ],
+          "n_prompts": 12,
+          "no_call_prompt_ids": [
+            "parallel_12",
+            "simple_python_135"
+          ],
+          "parse_ok": 11,
+          "parse_rate": 0.9166666666666666,
+          "prompts_with_ready": 0,
+          "ready_events": 0,
+          "unparsed_prompt_ids": [
+            "parallel_12"
+          ]
+        },
+        "reject_reasons": [
+          "BFCL correctness degraded: 8% vs standard 25%"
+        ]
+      }
+    },
+    {
+      "arm": {
+        "by_prompt": {
+          "multiple_101": {
+            "calls": [
+              "math_gcd(num1=12,num2=18)"
+            ],
+            "category": "multiple",
+            "correct": true,
+            "decode_ms": 2571.328713,
+            "final_text_chars": 400,
+            "parse_ok": true,
+            "ready": [
+              {
+                "canvas_id": 0,
+                "monotonic_ns": 1035997434430759,
+                "span_hi": 63,
+                "span_lo": 4,
+                "step": 5
+              }
+            ],
+            "revisions": 8
+          },
+          "multiple_126": {
+            "calls": [
+              "t_test(dataset_A=[12,24,36],dataset_B=[15,30,45])",
+              "t_test(dataset_A=[12,24,36],dataset_B=[15,30,45])"
+            ],
+            "category": "multiple",
+            "correct": false,
+            "decode_ms": 1759.184708,
+            "final_text_chars": 454,
+            "parse_ok": true,
+            "ready": [
+              {
+                "canvas_id": 0,
+                "monotonic_ns": 1036006908179301,
+                "span_hi": 71,
+                "span_lo": 4,
+                "step": 4
+              }
+            ],
+            "revisions": 7
+          },
+          "multiple_129": {
+            "calls": [
+              "compound_interest(annual_rate=0.05,compounding_freq=\"monthly\",principal=10000,time_in_years=5)"
+            ],
+            "category": "multiple",
+            "correct": false,
+            "decode_ms": 1777.021744,
+            "final_text_chars": 134,
+            "parse_ok": true,
+            "ready": [
+              {
+                "canvas_id": 0,
+                "monotonic_ns": 1036019270196452,
+                "span_hi": 73,
+                "span_lo": 4,
+                "step": 4
+              }
+            ],
+            "revisions": 7
+          },
+          "parallel_110": {
+            "calls": [
+              "cell_biology_function_lookup(molecule=\"ATP\",organelle=\"mitochondria\",specific_function=true)",
+              "cell_biology_function_lookup(molecule=\"ATP\",organelle=\"mitochondria\",specific_function=true)",
+              "cell_biology_function_lookup(molecule=\"DNA\",organelle=\"nucleus\",specific_function=true)",
+              "cell_biology_function_lookup(molecule=\"DNA\",organelle=\"nucleus\",specific_function=true)"
+            ],
+            "category": "parallel",
+            "correct": false,
+            "decode_ms": 2344.093228,
+            "final_text_chars": 614,
+            "parse_ok": false,
+            "ready": [
+              {
+                "canvas_id": 0,
+                "monotonic_ns": 1036032535022901,
+                "span_hi": 104,
+                "span_lo": 4,
+                "step": 7
+              }
+            ],
+            "revisions": 10
+          },
+          "parallel_111": {
+            "calls": [
+              "calculate_molecular_weight(compound=\"C12H22O11\",to_unit=\"grams/mole\")",
+              "calculate_molecular_weight(compound=\"C12H22O11\",to_unit=\"grams/mole\")",
+              "calculate_molecular_weight(compound=\"C6H12O6\",to_unit=\"grams/mole\")",
+              "calculate_molecular_weight(compound=\"C6H12O6\",to_unit=\"grams/mole\")"
+            ],
+            "category": "parallel",
+            "correct": false,
+            "decode_ms": 2781.196969,
+            "final_text_chars": 2008,
+            "parse_ok": false,
+            "ready": [],
+            "revisions": 12
+          },
+          "parallel_12": {
+            "calls": [],
+            "category": "parallel",
+            "correct": false,
+            "decode_ms": 1272.040074,
+            "final_text_chars": 180,
+            "parse_ok": false,
+            "ready": [
+              {
+                "canvas_id": 0,
+                "monotonic_ns": 1036083585025062,
+                "span_hi": 96,
+                "span_lo": 4,
+                "step": 2
+              }
+            ],
+            "revisions": 5
+          },
+          "parallel_multiple_0": {
+            "calls": [
+              "math_toolkit_product_of_primes(count=5)",
+              "math_toolkit_product_of_primes(count=5)",
+              "math_toolkit_sum_of_multiples(lower_limit=1,multiples=[3,5],upper_limit=1000)",
+              "math_toolkit_sum_of_multiples(lower_limit=1,multiples=[3,5],upper_limit=1000)"
+            ],
+            "category": "parallel_multiple",
+            "correct": false,
+            "decode_ms": 2006.897169,
+            "final_text_chars": 148,
+            "parse_ok": true,
+            "ready": [
+              {
+                "canvas_id": 0,
+                "monotonic_ns": 1036096919202252,
+                "span_hi": 113,
+                "span_lo": 4,
+                "step": 5
+              }
+            ],
+            "revisions": 8
+          },
+          "parallel_multiple_110": {
+            "calls": [
+              "us_economy_gdp_by_state_year(adjustment=\"Real\",state=\"California\",year=1980)",
+              "us_economy_gdp_by_state_year(adjustment=\"Real\",state=\"California\",year=1980)",
+              "us_economy_gdp_by_state_year(adjustment=\"Real\",state=\"California\",year=1990)",
+              "us_economy_gdp_by_state_year(adjustment=\"Real\",state=\"California\",year=1990)",
+              "us_history_population_by_state_year(state=\"California\",year=1980)",
+              "us_history_population_by_state_year(state=\"California\",year=1980)",
+              "us_history_population_by_state_year(state=\"California\",year=1990)",
+              "us_history_population_by_state_year(state=\"California\",year=1990)"
+            ],
+            "category": "parallel_multiple",
+            "correct": false,
+            "decode_ms": 1765.82927,
+            "final_text_chars": 313,
+            "parse_ok": true,
+            "ready": [
+              {
+                "canvas_id": 0,
+                "monotonic_ns": 1036108718315982,
+                "span_hi": 222,
+                "span_lo": 4,
+                "step": 4
+              }
+            ],
+            "revisions": 7
+          },
+          "parallel_multiple_115": {
+            "calls": [
+              "park_search_find(facilities=[\"playground\",\"picnic area\"],location=\"New York\")",
+              "park_search_find(facilities=[\"playground\",\"picnic area\"],location=\"New York\")",
+              "tourist_attraction_find(attractionType=\"modern art\",location=\"New York\")",
+              "tourist_attraction_find(attractionType=\"modern art\",location=\"New York\")",
+              "tourist_attraction_find(attractionType=\"monument\",location=\"New York\")",
+              "tourist_attraction_find(attractionType=\"monument\",location=\"New York\")"
+            ],
+            "category": "parallel_multiple",
+            "correct": false,
+            "decode_ms": 2671.01573,
+            "final_text_chars": 515,
+            "parse_ok": true,
+            "ready": [
+              {
+                "canvas_id": 0,
+                "monotonic_ns": 1036135778807450,
+                "span_hi": 114,
+                "span_lo": 4,
+                "step": 8
+              }
+            ],
+            "revisions": 11
+          },
+          "simple_python_126": {
+            "calls": [
+              "linear_regression_get_r_squared(dataset_path=\"C:/data/cars.csv\",dependent_variable=\"car_price\",independent_variables=[\"engine_size\",\"fuel_economy\"])"
+            ],
+            "category": "simple",
+            "correct": true,
+            "decode_ms": 1679.730045,
+            "final_text_chars": 1892,
+            "parse_ok": true,
+            "ready": [
+              {
+                "canvas_id": 0,
+                "monotonic_ns": 1036143778781147,
+                "span_hi": 81,
+                "span_lo": 4,
+                "step": 3
+              }
+            ],
+            "revisions": 7
+          },
+          "simple_python_134": {
+            "calls": [
+              "investment_predictProfit(annual_return=7,investment_amount=5000,years=5)"
+            ],
+            "category": "simple",
+            "correct": false,
+            "decode_ms": 1494.30089,
+            "final_text_chars": 79,
+            "parse_ok": true,
+            "ready": [
+              {
+                "canvas_id": 0,
+                "monotonic_ns": 1036164619447841,
+                "span_hi": 61,
+                "span_lo": 4,
+                "step": 3
+              }
+            ],
+            "revisions": 6
+          },
+          "simple_python_135": {
+            "calls": [
+              "calculate_return_on_investment(dividend=2,purchase_price=20,sale_price=25)"
+            ],
+            "category": "simple",
+            "correct": true,
+            "decode_ms": 1490.913365,
+            "final_text_chars": 209,
+            "parse_ok": true,
+            "ready": [
+              {
+                "canvas_id": 0,
+                "monotonic_ns": 1036177647065360,
+                "span_hi": 58,
+                "span_lo": 4,
+                "step": 3
+              }
+            ],
+            "revisions": 6
+          }
+        },
+        "summary": {
+          "arm": "preact_style",
+          "claimed": 0,
+          "doctor_digest": "4c1f900236dc2406039a31011e3bb3509e497ead2a8d39ba5a74214ae053b782",
+          "failures": 0,
+          "frozen_policy": {
+            "path": "configs/frozen_policy.json",
+            "status": "absent"
+          },
+          "instrumentation": "parse",
+          "manifest": "/tmp/crystalcall-bound-sweep-ih4voajb/dev_subset.jsonl",
+          "manifest_sha256": "ae477a257ae16684598e0f220491a4684f2210944d8637ae7aeaa4ecb06c6491",
+          "policy": {
+            "allowed_resources": [
+              "cpu",
+              "gpu",
+              "storage"
+            ],
+            "confidence_mode": "min",
+            "fixed_step": null,
+            "k": 2,
+            "max_inflight": 4,
+            "min_overlap_ms": 50.0,
+            "name": "full_gate",
+            "oracle": null,
+            "random_rate": null,
+            "tau": 0.9,
+            "use_confidence": true,
+            "use_overlap": true,
+            "use_persistence": true,
+            "use_resource": true
+          },
+          "policy_fingerprint": "ba6c5d6c138508b50af1d89a69db37427926ee6c20b96000fbec56ef3b251572",
+          "profile_fingerprint": "355644b578caf43eb00d897f6b3928ccb981b5e428cef9056cd40ed84f7b277d",
+          "prompts": 12,
+          "runtime_costs": {
+            "contention_ms_per_launch": {},
+            "parse_ms_per_revision": 0.7355408617021276,
+            "schedule_ms_per_launch": 0.0,
+            "trace_ms_per_revision": 0.7712252765957447
+          },
+          "seeds": [
+            0
+          ],
+          "semantic_divergence": 0,
+          "turns": 45,
+          "verification_error": 0,
+          "verified_match": 0
+        }
+      },
+      "bound": 0.45,
+      "score": {
+        "acceptable": false,
+        "divergence": {
+          "differ_rate": 0.3333333333333333,
+          "differing_calls": [
+            "multiple_129",
+            "parallel_multiple_110",
+            "parallel_multiple_115",
+            "simple_python_135"
+          ],
+          "n_shared": 12
+        },
+        "rates": {
+          "called_any": 11,
+          "called_any_rate": 0.9166666666666666,
+          "correct": 3,
+          "correct_rate": 0.25,
+          "incorrect_prompt_ids": [
+            "multiple_126",
+            "multiple_129",
+            "parallel_110",
+            "parallel_111",
+            "parallel_12",
+            "parallel_multiple_0",
+            "parallel_multiple_110",
+            "parallel_multiple_115",
+            "simple_python_134"
+          ],
+          "n_prompts": 12,
+          "no_call_prompt_ids": [
+            "parallel_12"
+          ],
+          "parse_ok": 9,
+          "parse_rate": 0.75,
+          "prompts_with_ready": 11,
+          "ready_events": 11,
+          "unparsed_prompt_ids": [
+            "parallel_110",
+            "parallel_111",
+            "parallel_12"
+          ]
+        },
+        "reference_rates": {
+          "called_any": 10,
+          "called_any_rate": 0.8333333333333334,
+          "correct": 3,
+          "correct_rate": 0.25,
+          "incorrect_prompt_ids": [
+            "multiple_126",
+            "multiple_129",
+            "parallel_110",
+            "parallel_111",
+            "parallel_12",
+            "parallel_multiple_0",
+            "parallel_multiple_115",
+            "simple_python_134",
+            "simple_python_135"
+          ],
+          "n_prompts": 12,
+          "no_call_prompt_ids": [
+            "parallel_12",
+            "simple_python_135"
+          ],
+          "parse_ok": 11,
+          "parse_rate": 0.9166666666666666,
+          "prompts_with_ready": 0,
+          "ready_events": 0,
+          "unparsed_prompt_ids": [
+            "parallel_12"
+          ]
+        },
+        "reject_reasons": [
+          "valid final parse degraded: 75% vs standard 92%"
+        ]
+      }
+    },
+    {
+      "arm": {
+        "by_prompt": {
+          "multiple_101": {
+            "calls": [
+              "math_gcd(num1=12,num2=18)"
+            ],
+            "category": "multiple",
+            "correct": true,
+            "decode_ms": 2628.911256,
+            "final_text_chars": 400,
+            "parse_ok": true,
+            "ready": [
+              {
+                "canvas_id": 0,
+                "monotonic_ns": 1036686375740851,
+                "span_hi": 63,
+                "span_lo": 4,
+                "step": 5
+              }
+            ],
+            "revisions": 8
+          },
+          "multiple_126": {
+            "calls": [
+              "t_test(dataset_A=[12,24,36],dataset_B=[15,30,45])",
+              "t_test(dataset_A=[12,24,36],dataset_B=[15,30,45])"
+            ],
+            "category": "multiple",
+            "correct": false,
+            "decode_ms": 1771.125185,
+            "final_text_chars": 442,
+            "parse_ok": true,
+            "ready": [
+              {
+                "canvas_id": 0,
+                "monotonic_ns": 1036695893651758,
+                "span_hi": 71,
+                "span_lo": 4,
+                "step": 4
+              }
+            ],
+            "revisions": 7
+          },
+          "multiple_129": {
+            "calls": [
+              "compound_interest(annual_rate=5,compounding_freq=\"monthly\",principal=10000,time_in_years=5)"
+            ],
+            "category": "multiple",
+            "correct": true,
+            "decode_ms": 1984.803935,
+            "final_text_chars": 585,
+            "parse_ok": true,
+            "ready": [
+              {
+                "canvas_id": 0,
+                "monotonic_ns": 1036710937155509,
+                "span_hi": 62,
+                "span_lo": 4,
+                "step": 4
+              }
+            ],
+            "revisions": 8
+          },
+          "parallel_110": {
+            "calls": [
+              "cell_biology_function_lookup(molecule=\"ATP\",organelle=\"mitochondria\",specific_function=true)",
+              "cell_biology_function_lookup(molecule=\"DNA\",organelle=\"nucleus\",specific_function=true)"
+            ],
+            "category": "parallel",
+            "correct": true,
+            "decode_ms": 1933.428277,
+            "final_text_chars": 668,
+            "parse_ok": true,
+            "ready": [
+              {
+                "canvas_id": 0,
+                "monotonic_ns": 1036721015467433,
+                "span_hi": 97,
+                "span_lo": 4,
+                "step": 5
+              }
+            ],
+            "revisions": 8
+          },
+          "parallel_111": {
+            "calls": [
+              "calculate_molecular_weight(compound=\"C12H22O11\",to_unit=\"grams/mole\")",
+              "calculate_molecular_weight(compound=\"C12H22O11\",to_unit=\"grams/mole\")",
+              "calculate_molecular_weight(compound=\"C6H12O6\",to_unit=\"grams/mole\")",
+              "calculate_molecular_weight(compound=\"C6H12O6\",to_unit=\"grams/mole\")"
+            ],
+            "category": "parallel",
+            "correct": false,
+            "decode_ms": 1735.4796,
+            "final_text_chars": 476,
+            "parse_ok": true,
+            "ready": [
+              {
+                "canvas_id": 0,
+                "monotonic_ns": 1036731367956641,
+                "span_hi": 110,
+                "span_lo": 4,
+                "step": 4
+              }
+            ],
+            "revisions": 7
+          },
+          "parallel_12": {
+            "calls": [],
+            "category": "parallel",
+            "correct": false,
+            "decode_ms": 1502.948033,
+            "final_text_chars": 153,
+            "parse_ok": false,
+            "ready": [
+              {
+                "canvas_id": 0,
+                "monotonic_ns": 1036755953138276,
+                "span_hi": 96,
+                "span_lo": 4,
+                "step": 3
+              }
+            ],
+            "revisions": 6
+          },
+          "parallel_multiple_0": {
+            "calls": [
+              "math_toolkit_product_of_primes(count=5)",
+              "math_toolkit_product_of_primes(count=5)",
+              "math_toolkit_sum_of_multiples(lower_limit=1,multiples=[3,5],upper_limit=1000)",
+              "math_toolkit_sum_of_multiples(lower_limit=1,multiples=[3,5],upper_limit=1000)"
+            ],
+            "category": "parallel_multiple",
+            "correct": false,
+            "decode_ms": 1553.121699,
+            "final_text_chars": 148,
+            "parse_ok": true,
+            "ready": [
+              {
+                "canvas_id": 0,
+                "monotonic_ns": 1036772240221557,
+                "span_hi": 104,
+                "span_lo": 4,
+                "step": 3
+              }
+            ],
+            "revisions": 6
+          },
+          "parallel_multiple_110": {
+            "calls": [
+              "us_economy_gdp_by_state_year(adjustment=\"Real\",state=\"California\",year=1980)",
+              "us_economy_gdp_by_state_year(adjustment=\"Real\",state=\"California\",year=1980)",
+              "us_economy_gdp_by_state_year(adjustment=\"Real\",state=\"California\",year=1990)",
+              "us_economy_gdp_by_state_year(adjustment=\"Real\",state=\"California\",year=1990)",
+              "us_history_population_by_state_year(state=\"California\",year=1980)",
+              "us_history_population_by_state_year(state=\"California\",year=1980)",
+              "us_history_population_by_state_year(state=\"California\",year=1990)",
+              "us_history_population_by_state_year(state=\"California\",year=1990)"
+            ],
+            "category": "parallel_multiple",
+            "correct": false,
+            "decode_ms": 1786.261395,
+            "final_text_chars": 281,
+            "parse_ok": true,
+            "ready": [
+              {
+                "canvas_id": 0,
+                "monotonic_ns": 1036786946957105,
+                "span_hi": 222,
+                "span_lo": 4,
+                "step": 3
+              }
+            ],
+            "revisions": 7
+          },
+          "parallel_multiple_115": {
+            "calls": [
+              "park_search_find(facilities=[\"playground\",\"picnic area\"],location=\"New York\")",
+              "park_search_find(facilities=[\"playground\",\"picnic area\"],location=\"New York\")",
+              "tourist_attraction_find(attractionType=\"modern art installation\",location=\"New York\")",
+              "tourist_attraction_find(attractionType=\"modern art installation\",location=\"New York\")",
+              "tourist_attraction_find(attractionType=\"monument\",location=\"New York\")",
+              "tourist_attraction_find(attractionType=\"monument\",location=\"New York\")"
+            ],
+            "category": "parallel_multiple",
+            "correct": false,
+            "decode_ms": 2239.451637,
+            "final_text_chars": 580,
+            "parse_ok": true,
+            "ready": [
+              {
+                "canvas_id": 0,
+                "monotonic_ns": 1036801980593906,
+                "span_hi": 108,
+                "span_lo": 4,
+                "step": 5
+              }
+            ],
+            "revisions": 9
+          },
+          "simple_python_126": {
+            "calls": [
+              "linear_regression_get_r_squared(dataset_path=\"C:/data/cars.csv\",dependent_variable=\"car_price\",independent_variables=[\"engine_size\",\"fuel_economy\"])"
+            ],
+            "category": "simple",
+            "correct": true,
+            "decode_ms": 1715.245334,
+            "final_text_chars": 234,
+            "parse_ok": true,
+            "ready": [
+              {
+                "canvas_id": 0,
+                "monotonic_ns": 1036821630096465,
+                "span_hi": 90,
+                "span_lo": 4,
+                "step": 4
+              }
+            ],
+            "revisions": 7
+          },
+          "simple_python_134": {
+            "calls": [
+              "investment_predictProfit(annual_return=7,investment_amount=5000,years=5)"
+            ],
+            "category": "simple",
+            "correct": false,
+            "decode_ms": 1724.882349,
+            "final_text_chars": 82,
+            "parse_ok": true,
+            "ready": [
+              {
+                "canvas_id": 0,
+                "monotonic_ns": 1036826391548851,
+                "span_hi": 62,
+                "span_lo": 4,
+                "step": 4
+              }
+            ],
+            "revisions": 7
+          },
+          "simple_python_135": {
+            "calls": [],
+            "category": "simple",
+            "correct": false,
+            "decode_ms": 1500.260121,
+            "final_text_chars": 73,
+            "parse_ok": true,
+            "ready": [
+              {
+                "canvas_id": 0,
+                "monotonic_ns": 1036836537821307,
+                "span_hi": 56,
+                "span_lo": 4,
+                "step": 3
+              }
+            ],
+            "revisions": 6
+          }
+        },
+        "summary": {
+          "arm": "preact_style",
+          "claimed": 0,
+          "doctor_digest": "4c1f900236dc2406039a31011e3bb3509e497ead2a8d39ba5a74214ae053b782",
+          "failures": 0,
+          "frozen_policy": {
+            "path": "configs/frozen_policy.json",
+            "status": "absent"
+          },
+          "instrumentation": "parse",
+          "manifest": "/tmp/crystalcall-bound-sweep-ih4voajb/dev_subset.jsonl",
+          "manifest_sha256": "ae477a257ae16684598e0f220491a4684f2210944d8637ae7aeaa4ecb06c6491",
+          "policy": {
+            "allowed_resources": [
+              "cpu",
+              "gpu",
+              "storage"
+            ],
+            "confidence_mode": "min",
+            "fixed_step": null,
+            "k": 2,
+            "max_inflight": 4,
+            "min_overlap_ms": 50.0,
+            "name": "full_gate",
+            "oracle": null,
+            "random_rate": null,
+            "tau": 0.9,
+            "use_confidence": true,
+            "use_overlap": true,
+            "use_persistence": true,
+            "use_resource": true
+          },
+          "policy_fingerprint": "ba6c5d6c138508b50af1d89a69db37427926ee6c20b96000fbec56ef3b251572",
+          "profile_fingerprint": "355644b578caf43eb00d897f6b3928ccb981b5e428cef9056cd40ed84f7b277d",
+          "prompts": 12,
+          "runtime_costs": {
+            "contention_ms_per_launch": {},
+            "parse_ms_per_revision": 0.24275832558139535,
+            "schedule_ms_per_launch": 0.0,
+            "trace_ms_per_revision": 0.21479855813953488
+          },
+          "seeds": [
+            0
+          ],
+          "semantic_divergence": 0,
+          "turns": 41,
+          "verification_error": 0,
+          "verified_match": 0
+        }
+      },
+      "bound": 0.6,
+      "score": {
+        "acceptable": true,
+        "divergence": {
+          "differ_rate": 0.3333333333333333,
+          "differing_calls": [
+            "multiple_129",
+            "parallel_110",
+            "parallel_multiple_110",
+            "parallel_multiple_115"
+          ],
+          "n_shared": 12
+        },
+        "rates": {
+          "called_any": 10,
+          "called_any_rate": 0.8333333333333334,
+          "correct": 4,
+          "correct_rate": 0.3333333333333333,
+          "incorrect_prompt_ids": [
+            "multiple_126",
+            "parallel_111",
+            "parallel_12",
+            "parallel_multiple_0",
+            "parallel_multiple_110",
+            "parallel_multiple_115",
+            "simple_python_134",
+            "simple_python_135"
+          ],
+          "n_prompts": 12,
+          "no_call_prompt_ids": [
+            "parallel_12",
+            "simple_python_135"
+          ],
+          "parse_ok": 11,
+          "parse_rate": 0.9166666666666666,
+          "prompts_with_ready": 12,
+          "ready_events": 12,
+          "unparsed_prompt_ids": [
+            "parallel_12"
+          ]
+        },
+        "reference_rates": {
+          "called_any": 10,
+          "called_any_rate": 0.8333333333333334,
+          "correct": 3,
+          "correct_rate": 0.25,
+          "incorrect_prompt_ids": [
+            "multiple_126",
+            "multiple_129",
+            "parallel_110",
+            "parallel_111",
+            "parallel_12",
+            "parallel_multiple_0",
+            "parallel_multiple_115",
+            "simple_python_134",
+            "simple_python_135"
+          ],
+          "n_prompts": 12,
+          "no_call_prompt_ids": [
+            "parallel_12",
+            "simple_python_135"
+          ],
+          "parse_ok": 11,
+          "parse_rate": 0.9166666666666666,
+          "prompts_with_ready": 0,
+          "ready_events": 0,
+          "unparsed_prompt_ids": [
+            "parallel_12"
+          ]
+        },
+        "reject_reasons": []
+      }
+    }
+  ],
+  "schema_version": "crystalcall-preact-sweep/1",
+  "seed": 0,
+  "selected": 0.6,
+  "selection_rule": "largest bound whose BFCL correctness, valid-parse and executed-a-call rates are all >= the standard arm's on the same prompts, and which produced at least one readiness event; per-prompt agreement is reported but is never an acceptance criterion, because the engine is not restart-reproducible"
+}

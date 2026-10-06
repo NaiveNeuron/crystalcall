@@ -1,0 +1,114 @@
+# P-ReAct-style tool-priority diffusion decoding (baseline arm D).
+#
+# This file is DATA for the mechanism implemented in src/crystalcall/preact.py
+# (pure, unit-tested) and patches/preact_priority.py (the in-container tensor
+# form called from the patched DiffusionGemma sampler).  Nothing here is a
+# magic number in the patch: scripts/serve_diffusiongemma.sh reads the ids out
+# of this file and exports them into the container, and the module refuses to
+# run when they are absent.
+#
+# The token ids are regenerated (and verified) with
+#   uv run scripts/resolve_gemma_tokens.py --write
+#   uv run scripts/resolve_gemma_tokens.py --check
+# and tests/test_preact.py re-resolves them from the live checkpoint so a
+# checkpoint swap fails the test suite instead of silently producing a vacuous
+# baseline.
+
+schema: crystalcall-preact/1
+
+# ---------------------------------------------------------------------------
+# Tool-call delimiters, resolved from the pinned checkpoint tokenizer.
+# Note the asymmetric pipe placement: opener "<|tool_call>", closer "<tool_call|>".
+# ---------------------------------------------------------------------------
+tokens:
+  open_token: "<|tool_call>"
+  close_token: "<tool_call|>"
+  open_token_id: 48
+  close_token_id: 49
+  # provenance / debugging only -- the mechanism uses the two ids above
+  tool_open_token_id: 46
+  tool_close_token_id: 47
+  tool_response_open_token_id: 50
+  tool_response_close_token_id: 51
+  turn_open_token_id: 105
+  turn_close_token_id: 106
+  tokenizer_snapshot: "f7f5b7f5fa82ffc52addd066915886d497f5517b"
+  tokenizer_sha256: "cc8d3a0ce36466ccc1278bf987df5f71db1719b9ca6b4118264f45cb627bfe0f"
+  model_repo: "google/diffusiongemma-26B-A4B-it"
+
+# ---------------------------------------------------------------------------
+# Provenance of the in-span entropy bound.  It is a DEVELOPMENT-SELECTED
+# parameter, not a guess.  `status: pending` means no
+# adequately-powered selection exists yet and the arm must not be run for
+# results; `scripts/preact_bound_sweep.py` writes the selection and
+# `tests/test_preact_selection.py` fails if `defaults.span_entropy_bound`
+# disagrees with it.
+# ---------------------------------------------------------------------------
+selection:
+  status: pending
+  selected_on: null
+  sweep_report: experiments/derived/preact_bound_sweep.json
+  sweep_sha256: null
+  note: >
+    A 12-prompt stratified pilot sweep is preserved at
+    experiments/derived/preact_bound_sweep_n12.json.  It is too small to decide
+    (one prompt is 8.3 percentage points and the rungs differ by 1-3 prompts
+    with no monotone trend), so the decision is deferred to the full 100-prompt
+    development manifest.
+
+# ---------------------------------------------------------------------------
+# Mechanism defaults.  Every one of these is overridable by environment
+# variable so the ablation table can decompose the mechanism without editing
+# the image, the patch or this file.
+# ---------------------------------------------------------------------------
+defaults:
+  # "span_accept" | "ready_signal" | "both".  The arm runs "both"; the other
+  # two exist so the ablation table can attribute the effect.
+  # NOTE: neither mode touches convergence.  span_accept changes only the
+  # acceptance mask inside the tool-call span; ready_signal only emits a
+  # `tool_call_ready` side-channel event.  Denoising ends under the ordinary
+  # rule, exactly as in the standard arm, so the committed canvas is never
+  # truncated or half-denoised.
+  mode: both
+  # Per-token entropy bound applied INSIDE the tool-call span.  The ordinary
+  # sampler rule is a *cumulative* bound of 0.1 nats over the whole canvas
+  # (EntropyBoundSamplerConfig.entropy_bound); this is a deliberately looser
+  # *per-token* bound, which is what "priority" means here.  0.6 nats ~ a
+  # top-1 probability around 0.75 for a two-way ambiguity.
+  span_entropy_bound: 0.6
+  # Consecutive denoising steps for which the span must be byte-identical
+  # before the readiness event fires.  1 == signal as soon as the span is
+  # fully accepted, matching the sampler's own stability_threshold of 1.
+  require_stable_steps: 1
+  # Off unless CRYSTALCALL_PREACT is truthy.  The CrystalCall / standard arms
+  # run the SAME patched file with this off, and then not one added op is in
+  # the compiled graph.
+  enabled: false
+
+# ---------------------------------------------------------------------------
+# Environment contract.  harness.ARMS["preact_style"].sampler_env sets the
+# first two; scripts/serve_diffusiongemma.sh fills the rest from this file.
+# ---------------------------------------------------------------------------
+env:
+  CRYSTALCALL_PREACT: "1|0 (default 0) -- master switch"
+  CRYSTALCALL_PREACT_MODE: "span_accept|ready_signal|both (default both)"
+  CRYSTALCALL_PREACT_BOUND: "float, in-span per-token entropy bound (default 0.6)"
+  CRYSTALCALL_PREACT_STABLE: "int >= 1, require_stable_steps (default 1)"
+  CRYSTALCALL_PREACT_OPEN_ID: "int, exported from tokens.open_token_id"
+  CRYSTALCALL_PREACT_CLOSE_ID: "int, exported from tokens.close_token_id"
+
+# ---------------------------------------------------------------------------
+# The exact server command for the arm.  Identical image, identical patched
+# sampler file, identical prompt (configs/system_prompt.md), identical tool
+# schemas and identical seed as every other diffusion arm -- the ONLY
+# difference is CRYSTALCALL_PREACT=1.
+# ---------------------------------------------------------------------------
+serve:
+  crystalcall_arm: |
+    SEED=12345 CRYSTALCALL_TRACE=1 CRYSTALCALL_TRACE_SINK=127.0.0.1:8765 \
+      bash scripts/serve_diffusiongemma.sh
+  preact_arm: |
+    SEED=12345 CRYSTALCALL_TRACE=1 CRYSTALCALL_TRACE_SINK=127.0.0.1:8765 \
+      CRYSTALCALL_PREACT=1 CRYSTALCALL_PREACT_MODE=both \
+      bash scripts/serve_diffusiongemma.sh
+  stop: bash scripts/serve_diffusiongemma.sh --stop

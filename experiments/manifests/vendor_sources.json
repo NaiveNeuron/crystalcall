@@ -1,0 +1,75 @@
+{
+  "schema": "crystalcall-vendor-sources/1",
+  "note": "Pinned upstream sources for the CrystalCall prompt manifests. experiments/vendor/ is gitignored; this file is the committed provenance record. GitHub smart-HTTP git-upload-pack POST is answered with HTTP 401 from this host (anonymous `git clone` and `git ls-remote` both fail intermittently), so the archives are fetched from codeload at the pinned commit SHA instead. The `git_clone_command` field records the equivalent canonical command; the `fetch_command` field records what `scripts/build_manifests.py --fetch` actually runs.",
+  "sources": [
+    {
+      "key": "bfcl",
+      "repo": "https://github.com/ShishirPatil/gorilla",
+      "commit": "6ea57973c7a6097fd7c5915698c54c17c5b1b6c8",
+      "resolved_by": "curl -sS https://api.github.com/repos/ShishirPatil/gorilla/commits?per_page=1 | jq -r '.[0].sha'",
+      "git_clone_command": "git clone --depth 1 https://github.com/ShishirPatil/gorilla",
+      "fetch_command": "curl -sSL -o gorilla.tar.gz https://codeload.github.com/ShishirPatil/gorilla/tar.gz/6ea57973c7a6097fd7c5915698c54c17c5b1b6c8",
+      "archive_url": "https://codeload.github.com/ShishirPatil/gorilla/tar.gz/6ea57973c7a6097fd7c5915698c54c17c5b1b6c8",
+      "archive_sha256": "c6b5081337cabd317b56c6eead2ec735f7a3cb86ac4fd664e3f9c8c02d1f1f1e",
+      "archive_bytes": 44726505,
+      "archive_member": "gorilla-6ea57973c7a6097fd7c5915698c54c17c5b1b6c8/berkeley-function-call-leaderboard/bfcl_eval/data",
+      "install_path": "bfcl/data",
+      "keep_note": "Only berkeley-function-call-leaderboard/bfcl_eval/data (prompts + possible_answer ground truth) is kept."
+    },
+    {
+      "key": "toolsandbox",
+      "repo": "https://github.com/apple/ToolSandbox",
+      "commit": "165848b9a78cead7ca7fe7c89c688b58e6501219",
+      "resolved_by": "curl -sS https://api.github.com/repos/apple/ToolSandbox/commits?per_page=1 | jq -r '.[0].sha'",
+      "git_clone_command": "git clone --depth 1 https://github.com/apple/ToolSandbox",
+      "fetch_command": "curl -sSL -o ToolSandbox.tar.gz https://codeload.github.com/apple/ToolSandbox/tar.gz/165848b9a78cead7ca7fe7c89c688b58e6501219",
+      "archive_url": "https://codeload.github.com/apple/ToolSandbox/tar.gz/165848b9a78cead7ca7fe7c89c688b58e6501219",
+      "archive_sha256": "0019647ab9a52348680a1e33f99c5db9c32b9513bcd78fed1af9c4beb804427e",
+      "archive_bytes": 165527,
+      "archive_member": "ToolSandbox-165848b9a78cead7ca7fe7c89c688b58e6501219",
+      "install_path": "toolsandbox/checkout",
+      "keep_note": "Whole checkout kept (1.6 MB); only tool_sandbox/scenarios/*.py and tool_sandbox/common/execution_context.py are read, never executed."
+    },
+    {
+      "key": "sptc",
+      "repo": "https://github.com/alexzhang13/spec-ptc",
+      "commit": "9b78b7d6ceeaf8afd1557c4e3a999ce653fc0e17",
+      "resolved_by": "curl -sS https://api.github.com/repos/alexzhang13/spec-ptc/commits?per_page=1 | python3 -c \"import json,sys;print(json.load(sys.stdin)[0]['sha'])\"",
+      "git_clone_command": "git clone --depth 1 https://github.com/alexzhang13/spec-ptc",
+      "fetch_command": "curl -sSL -o sptc.tar.gz https://codeload.github.com/alexzhang13/spec-ptc/tar.gz/9b78b7d6ceeaf8afd1557c4e3a999ce653fc0e17",
+      "archive_url": "https://codeload.github.com/alexzhang13/spec-ptc/tar.gz/9b78b7d6ceeaf8afd1557c4e3a999ce653fc0e17",
+      "archive_sha256": "31dcda7685056e16d0f3c793f871689bdd8629bb5f166238f1f8a93701296dc6",
+      "install_path": "sptc",
+      "keep_note": "Read for the AR-sPTC baseline; CrystalCall reuses its shadow-runtime/future SEMANTICS but our own canonicaliser, effect registry and tool implementations."
+    },
+    {
+      "key": "omp",
+      "repo": "https://github.com/can1357/oh-my-pi",
+      "release_tag": "v18.1.4",
+      "reported_version": "omp/18.1.4",
+      "resolved_by": "jq -r '.pins.omp.version' reports/doctor.json",
+      "fetch_command": "bash scripts/fetch_omp.sh",
+      "archive_url": "https://github.com/can1357/oh-my-pi/releases/download/v18.1.4/omp-linux-arm64",
+      "archive_sha256": "e8b6fcfda4df32e7f22fca98107b48eea9e4edf2201dc1132703fb615550237f",
+      "checksum_source": "https://github.com/can1357/oh-my-pi/releases/download/v18.1.4/SHA256SUMS.txt",
+      "install_path": "omp/18.1.4/omp-linux-arm64",
+      "size_bytes": 155240440,
+      "keep_note": "The harness build the pinned corpus was produced with. omp/18.1.11 breaks the stateful arm's native tool-call path, so omp_bridge.resolve_omp_binary prefers this vendored build over PATH and every run is attributable to the pinned build by digest."
+    }
+  ],
+  "input_files_sha256": {
+    "bfcl/data/BFCL_v4_multiple.json": "aef168155ebd74b7ac2401198b201343bc7d16d7a3d7e0d4e6d8ee82c6969b2a",
+    "bfcl/data/BFCL_v4_parallel.json": "19f51a82eff42e5d62541aa500115a056eb78f437c2ba1f10415fd7c8e5dda84",
+    "bfcl/data/BFCL_v4_parallel_multiple.json": "8863ea8433239f55c5f016154cf0830853c89f693c6ea270396a2fa121960579",
+    "bfcl/data/BFCL_v4_simple_python.json": "82dd63ba502eb2520c6b5d1d9a5c4b590e03ff261565175561f6228a367d1991",
+    "bfcl/data/possible_answer/BFCL_v4_multiple.json": "244e00ce9395df948bcafc7bee64e8f9c87ef70887587d83cae45b13699f3047",
+    "bfcl/data/possible_answer/BFCL_v4_parallel.json": "8a6aa19c1adddc6a5a2f7e40f9dbf30cc7e95815e7b830c90589ab318229e0f0",
+    "bfcl/data/possible_answer/BFCL_v4_parallel_multiple.json": "5ebf24f458c1f16300c05505d83d6f0a1b68b79be273a033febd0d4f840507e3",
+    "bfcl/data/possible_answer/BFCL_v4_simple_python.json": "90cd5bc653690ee8e459b5b3f3fc9458606f7f3fcbf795bb51b7dc581f8c86dc",
+    "toolsandbox/checkout/tool_sandbox/common/execution_context.py": "a18f54e157b92fa011e84780bc33941ea0635ad70ab4b38e7408beedc6221437",
+    "toolsandbox/checkout/tool_sandbox/scenarios/insufficient_information_scenarios.py": "3920e5bb8df528c5e87427c29edc7ee346057324eb47e56df61189a298c901b1",
+    "toolsandbox/checkout/tool_sandbox/scenarios/multiple_tool_call_scenarios.py": "e2d351bebf9afec76d37263b02544120c78b687f4dd4501ab0a4b6c981ce1ff3",
+    "toolsandbox/checkout/tool_sandbox/scenarios/multiple_user_turn_scenarios.py": "784c636140afbb452e94df301191f466f6d06929d3eebec13ba1a66992a74baf",
+    "toolsandbox/checkout/tool_sandbox/scenarios/single_tool_call_scenarios.py": "dd295b0f64c53015bfebea538891be3183a7a1f74ec37454a0f154b93fab9e38"
+  }
+}

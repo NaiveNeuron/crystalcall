@@ -1,0 +1,72 @@
+# OMP model registry for CrystalCall.  Installed to
+# ~/.omp/profiles/crystalcall/agent/models.yml by scripts/install_omp_profile.sh
+#
+# The provider id is `vllm` because membership in OMP's local
+# OpenAI-compatible provider list switches on the local-model stream-timeout
+# floor and reasoning-content replay.  The URL points at the CrystalCall
+# request proxy, not at vLLM directly: the proxy mints the stable request id
+# that correlates the authoritative OMP stream with the private
+# CanvasRevision side channel.
+providers:
+  vllm:
+    baseUrl: http://127.0.0.1:8000/v1
+    api: openai-completions
+    auth: none
+
+    compat:
+      # DiffusionGemma exposes reasoning through --reasoning-parser gemma4,
+      # which emits `reasoning_content` on the OpenAI-compatible surface.
+      reasoningContentField: reasoning_content
+      # `qwen-chat-template` is a WIRE SHAPE, not a model family: it sends
+      # chat_template_kwargs.enable_thinking, which is exactly how the
+      # DiffusionGemma / Gemma 4 template toggles thinking per the vLLM
+      # recipe.  The enum admits only
+      # openai|openrouter|zai|qwen|qwen-chat-template.
+      thinkingFormat: qwen-chat-template
+      # The template carries no reasoning_effort kwarg; sending one would 400.
+      supportsReasoningEffort: false
+      qwenTemplateReasoningEffort: false
+      # `auto` would send max_completion_tokens, which local engines reject.
+      maxTokensField: max_tokens
+      supportsMultipleSystemMessages: false
+      supportsUsageInStreaming: true
+      supportsStrictMode: false
+      toolStrictMode: none
+      supportsStore: false
+      streamIdleTimeoutMs: 1800000
+
+    models:
+      # Primary arm: block-diffusion model, instrumented sampler.
+      - id: diffusiongemma-26b-a4b-it
+        name: DiffusionGemma 26B-A4B-it (instrumented)
+        reasoning: true
+        input: [text]
+        contextWindow: 262144
+        maxTokens: 4096
+        cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 }
+      # Matched autoregressive control.
+      - id: gemma-4-26b-a4b-it
+        name: Gemma 4 26B-A4B-it (AR control)
+        reasoning: true
+        input: [text]
+        contextWindow: 262144
+        maxTokens: 4096
+        cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 }
+
+    # Runtime /v1/models discovery runs after `models:` and would stamp the
+    # server's max_model_len; modelOverrides is re-applied last and wins.
+    modelOverrides:
+      diffusiongemma-26b-a4b-it:
+        name: DiffusionGemma 26B-A4B-it (instrumented)
+        reasoning: true
+        input: [text]
+        contextWindow: 262144
+        maxTokens: 4096
+        cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 }
+      gemma-4-26b-a4b-it:
+        name: Gemma 4 26B-A4B-it (AR control)
+        reasoning: true
+        input: [text]
+        contextWindow: 262144
+        maxTokens: 4096
+        cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 }

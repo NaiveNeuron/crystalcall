@@ -1,0 +1,141 @@
+# The main method-comparison table: which (arm, policy) pair is each row.
+#
+# The same offline policy replayed against two arms' traces is two different
+# results, so a row is a pair, never a bare policy name.  `crystalcall analyze`
+# reads this file; nothing in the table is selected in code.
+#
+# `source: derived` rows replay stored standard-DiffusionGemma traces and cost
+# no extra model generations.  `source: online` rows have their own arm.
+
+schema_version: crystalcall-main-table/1
+
+reference_row: diffusion_final_response
+#: The row that carries the headline latency claim.
+primary_row: crystalcall
+#: Rows that exist to validate the invariant, not to estimate latency.
+validation_rows:
+  - crystalcall_online
+#: The decisive comparisons: the strongest non-speculative diffusion baseline
+#: (S7), the tool-priority diffusion arm (S8), and the matched autoregressive
+#: control.  Both AR rows are declared: `ar_sptc` overlaps independent calls,
+#: which is the concurrency discipline every diffusion policy also uses, so it
+#: is the matched comparison; `ar_streaming` is serial by construction and is
+#: kept as an explicitly serial baseline.
+decisive_rows:
+  - diffusion_earliest_committed
+  - preact_style
+  - gemma4_ar_sptc
+  - gemma4_ar_streaming
+rows:
+  - id: diffusion_final_response
+    label: Diffusion final-response
+    arm: diffusion_standard
+    policy: diffusion_final_response
+    source: derived
+    speculative: false
+    note: Reference denominator. A gain over this alone is not sufficient evidence.
+
+  - id: diffusion_final_canvas
+    label: Diffusion final-canvas
+    arm: diffusion_standard
+    policy: diffusion_final_canvas
+    source: derived
+    speculative: false
+
+  - id: diffusion_earliest_committed
+    label: Diffusion earliest committed call
+    arm: diffusion_standard
+    policy: diffusion_earliest_committed
+    source: derived
+    speculative: false
+    note: Strongest non-speculative diffusion baseline; decisive comparison S7.
+
+  - id: preact_style
+    label: P-ReAct-style tool-priority diffusion
+    arm: preact_style
+    policy: preact_ready
+    source: generated
+    speculative: true
+    note: >
+      Sampler-side token-selection priority over the tool-call span (same prompt,
+      model, tool schema and executor); launches on the sampler's `tool_call_ready`
+      readiness signal. Speculative: the span can settle to a call the final program
+      does not contain, so false launches and wasted work are counted for this row
+      too. Labelled P-ReAct-*style*: our priority is a fixed entropy-threshold
+      relaxation, not a learned guidance signal. See docs/baselines.md D.
+
+  - id: gemma4_ar_streaming
+    label: Gemma 4 AR streaming
+    arm: gemma4_ar
+    policy: ar_streaming
+    source: online
+    speculative: false
+    note: Serial execution from the irreversible prefix; precision is 100% by construction.
+
+  - id: gemma4_ar_sptc
+    label: Gemma 4 AR sPTC
+    arm: gemma4_ar
+    policy: ar_sptc
+    source: derived
+    speculative: true
+    note: Concurrent futures from the same recorded prefix; replay validity is asserted per episode.
+
+  # PRIMARY CrystalCall row.  Derived by replaying the SAME standard
+  # DiffusionGemma trajectories that every diffusion baseline row uses, so the
+  # paired prompt-level comparison is against the same trajectories rather than
+  # against a second, independently sampled generation, which would unpair
+  # the comparison.
+  - id: crystalcall
+    label: CrystalCall (DenoisePTC)
+    arm: diffusion_standard
+    policy: full_gate
+    source: derived
+    speculative: true
+    primary: true
+
+  # Bounded ONLINE validation of the same frozen gate.  Its job is the semantic
+  # invariant, the real-tool end-to-end behaviour and the replay-fidelity
+  # cross-check -- not the headline latency estimate, which comes from the row
+  # above on the full held-out set.
+  - id: crystalcall_online
+    label: CrystalCall online validation (bounded subset)
+    arm: crystalcall
+    policy: full_gate
+    source: online
+    speculative: true
+    validation_only: true
+    note: >
+      Runs the frozen gate live through OMP-Lite on a bounded held-out subset.
+      Every claimed result is re-executed normally after the turn and the digests
+      compared, which is the direct measurement behind gate S6. Not used for S3
+      or S4.
+
+  - id: oracle_earliest_invariant
+    label: Oracle earliest invariant
+    arm: diffusion_standard
+    policy: oracle_earliest_invariant
+    source: derived
+    speculative: true
+    oracle: true
+
+  - id: oracle_final_match
+    label: Oracle perfect final-match
+    arm: diffusion_standard
+    policy: oracle_final_match
+    source: derived
+    speculative: true
+    oracle: true
+
+# Gate ablations, all replayed from the standard-DiffusionGemma traces.
+ablation_arm: diffusion_standard
+ablation_policies:
+  - syntax_effect_only
+  - persistence_only
+  - confidence_only
+  - persistence_confidence
+  - full_gate
+  - fixed_step_2
+  - random_matched
+
+latency_conditions_ms: [100, 500, 2000, 5000]
+deadline_budgets_s: [1, 2, 5, 10]

@@ -1,0 +1,229 @@
+# OMP-Lite: the frozen Oh My Pi configuration used identically by every
+# CrystalCall experimental arm.  Loaded with `omp --mode rpc --config <this>`.
+#
+# OMP is an execution substrate, not an experimental treatment.  Everything
+# adaptive, stateful or model-consuming is disabled so that scheduling is the
+# only difference between arms.  Every key below was verified to exist against
+# `omp config list` on omp/18.1.4 (see reports/phase0_pins.json).
+#
+# Arrays are REPLACED, not merged, by a higher-precedence layer.  The harness
+# therefore runs with `--profile crystalcall` in a directory with no project
+# `.omp/config.yml`, and asserts the resulting `get_state.systemPrompt` +
+# `get_state.dumpTools` hash is identical on every run.
+
+# ---------------------------------------------------------------- models ----
+modelRoles:
+  default: vllm/diffusiongemma-26b-a4b-it
+  smol: vllm/diffusiongemma-26b-a4b-it
+  slow: vllm/diffusiongemma-26b-a4b-it
+  task: vllm/diffusiongemma-26b-a4b-it
+  tiny: vllm/diffusiongemma-26b-a4b-it
+  vision: vllm/diffusiongemma-26b-a4b-it
+  plan: vllm/diffusiongemma-26b-a4b-it
+  advisor: vllm/diffusiongemma-26b-a4b-it
+
+# Discovery probes of 127.0.0.1:11434/:8080/:1234 and every hosted provider are
+# removed: a network probe on the critical path would pollute latency numbers.
+disabledProviders:
+  - ollama
+  - ollama-cloud
+  - llama.cpp
+  - lm-studio
+  - anthropic
+  - openai
+  - openai-codex
+  - google
+  - google-vertex
+  - google-gemini-cli
+  - google-antigravity
+  - groq
+  - cerebras
+  - openrouter
+  - mistral
+  - xai
+  - xai-oauth
+  - github-copilot
+  - cursor
+  - azure
+  - amazon-bedrock
+  - deepseek
+  - moonshot
+  - zai
+  - litellm
+  - fireworks
+  - together
+
+# ------------------------------------------------- one fixed tool surface ----
+tools:
+  # Pinned, never `auto`: `auto` resolves by model-family affinity, and a
+  # catalog change to supportsTools would silently flip the wire format
+  # mid-project.  The server runs --tool-call-parser gemma4, so native
+  # provider tool calls are what the checkpoint's own template emits.
+  format: native
+  approvalMode: yolo
+  intentTracing: false
+  # xd:// tool devices would add an undocumented tool surface to the prompt.
+  xdev: false
+  maxTimeout: 0
+
+# Python is the only PTC runtime.  `tool.<name>(args)` inside the Python kernel
+# is OMP's loopback tool bridge and is the authoritative programmatic
+# tool-calling path for every arm.
+eval:
+  py: true
+  js: false
+  rb: false
+  jl: false
+  autoBackground:
+    enabled: false
+python:
+  kernelMode: session
+
+# -------------------------------------------- no subagents, no async work ----
+task:
+  batch: false
+  maxConcurrency: 1
+  maxRecursionDepth: 0
+  maxRuntimeMs: 0
+  prewalk: false
+  enableLsp: false
+  enableEffort: false
+  isolation:
+    mode: none
+async:
+  enabled: false
+todo:
+  enabled: false
+  reminders: false
+
+# ------------------------------------------- no advisor, memory, learning ----
+advisor:
+  enabled: false
+prewalk:
+  enabled: false
+memory:
+  backend: "off"
+autolearn:
+  enabled: false
+  autoContinue: false
+skills:
+  enabled: false
+  enableCodexUser: false
+  enableClaudeUser: false
+  enableClaudeProject: false
+  enablePiUser: false
+  enablePiProject: false
+  enableAgentsUser: false
+  enableAgentsProject: false
+  enableSkillCommands: false
+
+# --------------------------------------------------- no LSP, no debugger ----
+lsp:
+  enabled: false
+  lazy: true
+  formatOnWrite: false
+  diagnosticsOnWrite: false
+  diagnosticsOnEdit: false
+debug:
+  enabled: false
+launch:
+  enabled: false
+
+# ------------------- no adaptive prompts, stream rules, or magic keywords ----
+ttsr:
+  enabled: false
+  builtinRules: false
+magicKeywords:
+  enabled: false
+  ultrathink: false
+  orchestrate: false
+  workflow: false
+personality: none
+includeModelInPrompt: false
+includeWorkspaceTree: false
+inlineToolDescriptors: "off"
+contextPromotion:
+  enabled: false
+branchSummary:
+  enabled: false
+extendedContext: false
+
+# Context-file discovery (AGENTS.md / CLAUDE.md at either level) is removed so
+# the system prompt cannot drift with the working directory.
+disabledExtensions:
+  - context-file:user:AGENTS.md
+  - context-file:user:CLAUDE.md
+  - context-file:user:GEMINI.md
+  - context-file:project:AGENTS.md
+  - context-file:project:CLAUDE.md
+  - context-file:project:GEMINI.md
+
+# ----------------------------------------- no retries, no compaction churn ----
+retry:
+  enabled: false
+  maxRetries: 0
+  modelFallback: false
+  usageAwareFallback: false
+compaction:
+  enabled: false
+  midTurnEnabled: false
+  asyncEnabled: false
+  idleEnabled: false
+
+# --------------------------------------------------- no unrelated tooling ----
+browser:
+  enabled: false
+web_search:
+  enabled: false
+computer:
+  enabled: false
+generate_image:
+  enabled: false
+speechgen:
+  enabled: false
+inspect_image:
+  enabled: false
+  mode: "off"
+checkpoint:
+  enabled: false
+security:
+  enabled: false
+fetch:
+  enabled: false
+ask:
+  enabled: false
+git:
+  enabled: false
+exa:
+  enabled: false
+stt:
+  enabled: false
+secrets:
+  enabled: false
+mcp:
+  enableProjectConfig: false
+  notifications: false
+features:
+  unexpectedStopDetection: none
+
+# No outbound telemetry from an experiment run.
+dev:
+  autoqa: false
+share:
+  redactSecrets: true
+collab:
+  webUrl: ""
+
+# ------------------------------------------------------------- providers ----
+providers:
+  # A cold prefill on a single GB10 legitimately takes a long time; a client
+  # timeout mid-generation would corrupt latency measurements.
+  streamFirstEventTimeoutSeconds: 0
+  streamIdleTimeoutSeconds: 1800
+  # Exactly one model request in flight: this box is a batch-1 machine and
+  # concurrent streams would confound every latency number.
+  maxInFlightRequests:
+    vllm: 1
+
+# Thinking is a per-arm sampler setting, pinned by configs/diffusiongemma.yaml.
+defaultThinkingLevel: "off"

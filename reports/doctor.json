@@ -1,0 +1,435 @@
+{
+  "config_hashes": {
+    "configs/models.yml": "a51f2c8f8d421e62306e6449187274324ae46c02a0a3fa4f46efb2e69a4251ea",
+    "configs/omp-lite.yml": "33d25efeb7bea7fbfdde8e77d6780beb6e56bfdff7a90d2d6c6c77abd0eeecc5",
+    "configs/tools.yml": "baf787fe0e15a80c009b7983753436ac30d11bd00c73fe0b65c40a2c51ebcb51"
+  },
+  "digest": "547bc22144f46c0ac6cf9c902346ae04e4f69e8595811eb56ebc8151d095cf09",
+  "env": {},
+  "generated_unix_ns": 1788484252424010989,
+  "gpu": {
+    "nvcc": "IA (R) Cuda compiler driver\nCopyright (c) 2005-2025 NVIDIA Corporation\nBuilt on Wed_Aug_20_01:57:39_PM_PDT_2025\nCuda compilation tools, release 13.0, V13.0.88\nBuild cuda_13.0.r13.0/compiler.36424714_0",
+    "query_gpu": {
+      "cmd": [
+        "nvidia-smi",
+        "--query-gpu=name,driver_version,pci.bus_id,memory.total,persistence_mode,compute_mode,clocks.max.sm,power.max_limit",
+        "--format=csv,noheader"
+      ],
+      "status": "ok",
+      "stderr": "",
+      "stdout": "NVIDIA GB10, 580.173.02, 0000000F:01:00.0, [N/A], Enabled, Default, 3003 MHz, [N/A]"
+    },
+    "smi_version": "NVIDIA-SMI version  : 580.173.02\nNVML version        : 580.173\nDRIVER version      : 580.173.02\nCUDA Version        : 13.0",
+    "telemetry": {
+      "dcgmi": "missing",
+      "hwmon": {
+        "/sys/class/hwmon/hwmon0/name": "acpitz",
+        "/sys/class/hwmon/hwmon1/name": "nvme",
+        "/sys/class/hwmon/hwmon2/name": "mt7925_phy0"
+      },
+      "nvidia_smi_power_query": "ok",
+      "power_readings_supported": true
+    }
+  },
+  "hardware": {
+    "affinity": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19
+    ],
+    "boot_time_ns_offset": 1787382945196889339,
+    "cpu_count": 20,
+    "cpu_models": {},
+    "cpu_parts": {
+      "0xd85": 10,
+      "0xd87": 10
+    },
+    "hostname": "dgx-spark",
+    "machine": "aarch64",
+    "meminfo": {
+      "Active": "2296160 kB",
+      "Buffers": "209532 kB",
+      "Cached": "17609424 kB",
+      "Inactive": "17451192 kB",
+      "MemAvailable": "122667024 kB",
+      "MemFree": "105536520 kB",
+      "MemTotal": "127600524 kB",
+      "SwapCached": "505388 kB"
+    },
+    "platform": "Linux-6.17.0-1029-nvidia-aarch64-with-glibc2.39",
+    "processor": "aarch64",
+    "python": "3.12.13"
+  },
+  "omp_lite": {
+    "argv": [
+      "~/.local/bin/omp",
+      "--mode",
+      "rpc",
+      "--profile",
+      "crystalcall",
+      "--model",
+      "vllm/diffusiongemma-26b-a4b-it",
+      "--thinking",
+      "off",
+      "--tools",
+      "eval",
+      "--no-extensions",
+      "--no-skills",
+      "--no-rules",
+      "--no-lsp",
+      "--no-pty",
+      "--no-session",
+      "--no-title",
+      "--auto-approve",
+      "--config",
+      "configs/omp-lite.yml",
+      "--system-prompt",
+      "configs/system_prompt.md"
+    ],
+    "auto_compaction_enabled": false,
+    "context_window": 262144,
+    "model": "diffusiongemma-26b-a4b-it",
+    "profile_fingerprint": "9dccb7cf0e54eeed1ecf4bb97adafc51a18341aec62fcd6ccf8690c8e9e05c4d",
+    "protocol_version": 2,
+    "ready": {
+      "maxFrameBytes": 1048576,
+      "maxReassembledFrameBytes": 67108864,
+      "protocolVersion": 1,
+      "supportedProtocolVersions": [
+        1,
+        2
+      ],
+      "type": "ready"
+    },
+    "status": "ok",
+    "system_prompt_blocks": 2,
+    "system_prompt_chars": 2020,
+    "system_prompt_sha256": "3e2ed79c6cca0132198f96b1435b33b26ede65a0bf36dfe420fc3438e7876d5c",
+    "thinking_level": "off",
+    "tool_names": [
+      "eval"
+    ],
+    "tool_representation_sha256": "9d00d75367dca9910fe4c8375fa079d3f39a712acbe0f4baa8ef79ce9fa3a715"
+  },
+  "omp_settings": {
+    "lines": 505,
+    "sha256": "60fdf33a7deb694c21dc807a78e4ca27766dd1151ee416808fc1fee506434542",
+    "status": "ok"
+  },
+  "pins": {
+    "crystalcall": {
+      "commit": "7b98d3dd8808f6a187f94ccb540a007ec5532d70",
+      "dirty": false,
+      "path": ".",
+      "remote": "",
+      "status": "ok"
+    },
+    "docker": "Docker version 29.2.1, build a5c7197",
+    "hf_cache": "~/.cache/huggingface/hub",
+    "image": {
+      "architecture": "arm64",
+      "created": "2026-06-10T20:16:05.833963777Z",
+      "id": "sha256:de71fdd23e93ac46abf251e56992fd91547746010e0256c32551b6660a879589",
+      "image": "vllm/vllm-openai:gemma",
+      "os": "linux",
+      "repo_digests": [
+        "vllm/vllm-openai@sha256:9c719fc0c869092c7d0533f8357d6985a38d5ff03b20ffb6a4620c2b4806dd4b"
+      ],
+      "status": "ok"
+    },
+    "models": {
+      "google/diffusiongemma-26B-A4B-it": {
+        "files": {
+          ".gitattributes": {
+            "blob": "11cc27b6f12779a41e6777a7cbcd1b8e693189e5",
+            "size": 1658
+          },
+          "README.md": {
+            "blob": "5e69c184a47d0e83d3cd46571c7dc5ce3bbdf75f",
+            "size": 19722
+          },
+          "chat_template.jinja": {
+            "sha256": "9aeb7eac68ad87bba7567e9d4597ff203e5609f1b427d9e823437d0142cc61bf",
+            "size": 18575
+          },
+          "config.json": {
+            "sha256": "13b11d2fe87302cc2332c64eb9eb4ac305d9b8a123ffe9c5cb5b1920fc70c506",
+            "size": 3469
+          },
+          "generation_config.json": {
+            "sha256": "99334f763c3dbe8b161aeaca1c150a05344299fda2d2e4a0e1d342c744461200",
+            "size": 357
+          },
+          "model-00001-of-00011.safetensors": {
+            "blob": "3efe137998af7d2bde4e3ab04ab3524823699a4ac3130adace5003ef40cceeb6",
+            "size": 4732780476
+          },
+          "model-00002-of-00011.safetensors": {
+            "blob": "4a39d68c756fb26bbd2a54f2b8d550047ea98f3152f87ec75db825c8e17934a7",
+            "size": 4884578006
+          },
+          "model-00003-of-00011.safetensors": {
+            "blob": "ac6083e3489215ca032501714b78832e5cc4c945a8dbbb905b5292a4e95bc75e",
+            "size": 4913414742
+          },
+          "model-00004-of-00011.safetensors": {
+            "blob": "865b66393de5a9c752e67beae1bd2c860c12786b72ad86ca9345c00b7b586e60",
+            "size": 4884578030
+          },
+          "model-00005-of-00011.safetensors": {
+            "blob": "a87e01bed77ad9d2234851267d99af583ff79c7a86d7494fe08ae0f9de9cd318",
+            "size": 4913414814
+          },
+          "model-00006-of-00011.safetensors": {
+            "blob": "077e841b3b138fbc38df2c36665abdaafa96b8c96f968e2263a7452afaa912ab",
+            "size": 4884578070
+          },
+          "model-00007-of-00011.safetensors": {
+            "blob": "13a18b3c04a7f19a16385dd8a0d7fd0b9cc89ef131e4294a063c31c7d90c58ef",
+            "size": 4913414814
+          },
+          "model-00008-of-00011.safetensors": {
+            "blob": "aca5d3bdfc84700bd55b475781cb46e5608104c4832d2abe111a119ddcb23ff7",
+            "size": 4884578070
+          },
+          "model-00009-of-00011.safetensors": {
+            "blob": "8e2418867354e5cb356c0af8ccfdcc60bc363500674d6cf395991e7d6219eb29",
+            "size": 4913414814
+          },
+          "model-00010-of-00011.safetensors": {
+            "blob": "93d564b7dd686464a5c068ff9665cd5d3bca399c2ce320aecd41bd011e3787d5",
+            "size": 4884578070
+          },
+          "model-00011-of-00011.safetensors": {
+            "blob": "afec047176bb2a05f078566576aec6bdb71ad4d041275d0d0c89473fda6d6d87",
+            "size": 2838371118
+          },
+          "model.safetensors.index.json": {
+            "sha256": "6e33e8465d55fe6c7bc0a5453c7a4b341e6467d032c6ded82aaf439f61dac69a",
+            "size": 104650
+          },
+          "model_index.json": {
+            "sha256": "989c453462f9b84b90f02fe82b89f23c743b513a767a1789292da76f056f5117",
+            "size": 295
+          },
+          "processor_config.json": {
+            "sha256": "32bdf45d2ad4cc29a0822ddd157a182de76644f0419a6228d151495256e9813c",
+            "size": 1689
+          },
+          "scheduler": {
+            "size": 0
+          },
+          "tokenizer.json": {
+            "blob": "cc8d3a0ce36466ccc1278bf987df5f71db1719b9ca6b4118264f45cb627bfe0f",
+            "size": 32169626
+          },
+          "tokenizer_config.json": {
+            "sha256": "a284d1243b62be31faa9c13e1c28cece940c4abaa7bd9ad87b94f61b40687200",
+            "size": 2741
+          }
+        },
+        "path": "~/.cache/huggingface/hub/models--google--diffusiongemma-26B-A4B-it",
+        "refs": {
+          "main": "f7f5b7f5fa82ffc52addd066915886d497f5517b"
+        },
+        "repo_id": "google/diffusiongemma-26B-A4B-it",
+        "revisions": [
+          "f7f5b7f5fa82ffc52addd066915886d497f5517b"
+        ],
+        "status": "ok",
+        "total_bytes": 51680023806
+      },
+      "google/gemma-4-26B-A4B-it": {
+        "files": {
+          ".eval_results": {
+            "size": 0
+          },
+          ".gitattributes": {
+            "blob": "ddcb389f1c4efd0f6ec18e8925435134b04580da",
+            "size": 1708
+          },
+          "README.md": {
+            "blob": "742346e1fe57997c831b9065f4c54a9416021526",
+            "size": 27979
+          },
+          "chat_template.jinja": {
+            "sha256": "ae53464bf3be25802b3a5b37def7fd89667067d7577049b3b2d74c4d8de4c6d4",
+            "size": 18683
+          },
+          "config.json": {
+            "sha256": "ed0c1eb3633de771906e9ba004a44cc5635bcc06ee2062077c3d2e88a50707d3",
+            "size": 3815
+          },
+          "generation_config.json": {
+            "sha256": "d4226bbe3117d2d253ba4609720ba82c6c4ce4627a9a6ae05387c78983ac03de",
+            "size": 208
+          },
+          "model-00001-of-00002.safetensors": {
+            "blob": "1127684971bbca40465435a5cad69d67ad603bf5e61c6dfd5561fae4a3bcfdb3",
+            "size": 49907246508
+          },
+          "model-00002-of-00002.safetensors": {
+            "blob": "aab47033e1e8a492ef8e581efae1cf36478d0433567e7729b3c1728bc8970db7",
+            "size": 1704763408
+          },
+          "model.safetensors.index.json": {
+            "sha256": "907826a6e46ff454272bd6db1fee629d5531a2303be22986d825a0871d7dc7a7",
+            "size": 103196
+          },
+          "processor_config.json": {
+            "sha256": "32bdf45d2ad4cc29a0822ddd157a182de76644f0419a6228d151495256e9813c",
+            "size": 1689
+          },
+          "tokenizer.json": {
+            "blob": "cc8d3a0ce36466ccc1278bf987df5f71db1719b9ca6b4118264f45cb627bfe0f",
+            "size": 32169626
+          },
+          "tokenizer_config.json": {
+            "sha256": "9f4fec4b1dc6ecddf8f4a92e9caea5971c0e67d81309f3f9066a2bee8c362633",
+            "size": 3082
+          }
+        },
+        "path": "~/.cache/huggingface/hub/models--google--gemma-4-26B-A4B-it",
+        "refs": {},
+        "repo_id": "google/gemma-4-26B-A4B-it",
+        "revisions": [
+          "4d7ae4984b7db7de8f8457170b3f1a419ee76d52"
+        ],
+        "status": "ok",
+        "total_bytes": 51644339902
+      }
+    },
+    "omp": {
+      "binary": "~/.local/bin/omp",
+      "binary_sha256": "e8b6fcfda4df32e7f22fca98107b48eea9e4edf2201dc1132703fb615550237f",
+      "version": "omp/18.1.4"
+    },
+    "ripgrep": "",
+    "sqlite3": "3.45.1 2024-01-30 16:01:20 e876e51a0ed5c5b3126f52e532044363a014bc594cfefa87ffb5b",
+    "uv": "uv 0.12.4 (aarch64-unknown-linux-gnu)",
+    "vendor": {
+      "_provenance_sha256": "f3b6615d2d7cf9943830da34a0bf3d61fbb59cd406149f96dd3a4df117e4dba7",
+      "bfcl": {
+        "archive_sha256": "c6b5081337cabd317b56c6eead2ec735f7a3cb86ac4fd664e3f9c8c02d1f1f1e",
+        "commit": "6ea57973c7a6097fd7c5915698c54c17c5b1b6c8",
+        "fetch": "curl -sSL -o gorilla.tar.gz https://codeload.github.com/ShishirPatil/gorilla/tar.gz/6ea57973c7a6097fd7c5915698c54c17c5b1b6c8",
+        "path": "experiments/vendor/bfcl",
+        "remote": "https://github.com/ShishirPatil/gorilla",
+        "source": "vendor_sources.json",
+        "status": "ok"
+      },
+      "sptc": {
+        "archive_sha256": "31dcda7685056e16d0f3c793f871689bdd8629bb5f166238f1f8a93701296dc6",
+        "commit": "9b78b7d6ceeaf8afd1557c4e3a999ce653fc0e17",
+        "fetch": "curl -sSL -o sptc.tar.gz https://codeload.github.com/alexzhang13/spec-ptc/tar.gz/9b78b7d6ceeaf8afd1557c4e3a999ce653fc0e17",
+        "path": "experiments/vendor/sptc",
+        "remote": "https://github.com/alexzhang13/spec-ptc",
+        "source": "vendor_sources.json",
+        "status": "ok"
+      },
+      "toolsandbox": {
+        "archive_sha256": "0019647ab9a52348680a1e33f99c5db9c32b9513bcd78fed1af9c4beb804427e",
+        "commit": "165848b9a78cead7ca7fe7c89c688b58e6501219",
+        "fetch": "curl -sSL -o ToolSandbox.tar.gz https://codeload.github.com/apple/ToolSandbox/tar.gz/165848b9a78cead7ca7fe7c89c688b58e6501219",
+        "path": "experiments/vendor/toolsandbox",
+        "remote": "https://github.com/apple/ToolSandbox",
+        "source": "vendor_sources.json",
+        "status": "ok"
+      }
+    }
+  },
+  "sampler": {
+    "arch": "aarch64",
+    "architecture": "DiffusionGemmaForBlockDiffusion",
+    "async_scheduling": true,
+    "attention_backend": "TRITON_ATTN",
+    "canvas_length": 256,
+    "confidence_threshold": 0.005,
+    "control_model": "google/gemma-4-26B-A4B-it",
+    "control_model_revision": "4d7ae4984b7db7de8f8457170b3f1a419ee76d52",
+    "control_port": 8001,
+    "control_served_model_name": "gemma-4-26b-a4b-it",
+    "cores": 20,
+    "cpuset": "5-9,15-19",
+    "cuda": "13.0",
+    "diffusion_config": "{\"canvas_length\": 256}",
+    "docker_flags": "--gpus all --ipc=host --network host",
+    "driver": "580.173.02",
+    "dtype": "bfloat16",
+    "enable_auto_tool_choice": true,
+    "entropy_bound": 0.1,
+    "final_logit_softcapping": 30.0,
+    "generation_config": "vllm",
+    "gpu": "NVIDIA GB10 (sm_121, Blackwell)",
+    "gpu_memory_utilization": 0.8,
+    "hf_overrides": "{\"diffusion_sampler\":\"entropy_bound\",\"diffusion_entropy_bound\":0.1}",
+    "hidden_size": 2816,
+    "host": "127.0.0.1",
+    "image": "vllm/vllm-openai:gemma",
+    "image_digest": "sha256:9c719fc0c869092c7d0533f8357d6985a38d5ff03b20ffb6a4620c2b4806dd4b",
+    "image_id": "sha256:de71fdd23e93ac46abf251e56992fd91547746010e0256c32551b6660a879589",
+    "max_denoising_steps": 48,
+    "max_model_len": 32768,
+    "max_new_tokens": 256,
+    "max_num_seqs": 1,
+    "model": "google/diffusiongemma-26B-A4B-it",
+    "model_revision": "f7f5b7f5fa82ffc52addd066915886d497f5517b",
+    "model_type": "diffusion_gemma",
+    "port": 8000,
+    "reasoning_parser": "gemma4",
+    "sampler": "entropy_bound",
+    "sampler_module": "vllm/model_executor/models/diffusion_gemma.py",
+    "schema": "crystalcall-serving/1",
+    "seed": 12345,
+    "served_model_name": "diffusiongemma-26b-a4b-it",
+    "site_packages": "/usr/local/lib/python3.12/dist-packages",
+    "stability_threshold": 1,
+    "t_max": 0.8,
+    "t_min": 0.4,
+    "tool_call_parser": "gemma4",
+    "trace_emitter": "/opt/crystalcall/crystalcall_trace.py",
+    "trace_env": "CRYSTALCALL_TRACE",
+    "trace_level_env": "CRYSTALCALL_TRACE_LEVEL",
+    "trace_queue_default": 4096,
+    "trace_schema": "crystalcall-revision/2",
+    "trace_sink_env": "CRYSTALCALL_TRACE_SINK",
+    "trace_stats_path": "/tmp/cc-trace/stats.json",
+    "unified_memory_gb": 121,
+    "vllm_version": "0.22.1rc1.dev357+g74b5964f0",
+    "vocab_size": 262144
+  },
+  "sampler_config_sha256": "bafc842f6a593ea8e80479ef4f74d47616ed7aa54d3dba8562abcfbfbb955947",
+  "schema_version": "crystalcall-doctor/1",
+  "storage": {
+    "/": {
+      "free_gb": 3127.42,
+      "total_gb": 4031.87
+    },
+    "~/.cache/huggingface": {
+      "free_gb": 3127.42,
+      "total_gb": 4031.87
+    },
+    ".": {
+      "free_gb": 3127.42,
+      "total_gb": 4031.87
+    },
+    "block_devices": "loop0      0    69M \nloop1      0     4K \nloop2      0  61.9M \nloop3      0    69M \nloop4      0 214.7M \nloop5      0  10.2M \nloop6      0  15.6M \nloop7      0 552.9M \nloop8      0 247.5M \nloop9      0   503M \nloop10     0 174.6M \nloop11     0  91.7M \nloop12     0 503.1M \nloop13     0 188.2M \nloop14     0  12.2M \nloop15     0    10M \nloop16     0  43.4M \nloop17     0  43.4M \nloop18     0   804K \nloop19     0   800K \nloop21     0 213.9M \nloop22     0 247.5M \nnvme0n1    0   3.7T SAMSUNG MZALC4T0HBL1-00B07"
+  }
+}

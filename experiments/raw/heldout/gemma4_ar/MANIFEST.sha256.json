@@ -1,0 +1,55 @@
+{
+  "directory": "experiments/raw/heldout/gemma4_ar",
+  "schema_version": "crystalcall-trace/1",
+  "shards": {
+    "gemma4_ar-seed0.jsonl": {
+      "final_chain": "3bef5e8e3134d2895ac4ec83699a8e167cde2282b2a7ab4c81fe41e319471661",
+      "meta": {
+        "arm": "gemma4_ar",
+        "doctor_digest": "547bc22144f46c0ac6cf9c902346ae04e4f69e8595811eb56ebc8151d095cf09",
+        "frozen_policy": {
+          "gate": {
+            "confidence_mode": "min",
+            "k": 2,
+            "min_overlap_ms": 50.0,
+            "tau": 0.9
+          },
+          "path": "configs/frozen_policy.json",
+          "selected_on": "library defaults GatePolicy(name='full_gate'): k=2, tau=0.9, min_overlap_ms=50 (the values every reported replay used); pilot attempt 2 decided stop, so no pilot-selected file existed. Costs are zero so replay stays identical to the published numbers.",
+          "sha256": "2d094b84d25d772117e572f0317064f21e26382272a42bc69c8f355b007d816b",
+          "status": "applied"
+        },
+        "instrumentation": "off",
+        "manifest": "experiments/manifests/test.jsonl",
+        "manifest_sha256": "16b0c799263b711486afcaa2b1a0d7929fd1cc5bcd8d0b3e162caf02834e7574",
+        "model": null,
+        "policy": {
+          "allowed_resources": [
+            "cpu",
+            "gpu",
+            "storage"
+          ],
+          "confidence_mode": "min",
+          "fixed_step": null,
+          "k": 2,
+          "max_inflight": 4,
+          "min_overlap_ms": 50.0,
+          "name": "full_gate",
+          "oracle": null,
+          "random_rate": null,
+          "tau": 0.9,
+          "use_acceptance": false,
+          "use_confidence": true,
+          "use_overlap": true,
+          "use_persistence": true,
+          "use_resource": true
+        },
+        "profile_fingerprint": "0b6fd4092e0e109cd18891cc0cf9669fd4aa0c4b2a1a891f115bfbe5912b7eeb",
+        "seed": 0,
+        "tool_sleep_ms": 0.0
+      },
+      "records": 26768,
+      "sha256": "df94106f1f3beb5aa6afceccea07a04193d71363e0b9cbb61524622d528d9659"
+    }
+  }
+}

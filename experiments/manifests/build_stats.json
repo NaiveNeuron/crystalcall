@@ -1,0 +1,305 @@
+{
+  "bfcl": {
+    "aliases_skipped_selected": 0,
+    "candidates_per_category": {
+      "multiple": 199,
+      "parallel": 200,
+      "parallel_multiple": 193,
+      "simple": 398
+    },
+    "collision_suffixed_names_selected": 0,
+    "distinct_upstream_names_sanitised_selected": 290,
+    "drop_reasons": {
+      "multiple": {
+        "unsupported_param_type": 1
+      },
+      "parallel_multiple": {
+        "canonicalize:type_mismatch": 1,
+        "canonicalize:unknown_parameter": 2,
+        "non_literal_argument": 2,
+        "unsupported_param_type": 2
+      },
+      "simple": {
+        "canonicalize:type_mismatch": 1,
+        "unsupported_param_type": 1
+      }
+    },
+    "dropped_defaults": 8,
+    "dropped_per_category": {
+      "multiple": 1,
+      "parallel": 0,
+      "parallel_multiple": 7,
+      "simple": 2
+    },
+    "drops": [
+      {
+        "category": "multiple",
+        "detail": "data:any",
+        "prompt_id": "multiple_181",
+        "reason": "unsupported_param_type"
+      },
+      {
+        "category": "parallel_multiple",
+        "detail": "calculate_voltage_difference:permeability",
+        "prompt_id": "parallel_multiple_12",
+        "reason": "canonicalize:unknown_parameter"
+      },
+      {
+        "category": "parallel_multiple",
+        "detail": "call_expression:exp(-x**2)",
+        "prompt_id": "parallel_multiple_19",
+        "reason": "non_literal_argument"
+      },
+      {
+        "category": "parallel_multiple",
+        "detail": "data:any",
+        "prompt_id": "parallel_multiple_194",
+        "reason": "unsupported_param_type"
+      },
+      {
+        "category": "parallel_multiple",
+        "detail": "linear_regression_fit:expected list, got \"data['sales']\"",
+        "prompt_id": "parallel_multiple_21",
+        "reason": "canonicalize:type_mismatch"
+      },
+      {
+        "category": "parallel_multiple",
+        "detail": "bank_calculate_balance:type",
+        "prompt_id": "parallel_multiple_26",
+        "reason": "canonicalize:unknown_parameter"
+      },
+      {
+        "category": "parallel_multiple",
+        "detail": "date:any",
+        "prompt_id": "parallel_multiple_57",
+        "reason": "unsupported_param_type"
+      },
+      {
+        "category": "parallel_multiple",
+        "detail": "call_expression:startswith(b)",
+        "prompt_id": "parallel_multiple_94",
+        "reason": "non_literal_argument"
+      },
+      {
+        "category": "simple",
+        "detail": "data:any",
+        "prompt_id": "simple_python_109",
+        "reason": "unsupported_param_type"
+      },
+      {
+        "category": "simple",
+        "detail": "calculate_emissions:expected number, got str",
+        "prompt_id": "simple_python_200",
+        "reason": "canonicalize:type_mismatch"
+      }
+    ],
+    "effect_distribution_candidates": {
+      "multiple": {
+        "calls_LiveRead": 15,
+        "calls_Pure": 172,
+        "calls_SnapshotRead": 0,
+        "calls_Write": 12,
+        "calls_total": 199,
+        "tools_LiveRead": 52,
+        "tools_Pure": 462,
+        "tools_SnapshotRead": 0,
+        "tools_Write": 39,
+        "tools_total": 553
+      },
+      "parallel": {
+        "calls_LiveRead": 65,
+        "calls_Pure": 447,
+        "calls_SnapshotRead": 0,
+        "calls_Write": 28,
+        "calls_total": 540,
+        "tools_LiveRead": 20,
+        "tools_Pure": 167,
+        "tools_SnapshotRead": 0,
+        "tools_Write": 13,
+        "tools_total": 200
+      },
+      "parallel_multiple": {
+        "calls_LiveRead": 52,
+        "calls_Pure": 489,
+        "calls_SnapshotRead": 0,
+        "calls_Write": 48,
+        "calls_total": 589,
+        "tools_LiveRead": 42,
+        "tools_Pure": 415,
+        "tools_SnapshotRead": 0,
+        "tools_Write": 46,
+        "tools_total": 503
+      },
+      "simple": {
+        "calls_LiveRead": 35,
+        "calls_Pure": 340,
+        "calls_SnapshotRead": 0,
+        "calls_Write": 23,
+        "calls_total": 398,
+        "tools_LiveRead": 35,
+        "tools_Pure": 340,
+        "tools_SnapshotRead": 0,
+        "tools_Write": 23,
+        "tools_total": 398
+      }
+    },
+    "effect_distribution_selected": {
+      "multiple": {
+        "calls_LiveRead": 7,
+        "calls_Pure": 86,
+        "calls_SnapshotRead": 0,
+        "calls_Write": 7,
+        "calls_total": 100,
+        "tools_LiveRead": 26,
+        "tools_Pure": 236,
+        "tools_SnapshotRead": 0,
+        "tools_Write": 18,
+        "tools_total": 280
+      },
+      "parallel": {
+        "calls_LiveRead": 28,
+        "calls_Pure": 231,
+        "calls_SnapshotRead": 0,
+        "calls_Write": 18,
+        "calls_total": 277,
+        "tools_LiveRead": 7,
+        "tools_Pure": 85,
+        "tools_SnapshotRead": 0,
+        "tools_Write": 8,
+        "tools_total": 100
+      },
+      "parallel_multiple": {
+        "calls_LiveRead": 22,
+        "calls_Pure": 258,
+        "calls_SnapshotRead": 0,
+        "calls_Write": 22,
+        "calls_total": 302,
+        "tools_LiveRead": 19,
+        "tools_Pure": 219,
+        "tools_SnapshotRead": 0,
+        "tools_Write": 21,
+        "tools_total": 259
+      },
+      "simple": {
+        "calls_LiveRead": 10,
+        "calls_Pure": 86,
+        "calls_SnapshotRead": 0,
+        "calls_Write": 4,
+        "calls_total": 100,
+        "tools_LiveRead": 10,
+        "tools_Pure": 86,
+        "tools_SnapshotRead": 0,
+        "tools_Write": 4,
+        "tools_total": 100
+      }
+    },
+    "expected_calls_selected": 779,
+    "omitted_optional_params": 275,
+    "prompts_with_sanitised_names_selected": 253,
+    "split_counts": {
+      "dev": {
+        "multiple": 25,
+        "parallel": 25,
+        "parallel_multiple": 25,
+        "simple": 25
+      },
+      "test": {
+        "multiple": 75,
+        "parallel": 75,
+        "parallel_multiple": 75,
+        "simple": 75
+      }
+    },
+    "tool_declarations_selected": 739,
+    "tool_names_sanitised_selected": 409,
+    "upstream_prompts": {
+      "multiple": 200,
+      "parallel": 200,
+      "parallel_multiple": 200,
+      "simple": 400
+    }
+  },
+  "build_command": "uv run scripts/build_manifests.py --out-dir experiments/manifests --vendor-dir experiments/vendor --seed 20260903",
+  "commits": {
+    "bfcl": "6ea57973c7a6097fd7c5915698c54c17c5b1b6c8",
+    "toolsandbox": "165848b9a78cead7ca7fe7c89c688b58e6501219"
+  },
+  "hashes": {
+    "configs/manifest_rules.yml": "90e531c1bc1a46bd754e7e9bae817867aeacdfed53d173a47dd983108f4878ef",
+    "dev.jsonl": "bcac80d20775dddbbf667b29e81a5c8765545b6f4ff19abdcbab10d36f4a4188",
+    "test.jsonl": "16b0c799263b711486afcaa2b1a0d7929fd1cc5bcd8d0b3e162caf02834e7574",
+    "toolsandbox.jsonl": "e5f0214f234bc123f0d711f0f54f5e9a07cc07c5ee04f49cf73c68f2e991ad90"
+  },
+  "rules_path": "configs/manifest_rules.yml",
+  "rules_sha256": "90e531c1bc1a46bd754e7e9bae817867aeacdfed53d173a47dd983108f4878ef",
+  "schema": "crystalcall-manifest-build-stats/1",
+  "seed": 20260903,
+  "toolsandbox": {
+    "base_scenarios_declared": 129,
+    "base_scenarios_per_family": {
+      "canonicalization": 48,
+      "insufficient_information": 28,
+      "multi_tool_workflows": 14,
+      "state_dependencies": 24
+    },
+    "base_scenarios_per_module": {
+      "insufficient_information_scenarios.py": 28,
+      "multiple_tool_call_scenarios.py": 54,
+      "multiple_user_turn_scenarios.py": 28,
+      "single_tool_call_scenarios.py": 19
+    },
+    "declared_category_counts": {
+      "CANONICALIZATION": 59,
+      "INSUFFICIENT_INFORMATION": 28,
+      "MULTIPLE_TOOL_CALL": 82,
+      "MULTIPLE_USER_TURN": 28,
+      "SINGLE_TOOL_CALL": 19,
+      "SINGLE_USER_TURN": 73,
+      "STATE_DEPENDENCY": 24
+    },
+    "distinct_base_scenarios_selected": 62,
+    "selected_per_family": {
+      "canonicalization": 16,
+      "insufficient_information": 16,
+      "multi_tool_workflows": 16,
+      "state_dependencies": 16
+    },
+    "selected_per_variant": {
+      "NO_DISTRACTION_TOOLS": 62,
+      "THREE_DISTRACTION_TOOLS": 2
+    },
+    "unassigned_base_scenarios": [
+      "add_contact_with_name_and_phone_number",
+      "cellular_off",
+      "find_address_with_lat_lon",
+      "find_stock_symbol_with_company_name",
+      "find_thanksgiving_timestamp",
+      "get_cellular",
+      "get_wifi",
+      "remove_contact_with_id",
+      "search_name_with_relationship",
+      "search_phone_number_with_name",
+      "search_relationship_with_phone_number",
+      "search_sender_phone_number_with_content",
+      "send_message_with_phone_number_and_content",
+      "update_contact_with_id_and_phone_number",
+      "wifi_off"
+    ]
+  },
+  "vendor_input_files_sha256": {
+    "bfcl/data/BFCL_v4_multiple.json": "aef168155ebd74b7ac2401198b201343bc7d16d7a3d7e0d4e6d8ee82c6969b2a",
+    "bfcl/data/BFCL_v4_parallel.json": "19f51a82eff42e5d62541aa500115a056eb78f437c2ba1f10415fd7c8e5dda84",
+    "bfcl/data/BFCL_v4_parallel_multiple.json": "8863ea8433239f55c5f016154cf0830853c89f693c6ea270396a2fa121960579",
+    "bfcl/data/BFCL_v4_simple_python.json": "82dd63ba502eb2520c6b5d1d9a5c4b590e03ff261565175561f6228a367d1991",
+    "bfcl/data/possible_answer/BFCL_v4_multiple.json": "244e00ce9395df948bcafc7bee64e8f9c87ef70887587d83cae45b13699f3047",
+    "bfcl/data/possible_answer/BFCL_v4_parallel.json": "8a6aa19c1adddc6a5a2f7e40f9dbf30cc7e95815e7b830c90589ab318229e0f0",
+    "bfcl/data/possible_answer/BFCL_v4_parallel_multiple.json": "5ebf24f458c1f16300c05505d83d6f0a1b68b79be273a033febd0d4f840507e3",
+    "bfcl/data/possible_answer/BFCL_v4_simple_python.json": "90cd5bc653690ee8e459b5b3f3fc9458606f7f3fcbf795bb51b7dc581f8c86dc",
+    "toolsandbox/checkout/tool_sandbox/common/execution_context.py": "a18f54e157b92fa011e84780bc33941ea0635ad70ab4b38e7408beedc6221437",
+    "toolsandbox/checkout/tool_sandbox/scenarios/insufficient_information_scenarios.py": "3920e5bb8df528c5e87427c29edc7ee346057324eb47e56df61189a298c901b1",
+    "toolsandbox/checkout/tool_sandbox/scenarios/multiple_tool_call_scenarios.py": "e2d351bebf9afec76d37263b02544120c78b687f4dd4501ab0a4b6c981ce1ff3",
+    "toolsandbox/checkout/tool_sandbox/scenarios/multiple_user_turn_scenarios.py": "784c636140afbb452e94df301191f466f6d06929d3eebec13ba1a66992a74baf",
+    "toolsandbox/checkout/tool_sandbox/scenarios/single_tool_call_scenarios.py": "dd295b0f64c53015bfebea538891be3183a7a1f74ec37454a0f154b93fab9e38"
+  },
+  "vendor_provenance_sha256": "a4a02e66a2d07ddee194789372fcc0d7acbc39fb9301ee2cba4e12e252d779ec"
+}

@@ -1,0 +1,380 @@
+--- a/vllm/model_executor/models/diffusion_gemma.py
++++ b/vllm/model_executor/models/diffusion_gemma.py
+@@ -67,6 +67,85 @@
+ )
+ 
+ logger = init_logger(__name__)
++
++
++# ---------------------------------------------------------------------------
++# CrystalCall / DenoisePTC instrumentation (observation only).
++#
++# ``crystalcall_trace`` is a stdlib-only emitter mounted onto PYTHONPATH next
++# to this file.  When it is absent, or when CRYSTALCALL_TRACE is not set, every
++# hook below is a no-op: no buffers are allocated, the compiled step keeps the
++# upstream graph, and no device->host copy is issued.
++# ---------------------------------------------------------------------------
++import time
++
++#: The live DiffusionSampler while tracing is on.  `remove_request` lives on
++#: the model state, which holds no reference to the sampler, so the in-flight
++#: drain reaches it through here.
++_TRACE_SAMPLER = None
++
++try:
++    import crystalcall_trace
++except ImportError:  # emitter not mounted -> tracing unavailable
++
++    class _CrystalCallTraceStub:
++        SCHEMA = "crystalcall-revision/1"
++
++        @staticmethod
++        def enabled() -> bool:
++            return False
++
++        @staticmethod
++        def want_payload() -> bool:
++            return False
++
++        @staticmethod
++        def ring_depth() -> int:
++            return 3
++
++        @staticmethod
++        def note_drop() -> None:
++            return None
++
++        @staticmethod
++        def defer_staged(*args: Any, **kwargs: Any) -> bool:
++            return False
++
++        @staticmethod
++        def flush_staged(*args: Any, **kwargs: Any) -> bool:
++            return True
++
++        @staticmethod
++        def emit_revision(*args: Any, **kwargs: Any) -> None:
++            return None
++
++        @staticmethod
++        def canvas_done(*args: Any, **kwargs: Any) -> None:
++            return None
++
++        @staticmethod
++        def end_request(*args: Any, **kwargs: Any) -> None:
++            return None
++
++    crystalcall_trace = _CrystalCallTraceStub()
++
++
++class _TraceRequest:
++    """Per-slot trace bookkeeping and drop/desynchronisation state."""
++
++    __slots__ = ("req_id", "canvas_id", "prefix_len", "desynced")
++
++    def __init__(self, req_id: str) -> None:
++        self.req_id = req_id
++        self.canvas_id = 0
++        self.prefix_len = 0
++        self.desynced = False
++
++
++# slot index -> _TraceRequest.  The ModelState knows request ids, the sampler
++# only ever sees slots, so the mapping lives at module scope (one model per
++# worker process).  Stays empty whenever tracing is off.
++_TRACE_SLOTS: dict[int, _TraceRequest] = {}
+ 
+ 
+ class DiffusionGemmaSelfConditioning(nn.Module):
+@@ -521,6 +600,12 @@
+     ST: int,
+     # Sampler config
+     entropy_bound: float,
++    # ---- CrystalCall trace outputs (written in-place; None when tracing is
++    # off, in which case the compiled graph contains none of the writes) ----
++    trace_accept_mask: torch.Tensor | None = None,
++    trace_token_conf: torch.Tensor | None = None,
++    trace_token_entropy: torch.Tensor | None = None,
++    trace_mean_entropy: torch.Tensor | None = None,
+ ) -> torch.Tensor:
+     """Compiled decode step: temperature → Gumbel sample → probs/confidence →
+     accept/renoise → convergence, all as vectorized PyTorch ops.
+@@ -662,6 +747,17 @@
+ 
+     # ---- Phase 7: Copy canvas → draft_tokens for all slots ----
+     draft_tokens[all_slots, :CL] = canvas[all_slots]
++
++    # ---- CrystalCall trace taps ----
++    # Pure observation: copies of already-computed values into caller-owned
++    # buffers.  Nothing here feeds back into the sampling math and no RNG is
++    # consumed, so with the buffers None (tracing off) the traced graph is
++    # identical to the uninstrumented one.
++    if trace_accept_mask is not None:
++        trace_accept_mask[decode_slots] = eb_mask
++        trace_token_conf[decode_slots] = probs.max(dim=-1).values.to(torch.float32)
++        trace_token_entropy[decode_slots] = token_entropy.to(torch.float32)
++        trace_mean_entropy[decode_slots] = mean_entropy.to(torch.float32)
+ 
+     return scaled
+ 
+@@ -741,6 +837,30 @@
+         self.self_conditioning_embeds = torch.zeros(
+             max_num_reqs, canvas_length, hidden_size, dtype=torch.float32, device=device
+         )
++
++        # CrystalCall trace buffers: the compiled step writes the entropy-bound
++        # acceptance mask, the top-1 confidence and the per-token/mean entropy
++        # here so the sampler can ship one fused device->host copy per step.
++        # Allocated ONLY when tracing is on; None otherwise, so an
++        # uninstrumented run keeps the upstream allocation footprint exactly.
++        if crystalcall_trace.enabled():
++            self.trace_accept_mask = torch.zeros(
++                max_num_reqs, canvas_length, dtype=torch.bool, device=device
++            )
++            self.trace_token_conf = torch.zeros(
++                max_num_reqs, canvas_length, dtype=torch.float32, device=device
++            )
++            self.trace_token_entropy = torch.zeros(
++                max_num_reqs, canvas_length, dtype=torch.float32, device=device
++            )
++            self.trace_mean_entropy = torch.zeros(
++                max_num_reqs, dtype=torch.float32, device=device
++            )
++        else:
++            self.trace_accept_mask = None
++            self.trace_token_conf = None
++            self.trace_token_entropy = None
++            self.trace_mean_entropy = None
+ 
+     def init_canvas(self, slot_indices_np: np.ndarray) -> None:
+         """Initialize canvas with random tokens for the given slots."""
+@@ -884,17 +1004,51 @@
+     def apply_staged_writes(self) -> None:
+         pass
+ 
++    def _trace_sampler_info(self) -> dict[str, Any]:
++        """Pinned sampler settings, reported once per traced request."""
++        gen = self.gen_config
++        diffusion_config = self.vllm_config.diffusion_config
++        sampler_cfg = gen.get("sampler_config") or {}
++        return {
++            "schema": crystalcall_trace.SCHEMA,
++            "sampler": "entropy_bound",
++            "entropy_bound": sampler_cfg.get("entropy_bound"),
++            "canvas_length": (
++                diffusion_config.canvas_length if diffusion_config else None
++            ),
++            "max_denoising_steps": int(self.diffusion_states.max_denoising_steps),
++            "stability_threshold": int(self.diffusion_states.stability_threshold),
++            "confidence_threshold": gen.get("confidence_threshold"),
++            "t_min": gen.get("t_min"),
++            "t_max": gen.get("t_max"),
++            "vocab_size": self.model_config.get_vocab_size(),
++        }
++
+     def add_request(self, req_index: int, new_req_data: Any) -> None:
+         self._req_id_to_index[new_req_data.req_id] = req_index
+         self.diffusion_states.add_request(req_index)
+         if not new_req_data.req_id.startswith("_warmup_"):
+             prompt_len = len(new_req_data.prompt_token_ids)
+             self.diffusion_states.prompt_len[req_index] = prompt_len
++            if crystalcall_trace.enabled():
++                _TRACE_SLOTS[req_index] = _TraceRequest(new_req_data.req_id)
++                crystalcall_trace.begin_request(
++                    new_req_data.req_id, prompt_len, self._trace_sampler_info()
++                )
+ 
+     def remove_request(self, req_id: str) -> None:
+         idx = self._req_id_to_index.pop(req_id, None)
+         if idx is not None:
+             self.diffusion_states.remove_request(idx)
++            if crystalcall_trace.enabled():
++                # Drain in-flight revisions FIRST: the copy is deferred by a
++                # step, so anything staged for this request must be emitted
++                # before its slot record is discarded.
++                if _TRACE_SAMPLER is not None:
++                    _TRACE_SAMPLER.flush_trace()
++                rec = _TRACE_SLOTS.pop(idx, None)
++                if rec is not None:
++                    crystalcall_trace.end_request(rec.req_id, rec.prefix_len, "removed")
+ 
+     def get_mm_embeddings(self, scheduled_encoder_inputs, input_batch):
+         if not self.supports_mm_inputs:
+@@ -1118,6 +1272,13 @@
+         # on the subsequent commit step when num_sampled=CANVAS_LEN.
+         self._pending_logprobs: dict[int, LogprobsTensors] = {}
+ 
++        # Fixed for the process lifetime: the emitter reads its env once.
++        self._trace_on = crystalcall_trace.enabled()
++        self._trace_ring = None
++        if self._trace_on:
++            global _TRACE_SAMPLER
++            _TRACE_SAMPLER = self
++
+     def add_request(self, req_idx: int, prompt_len: int, sampling_params: Any) -> None:
+         if use_penalty(sampling_params):
+             logger.warning_once(
+@@ -1202,6 +1363,131 @@
+         )
+ 
+     # ------------------------------------------------------------------
++    # CrystalCall trace emission
++    # ------------------------------------------------------------------
++
++    def _emit_trace(
++        self,
++        decode_slots: torch.Tensor,
++        step_pre: torch.Tensor,
++        is_committing: torch.Tensor,
++        decode_slots_np: np.ndarray,
++        valid_canvas_len_np: np.ndarray,
++    ) -> None:
++        """Stage one revision batch without waiting for host visibility.
++
++        The sampler only performs non-blocking copies into a persistent pinned
++        ring and records a CUDA event.  ``crystalcall_trace`` owns the bounded
++        staging queue; its worker waits for the event and materialises Python
++        lists.  Thus neither event synchronisation nor ``.tolist()`` runs on
++        the denoise thread.
++        """
++        states = self.diffusion_states
++        sample_ns = time.monotonic_ns()
++        # Post-step is_encoder_phase == "commits next" == converged.
++        converged_after = states.is_encoder_phase[decode_slots]
++        payload = crystalcall_trace.want_payload()
++        n = int(decode_slots.shape[0])
++        if n == 0:
++            return
++
++        slot = self._trace_stage_acquire()
++        if slot is None:
++            # A dropped commit would otherwise make the worker assign every
++            # later revision the wrong canvas id.  Mark the request unusable
++            # rather than emitting a plausible but corrupted trace.
++            for req_slot in decode_slots_np[:n]:
++                rec = _TRACE_SLOTS.get(int(req_slot))
++                if rec is not None:
++                    rec.desynced = True
++            crystalcall_trace.note_drop()
++            return
++        buf = self._trace_ring[slot]
++
++        # Narrow dtypes: token ids fit int32 (vocab 262144) and the accept mask
++        # is 0/1, so both shrink 8x -> 4x and 8x -> 1x.  Confidence and entropy
++        # stay float32 so the tau comparison in the launch gate is bit-for-bit
++        # what the sampler computed.
++        if payload:
++            buf["tokens"][:n].copy_(
++                states.argmax_canvas[decode_slots].to(torch.int32), non_blocking=True
++            )
++            buf["mask"][:n].copy_(
++                states.trace_accept_mask[decode_slots].to(torch.uint8), non_blocking=True
++            )
++            buf["conf"][:n].copy_(states.trace_token_conf[decode_slots], non_blocking=True)
++            buf["entropy"][:n].copy_(
++                states.trace_token_entropy[decode_slots], non_blocking=True
++            )
++        scal = torch.stack(
++            (
++                step_pre.to(torch.int32),
++                converged_after.to(torch.int32),
++                is_committing.to(torch.int32),
++            ),
++            dim=1,
++        )
++        buf["scalars"][:n].copy_(scal, non_blocking=True)
++        buf["mean_entropy"][:n].copy_(
++            states.trace_mean_entropy[decode_slots], non_blocking=True
++        )
++        buf["event"].record()
++        buf["n"] = n
++        buf["payload"] = payload
++        buf["sample_ns"] = sample_ns
++        # Request records are consumed only by the single stage worker, in
++        # queue order, so mutable canvas counters cannot race this sampler.
++        buf["recs"] = [_TRACE_SLOTS.get(int(x)) for x in decode_slots_np[:n]]
++        buf["valid_lens"] = [int(x) for x in valid_canvas_len_np[:n]]
++
++        if not crystalcall_trace.defer_staged(buf):
++            # The emitter counted the queue drop.  Mark every request in the
++            # batch desynchronised before releasing the pinned slot.
++            for rec in buf["recs"]:
++                if rec is not None:
++                    rec.desynced = True
++            buf["busy"] = False
++            buf["recs"] = None
++
++    def _trace_stage_acquire(self):
++        """Reserve a pinned staging slot, allocating the ring on first use."""
++        if self._trace_ring is None:
++            depth = crystalcall_trace.ring_depth()
++            rows = int(self.diffusion_states.argmax_canvas.shape[0])
++            CL = self.canvas_length
++            ring = []
++            for _ in range(depth):
++                ring.append(
++                    {
++                        "tokens": torch.empty((rows, CL), dtype=torch.int32, pin_memory=True),
++                        "mask": torch.empty((rows, CL), dtype=torch.uint8, pin_memory=True),
++                        "conf": torch.empty((rows, CL), dtype=torch.float32, pin_memory=True),
++                        "entropy": torch.empty(
++                            (rows, CL), dtype=torch.float32, pin_memory=True
++                        ),
++                        "scalars": torch.empty((rows, 3), dtype=torch.int32, pin_memory=True),
++                        "mean_entropy": torch.empty(
++                            (rows,), dtype=torch.float32, pin_memory=True
++                        ),
++                        "event": torch.cuda.Event(),
++                        "busy": False,
++                        "n": 0,
++                        "recs": None,
++                    }
++                )
++            self._trace_ring = ring
++        for i, b in enumerate(self._trace_ring):
++            if not b["busy"]:
++                b["busy"] = True
++                return i
++        return None
++
++    def flush_trace(self) -> None:
++        """Wait for staged revisions before a request record is discarded."""
++        if self._trace_on:
++            crystalcall_trace.flush_staged()
++
++    # ------------------------------------------------------------------
+     # Main entry point
+     # ------------------------------------------------------------------
+ 
+@@ -1273,6 +1559,9 @@
+         # Snapshot which slots are committing BEFORE the compiled step runs,
+         # since it mutates is_encoder_phase (commit→False, converge→True).
+         is_committing = states.is_encoder_phase[decode_slots].clone()
++        # Pre-step denoising index, snapshotted for the same reason: the
++        # compiled step increments it on denoise and resets it on commit.
++        trace_step_pre = states.step[decode_slots].clone() if self._trace_on else None
+ 
+         # --- Single compiled call: temp → sample → probs → post-process ---
+         scaled = _compiled_sample_step(
+@@ -1305,7 +1594,20 @@
+             CL=self.canvas_length,
+             ST=states.stability_threshold,
+             entropy_bound=self.entropy_bound,
+-        )
++            trace_accept_mask=states.trace_accept_mask,
++            trace_token_conf=states.trace_token_conf,
++            trace_token_entropy=states.trace_token_entropy,
++            trace_mean_entropy=states.trace_mean_entropy,
++        )
++
++        if self._trace_on and _TRACE_SLOTS:
++            self._emit_trace(
++                decode_slots,
++                trace_step_pre,
++                is_committing,
++                decode_slots_np,
++                valid_canvas_len_np,
++            )
+ 
+         # --- Logprobs: stash on convergence, return on commit ---
+         slots_np = input_batch.idx_mapping_np[:num_reqs]

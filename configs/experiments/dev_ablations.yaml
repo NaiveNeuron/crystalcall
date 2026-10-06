@@ -1,0 +1,79 @@
+# Development-only sampler ablations.
+#
+# These are the two sampler ablations that CANNOT be replayed from a
+# stored trace, because they change the sampler and therefore the trajectory
+# itself. They run on a small DEVELOPMENT subset only, never on the held-out
+# test manifest, and they never influence the frozen thresholds: those are
+# selected by `crystalcall pilot` on the standard configuration.
+#
+# `EXTRA_ARGS` is appended verbatim to the vLLM server command line by
+# `scripts/serve_diffusiongemma.sh`, so each variant is one server restart.
+
+schema_version: crystalcall-dev-ablations/1
+
+manifest: experiments/manifests/dev.jsonl
+subset: 25                 # first 25 development prompts, deterministic order
+arm: diffusion_standard    # trace + parse only; the gate is replayed offline
+seed: 0
+
+variants:
+  - id: adaptive_stopping_on
+    label: Adaptive stopping ON (standard configuration)
+    note: >
+      The checkpoint's own generation_config: confidence_threshold 0.005,
+      stability_threshold 1, max_denoising_steps 48. A canvas commits as soon as
+      it is both stable and confident, so most canvases stop well before step 48.
+    extra_args: ""
+    out_dir: experiments/raw/dev_ablation_adaptive_on
+
+  - id: adaptive_stopping_off
+    label: Adaptive stopping OFF (always run to max_denoising_steps)
+    note: >
+      Convergence is disabled by making the confidence test unreachable, so every
+      canvas denoises for the full max_denoising_steps. This lengthens the
+      pre-commit window artificially, which is exactly why it is a development
+      ablation and not part of the held-out matrix: it tells us how much of the
+      measured lead is a property of adaptive stopping rather than of
+      crystallization.
+    extra_args: >-
+      --hf-overrides
+      {"diffusion_sampler":"entropy_bound","diffusion_entropy_bound":0.1,"confidence_threshold":-1.0,"stability_threshold":9999}
+    out_dir: experiments/raw/dev_ablation_adaptive_off
+
+# Reported quantities, computed by replaying each variant's traces through the
+# same offline analysis as the pilot:
+report:
+  - revisions_per_canvas_p50
+  - canvases_per_request_p50
+  - decode_ms_p50
+  - precommit_lead_ms_p50
+  - precommit_lead_fraction_of_remaining_p50
+  - valid_final_ptc_rate
+  - eligible_coverage_at_frozen_gate
+  - precision_at_frozen_gate
+  - median_gain_500ms
+  - median_gain_2000ms
+
+commands: |
+  # variant A (standard)
+  SEED=0 PORT=8000 CRYSTALCALL_TRACE=1 CRYSTALCALL_TRACE_SINK=127.0.0.1:9801 \
+    CRYSTALCALL_TRACE_LEVEL=full bash scripts/serve_diffusiongemma.sh
+  uv run crystalcall trace --manifest experiments/manifests/dev.jsonl \
+    --arm diffusion_standard --seed 0 --limit 25 \
+    --out experiments/raw/dev_ablation_adaptive_on
+  bash scripts/serve_diffusiongemma.sh --stop
+
+  # variant B (adaptive stopping disabled)
+  SEED=0 PORT=8000 CRYSTALCALL_TRACE=1 CRYSTALCALL_TRACE_SINK=127.0.0.1:9801 \
+    CRYSTALCALL_TRACE_LEVEL=full \
+    EXTRA_ARGS='--hf-overrides {"diffusion_sampler":"entropy_bound","diffusion_entropy_bound":0.1,"confidence_threshold":-1.0,"stability_threshold":9999}' \
+    bash scripts/serve_diffusiongemma.sh
+  uv run crystalcall trace --manifest experiments/manifests/dev.jsonl \
+    --arm diffusion_standard --seed 0 --limit 25 \
+    --out experiments/raw/dev_ablation_adaptive_off
+  bash scripts/serve_diffusiongemma.sh --stop
+
+  uv run crystalcall replay --policy all \
+    --shard experiments/raw/dev_ablation_adaptive_on/*.jsonl \
+            experiments/raw/dev_ablation_adaptive_off/*.jsonl \
+    --out experiments/derived/dev_ablations

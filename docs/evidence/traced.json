@@ -1,0 +1,172 @@
+{
+  "model": "diffusiongemma-26b-a4b-it",
+  "wall_s": 13.63436845690012,
+  "baseline_wall_s": 9.694209040142596,
+  "results": [
+    {
+      "prompt": "Name the capital of France in one word.",
+      "server_request_id": "chatcmpl-8e46f472efabcbfe",
+      "content": "Paris",
+      "reasoning": "",
+      "tool_calls": [],
+      "finish_reason": "stop",
+      "completion_tokens": 6,
+      "prompt_tokens": 18,
+      "latency_s": 0.614716089097783
+    },
+    {
+      "prompt": "What is 17 times 3? Answer with the number only.",
+      "server_request_id": "chatcmpl-9debc39feeacaa1f",
+      "content": "51",
+      "reasoning": "",
+      "tool_calls": [],
+      "finish_reason": "stop",
+      "completion_tokens": 7,
+      "prompt_tokens": 24,
+      "latency_s": 0.7390162639785558
+    },
+    {
+      "prompt": "List three primary colours, comma separated.",
+      "server_request_id": "chatcmpl-8ba8ef3e74104001",
+      "content": "Red, blue, blue",
+      "reasoning": "",
+      "tool_calls": [],
+      "finish_reason": "stop",
+      "completion_tokens": 10,
+      "prompt_tokens": 17,
+      "latency_s": 1.143840410048142
+    },
+    {
+      "prompt": "Explain in detail, in at least 400 words, how a bicycle derailleur shifts gears, covering the cable, the parallelogram, the jockey wheels and the chain.",
+      "server_request_id": "chatcmpl-beba6026b079f7b0",
+      "content": "The bicycle derailleur is a marvel of mechanical engineering, designed to translate the linear pull of a hand cable into the precise lateral movement that moves a chain. To understand how it works, one must examine the synergy between the cable tension, the mechanical parallelogram structure, the jockey wheels, and the chain itself.\n\n### The Cable: The Input of Force\nThe shifting process begins at the rider's handlebars. When the rider clicks the shift lever, it either pulls or releases tension on a stainless steel inner cable. This cable runs along the frame of the bike and is anchored to the derailleur. \n\nWhen the rider shifts to a larger cog (into an easier gear), the lever pulls the cable taut. This tension pulls the derailleur toward the spokes of the wheel. Conversely, when shifting to a smaller cog (a harder gear), the lever releases tension, allowing a spring-return mechanism inside the derailleur to pull the mechanism back to its original position. The cable acts as the messenger that initiates the entire mechanical sequence.\n\n### The Parallelogram: The Geometric Guide\nThe body of the derailleur is constructed as a parallelogram. This structure consists of four metal links connected by pivots. The genius of the parallelogram design is that it ensures the derailleur cage\u2014the part that holds the wheels\u2014stays perfectly parallel to the cassette regardless of where it moves inward or outward.\n\nAs the cable pulls the derailleur, the parallelogram pivots, moving the entire cage laterally. Because of the geometric constraints, the pulley wheels remain in a vertical plane relative to the chain. This is crucial because if the cage tilted during the shift, the chain would likely bind or jump off the teeth, rather than transitioning smoothly.\n\n### The Jockey Wheels: Maintaining Tension and Direction\nInside the moving cage are two small sprockets known as jockey wheels: the guide wheel and the tension pulley (bottom). These wheels serve two vital functions. First, they maintain proper tension on the chain. When the chain moves to a larger cog, the length of the chain loop increases; the derailleur\u2019s spring mechanism pulls the jockey wheels forward to take up the slack, preventing the chain from sagging and rubbing against the frame.\n\nSecond, the guide wheel (top) acts as a \"fencer.\" As the parallelogram moves laterally, the guide wheel pushes against the side of the chain. This lateral force is what actually forces the chain to climb onto the next cog.\n\n### The Chain: The Final Output\nThe chain is the component that actually performs the work. When the derailleur moves, the guide wheel exerts a lateral force on the chain links. Because the chain is under tension from the pedals, it cannot simply move sideways; it is forced to climb or drop between the teeth of the cassette. Once the chain catches the teeth of the new cog, the rotation of the cassette pulls the rest of the chain along. \n\nIn summary, shifting is a continuous chain reaction: the cable provides the force, the parallelogram directs the movement precisely, the jockey wheels guide and tension the chain, and the chain transitions to the new gear, allowing the rider to maintain their cadence regardless of the terrain.",
+      "reasoning": "",
+      "tool_calls": [],
+      "finish_reason": "stop",
+      "completion_tokens": 643,
+      "prompt_tokens": 44,
+      "latency_s": 11.13379862695001
+    }
+  ],
+  "emitter_stats": {
+    "bytes": 330271,
+    "dropped": 0,
+    "enabled": true,
+    "encode_ns": 26550502,
+    "errors": 0,
+    "file": "",
+    "level": "full",
+    "queue_max": 1,
+    "reconnects": 1,
+    "sent": 78,
+    "sink": "127.0.0.1:45285"
+  },
+  "per_revision": {
+    "bytes_per_revision": 5160.5,
+    "encode_ns_per_event": 340391.1,
+    "queue_max": 1
+  },
+  "revisions": {
+    "streams": [
+      {
+        "request_id": "chatcmpl-8e46f472efabcbfe-beedd0ce",
+        "prompt_tokens": 18,
+        "output_tokens": 256,
+        "revisions": 3,
+        "canvases": 2,
+        "denoise_steps_per_canvas": [
+          1,
+          1
+        ],
+        "first_mean_entropy": 0.00185,
+        "last_mean_entropy": 2e-05,
+        "accepted_first": 256,
+        "accepted_last": 256,
+        "wall_ms": 741.21
+      },
+      {
+        "request_id": "chatcmpl-9debc39feeacaa1f-952f93b1",
+        "prompt_tokens": 24,
+        "output_tokens": 256,
+        "revisions": 3,
+        "canvases": 2,
+        "denoise_steps_per_canvas": [
+          1,
+          1
+        ],
+        "first_mean_entropy": 0.00108,
+        "last_mean_entropy": 6e-05,
+        "accepted_first": 256,
+        "accepted_last": 256,
+        "wall_ms": 744.59
+      },
+      {
+        "request_id": "chatcmpl-8ba8ef3e74104001-9c29742c",
+        "prompt_tokens": 17,
+        "output_tokens": 256,
+        "revisions": 5,
+        "canvases": 2,
+        "denoise_steps_per_canvas": [
+          3,
+          1
+        ],
+        "first_mean_entropy": 0.00686,
+        "last_mean_entropy": 0.00605,
+        "accepted_first": 254,
+        "accepted_last": 43,
+        "wall_ms": 1140.08
+      },
+      {
+        "request_id": "chatcmpl-beba6026b079f7b0-914de3c5",
+        "prompt_tokens": 44,
+        "output_tokens": 768,
+        "revisions": 53,
+        "canvases": 4,
+        "denoise_steps_per_canvas": [
+          12,
+          27,
+          10,
+          1
+        ],
+        "first_mean_entropy": 3.41355,
+        "last_mean_entropy": 2e-05,
+        "accepted_first": 9,
+        "accepted_last": 256,
+        "wall_ms": 11148.07
+      }
+    ],
+    "sink_stats": {
+      "endpoint": "127.0.0.1:45285",
+      "requests": 4,
+      "events": 78,
+      "malformed": 0,
+      "clock_skew": {
+        "samples": 4,
+        "min_ns": 217584,
+        "median_ns": 676370,
+        "max_ns": 1495045
+      }
+    }
+  },
+  "clock_skew": {
+    "samples": 4,
+    "min_ns": 217584,
+    "median_ns": 676370,
+    "max_ns": 1495045
+  },
+  "identity_required_indices": [
+    0,
+    1,
+    2
+  ],
+  "identity_warnings": [
+    "request 3 ('Explain in detail, in at least 400 words'): content differs (3183 vs 3230 chars); completion_tokens: baseline=646 traced=643  [engine not reproducible here; not a purity signal]"
+  ],
+  "errors": [],
+  "source_provenance": {
+    "git_commit": "754066f176fb1bfa01257cd819d4cf1cf76d9970",
+    "sampler_sha256": "dccfcfaf707423b6edf53ccf87f530c3fcc171ee3411a407a27fc241664a32c2",
+    "trace_patch_sha256": "a9279d6a051bcae9487b59994542025c891b272e925232c4a275d7e1cb0e416e",
+    "emitter_sha256": "438a8f1ea0c3a6b93ba60da78b3bc4e6986ed86c4e8dbe10c0d043b8ba98f758"
+  }
+}

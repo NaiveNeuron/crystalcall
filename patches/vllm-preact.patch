@@ -1,0 +1,237 @@
+--- a/vllm/model_executor/models/diffusion_gemma.py
++++ b/vllm/model_executor/models/diffusion_gemma.py
+@@ -146,6 +146,45 @@
+ # only ever sees slots, so the mapping lives at module scope (one model per
+ # worker process).  Stays empty whenever tracing is off.
+ _TRACE_SLOTS: dict[int, _TraceRequest] = {}
++
++
++# ---------------------------------------------------------------------------
++# CrystalCall P-ReAct-style tool-priority decoding (mandatory baseline arm D).
++#
++# ``crystalcall_preact`` is patches/preact_priority.py, mounted onto PYTHONPATH
++# next to this file.  Off unless CRYSTALCALL_PREACT is set: with it off
++# ``enabled()`` is False, no buffer is allocated, every added argument below
++# stays None, and the compiled graph is exactly the trace-only graph -- which
++# is what lets the SAME image and the SAME patched file serve the CrystalCall /
++# standard arms with untouched decoding.
++#
++# The mechanism NEVER touches convergence: it widens the acceptance mask inside
++# the tool-call span and latches a readiness flag for the side channel.  The
++# request still ends under the ordinary convergence rule, so the committed
++# canvas is never truncated or half-denoised.
++# ---------------------------------------------------------------------------
++try:
++    import crystalcall_preact
++except ImportError:  # module not mounted -> mechanism unavailable
++
++    class _CrystalCallPreactStub:
++        @staticmethod
++        def enabled() -> bool:
++            return False
++
++        @staticmethod
++        def config() -> Any:
++            raise RuntimeError("crystalcall_preact is not mounted")
++
++        @staticmethod
++        def priority_step(*args: Any, **kwargs: Any) -> Any:
++            raise RuntimeError("crystalcall_preact is not mounted")
++
++        @staticmethod
++        def emit_tool_call_ready(*args: Any, **kwargs: Any) -> None:
++            return None
++
++    crystalcall_preact = _CrystalCallPreactStub()
+ 
+ 
+ class DiffusionGemmaSelfConditioning(nn.Module):
+@@ -606,6 +645,18 @@
+     trace_token_conf: torch.Tensor | None = None,
+     trace_token_entropy: torch.Tensor | None = None,
+     trace_mean_entropy: torch.Tensor | None = None,
++    # ---- CrystalCall P-ReAct-style tool priority (None/False when the
++    # mechanism is off, in which case none of its ops enter the graph) ----
++    preact_span_hist: torch.Tensor | None = None,
++    preact_span_hist_len: torch.Tensor | None = None,
++    preact_fired: torch.Tensor | None = None,
++    preact_span_out: torch.Tensor | None = None,
++    preact_open_id: int = -1,
++    preact_close_id: int = -1,
++    preact_bound: float = 0.0,
++    preact_stable_steps: int = 1,
++    preact_span_accept: bool = False,
++    preact_ready_signal: bool = False,
+ ) -> torch.Tensor:
+     """Compiled decode step: temperature → Gumbel sample → probs/confidence →
+     accept/renoise → convergence, all as vectorized PyTorch ops.
+@@ -663,6 +714,34 @@
+     is_commit = is_encoder_phase[decode_slots]  # [num_decode]
+     is_denoise = ~is_commit
+     cur_step = step_tensor[decode_slots].float()
++
++    # ---- CrystalCall P-ReAct-style tool priority ----
++    # Union-only widening of the acceptance mask, plus a readiness latch for
++    # the side channel.  Everything is derived from tensors this step already
++    # holds -- argmax_tokens, token_entropy, eb_mask -- so there is no logits
++    # copy, no probability transfer and no host synchronisation.  With the
++    # buffers None (mechanism off) not one op below is traced.  Nothing here
++    # feeds `converged` or `is_encoder_phase`: readiness is a signal, not a
++    # decision, and the request ends exactly when the ordinary rule says so.
++    if preact_span_hist is not None:
++        eb_mask = crystalcall_preact.priority_step(
++            argmax_tokens,
++            token_entropy,
++            eb_mask,
++            is_denoise,
++            decode_slots,
++            preact_span_hist,
++            preact_span_hist_len,
++            preact_fired,
++            preact_span_out,
++            preact_open_id,
++            preact_close_id,
++            preact_bound,
++            preact_stable_steps,
++            preact_span_accept,
++            preact_ready_signal,
++            CL,
++        )
+ 
+     # Step update: +1 for denoise, reset to 0 for commit
+     new_step_val = torch.where(
+@@ -862,6 +941,34 @@
+             self.trace_token_entropy = None
+             self.trace_mean_entropy = None
+ 
++        # CrystalCall P-ReAct-style priority state: a small ring of recent
++        # argmax canvases for the span-stability test, its length, the
++        # one-event-per-canvas latch, and the [lo, hi, fired] readout the
++        # sampler ships to the emitter.  Allocated ONLY when the mechanism is
++        # on; None otherwise, so the CrystalCall arm keeps the upstream
++        # allocation footprint exactly.
++        if crystalcall_preact.enabled():
++            _preact = crystalcall_preact.config()
++            self.preact_span_hist = torch.zeros(
++                max_num_reqs,
++                _preact.stable_steps,
++                canvas_length,
++                dtype=torch.int64,
++                device=device,
++            )
++            self.preact_span_hist_len = torch.zeros(
++                max_num_reqs, dtype=torch.int32, device=device
++            )
++            self.preact_fired = torch.zeros(max_num_reqs, dtype=torch.bool, device=device)
++            self.preact_span_out = torch.full(
++                (max_num_reqs, 3), -1, dtype=torch.int32, device=device
++            )
++        else:
++            self.preact_span_hist = None
++            self.preact_span_hist_len = None
++            self.preact_fired = None
++            self.preact_span_out = None
++
+     def init_canvas(self, slot_indices_np: np.ndarray) -> None:
+         """Initialize canvas with random tokens for the given slots."""
+         n = slot_indices_np.shape[0]
+@@ -879,6 +986,10 @@
+         self.step[slot_idx] = 0
+         self.accepted_canvas_history_len[slot_idx] = 0
+         self.self_conditioning_embeds[slot_idx] = 0
++        if self.preact_span_hist is not None:
++            self.preact_span_hist_len[slot_idx] = 0
++            self.preact_fired[slot_idx] = False
++            self.preact_span_out[slot_idx] = -1
+ 
+     def remove_request(self, slot_idx: int) -> None:
+         self.is_encoder_phase[slot_idx] = False
+@@ -1278,6 +1389,28 @@
+         if self._trace_on:
+             global _TRACE_SAMPLER
+             _TRACE_SAMPLER = self
++
++        # P-ReAct-style tool priority: resolved once (the module reads its env
++        # at import) so the hot path is a bool test.
++        self._preact_on = crystalcall_preact.enabled()
++        if self._preact_on:
++            _pre = crystalcall_preact.config()
++            self._preact_open_id = _pre.open_id
++            self._preact_close_id = _pre.close_id
++            self._preact_bound = _pre.bound
++            self._preact_stable_steps = _pre.stable_steps
++            self._preact_span_accept = _pre.span_accept
++            self._preact_ready_signal = _pre.ready_signal
++            logger.info(
++                "CrystalCall P-ReAct-style tool priority enabled: %s", _pre.as_dict()
++            )
++        else:
++            self._preact_open_id = -1
++            self._preact_close_id = -1
++            self._preact_bound = 0.0
++            self._preact_stable_steps = 1
++            self._preact_span_accept = False
++            self._preact_ready_signal = False
+ 
+     def add_request(self, req_idx: int, prompt_len: int, sampling_params: Any) -> None:
+         if use_penalty(sampling_params):
+@@ -1486,6 +1619,31 @@
+         """Wait for staged revisions before a request record is discarded."""
+         if self._trace_on:
+             crystalcall_trace.flush_staged()
++
++    def _emit_preact(
++        self,
++        decode_slots: torch.Tensor,
++        step_pre: torch.Tensor,
++        decode_slots_np: np.ndarray,
++    ) -> None:
++        """Emit ``tool_call_ready`` for slots whose span just latched.
++
++        One ``[num_decode, 3]`` int copy per step -- three ints per request,
++        never a vocabulary-sized transfer.  The latch in the compiled step
++        guarantees at most one event per ``(request_id, canvas_id)``.  Purely
++        observational: no sampler state is modified here.
++        """
++        rows = self.diffusion_states.preact_span_out[decode_slots].cpu().tolist()
++        steps = step_pre.cpu().tolist()
++        for i, row in enumerate(rows):
++            if not row[2]:
++                continue
++            rec = _TRACE_SLOTS.get(int(decode_slots_np[i]))
++            if rec is None:
++                continue
++            crystalcall_preact.emit_tool_call_ready(
++                rec.req_id, rec.canvas_id, int(steps[i]), int(row[0]), int(row[1])
++            )
+ 
+     # ------------------------------------------------------------------
+     # Main entry point
+@@ -1598,6 +1756,16 @@
+             trace_token_conf=states.trace_token_conf,
+             trace_token_entropy=states.trace_token_entropy,
+             trace_mean_entropy=states.trace_mean_entropy,
++            preact_span_hist=states.preact_span_hist,
++            preact_span_hist_len=states.preact_span_hist_len,
++            preact_fired=states.preact_fired,
++            preact_span_out=states.preact_span_out,
++            preact_open_id=self._preact_open_id,
++            preact_close_id=self._preact_close_id,
++            preact_bound=self._preact_bound,
++            preact_stable_steps=self._preact_stable_steps,
++            preact_span_accept=self._preact_span_accept,
++            preact_ready_signal=self._preact_ready_signal,
+         )
+ 
+         if self._trace_on and _TRACE_SLOTS:
+@@ -1608,6 +1776,10 @@
+                 decode_slots_np,
+                 valid_canvas_len_np,
+             )
++
++        # Readiness rides the same NDJSON side channel, so it needs tracing on.
++        if self._preact_on and self._trace_on and _TRACE_SLOTS:
++            self._emit_preact(decode_slots, trace_step_pre, decode_slots_np)
+ 
+         # --- Logprobs: stash on convergence, return on commit ---
+         slots_np = input_batch.idx_mapping_np[:num_reqs]

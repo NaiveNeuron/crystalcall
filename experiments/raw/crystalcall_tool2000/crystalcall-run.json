@@ -1,0 +1,113 @@
+{
+  "arm": "crystalcall",
+  "claimed": 34,
+  "doctor_digest": "547bc22144f46c0ac6cf9c902346ae04e4f69e8595811eb56ebc8151d095cf09",
+  "failures": 0,
+  "frozen_policy": {
+    "gate": {
+      "confidence_mode": "min",
+      "k": 2,
+      "min_overlap_ms": 50.0,
+      "tau": 0.9
+    },
+    "path": "configs/frozen_policy.json",
+    "selected_on": "library defaults GatePolicy(name='full_gate'): k=2, tau=0.9, min_overlap_ms=50 (the values every reported replay used); pilot attempt 2 decided stop, so no pilot-selected file existed. Costs are zero so replay stays identical to the published numbers.",
+    "sha256": "2d094b84d25d772117e572f0317064f21e26382272a42bc69c8f355b007d816b",
+    "status": "applied"
+  },
+  "instrumentation": "full",
+  "manifest": "experiments/manifests/test.jsonl",
+  "manifest_sha256": "16b0c799263b711486afcaa2b1a0d7929fd1cc5bcd8d0b3e162caf02834e7574",
+  "policy": {
+    "allowed_resources": [
+      "cpu",
+      "gpu",
+      "storage"
+    ],
+    "confidence_mode": "min",
+    "fixed_step": null,
+    "k": 2,
+    "max_inflight": 4,
+    "min_overlap_ms": 50.0,
+    "name": "full_gate",
+    "oracle": null,
+    "random_rate": null,
+    "tau": 0.9,
+    "use_acceptance": false,
+    "use_confidence": true,
+    "use_overlap": true,
+    "use_persistence": true,
+    "use_resource": true
+  },
+  "policy_fingerprint": "0b3622314e37ec76c7317ec06435af022a39a96f9e789f6745368495f30eca9d",
+  "profile_fingerprint": "984ad76b947db6664dd2c33e15007ae409e2990c9710ea18de1acc4002f31682",
+  "prompts": 60,
+  "runtime_costs": {
+    "contention_ms_per_launch": {},
+    "parse_ms_per_revision": 0.34163416968325794,
+    "schedule_ms_per_launch": 0.0,
+    "trace_ms_per_revision": 0.28649924886877826
+  },
+  "seeds": [
+    0
+  ],
+  "semantic_divergence": 0,
+  "shards": [
+    {
+      "bytes": 2496270,
+      "final_chain": "f6847ce8b2a3cc541fb18c438b65ddd075ac16eb3cc8798b6685920f409e9e77",
+      "meta": {
+        "arm": "crystalcall",
+        "doctor_digest": "547bc22144f46c0ac6cf9c902346ae04e4f69e8595811eb56ebc8151d095cf09",
+        "frozen_policy": {
+          "gate": {
+            "confidence_mode": "min",
+            "k": 2,
+            "min_overlap_ms": 50.0,
+            "tau": 0.9
+          },
+          "path": "configs/frozen_policy.json",
+          "selected_on": "library defaults GatePolicy(name='full_gate'): k=2, tau=0.9, min_overlap_ms=50 (the values every reported replay used); pilot attempt 2 decided stop, so no pilot-selected file existed. Costs are zero so replay stays identical to the published numbers.",
+          "sha256": "2d094b84d25d772117e572f0317064f21e26382272a42bc69c8f355b007d816b",
+          "status": "applied"
+        },
+        "instrumentation": "full",
+        "manifest": "experiments/manifests/test.jsonl",
+        "manifest_sha256": "16b0c799263b711486afcaa2b1a0d7929fd1cc5bcd8d0b3e162caf02834e7574",
+        "model": null,
+        "policy": {
+          "allowed_resources": [
+            "cpu",
+            "gpu",
+            "storage"
+          ],
+          "confidence_mode": "min",
+          "fixed_step": null,
+          "k": 2,
+          "max_inflight": 4,
+          "min_overlap_ms": 50.0,
+          "name": "full_gate",
+          "oracle": null,
+          "random_rate": null,
+          "tau": 0.9,
+          "use_acceptance": false,
+          "use_confidence": true,
+          "use_overlap": true,
+          "use_persistence": true,
+          "use_resource": true
+        },
+        "profile_fingerprint": "984ad76b947db6664dd2c33e15007ae409e2990c9710ea18de1acc4002f31682",
+        "seed": 0,
+        "tool_sleep_ms": 2000.0
+      },
+      "path": "experiments/raw/crystalcall_tool2000/crystalcall-seed0.jsonl",
+      "records": 624,
+      "schema_version": "crystalcall-trace/1",
+      "sha256": "b52fba9558a6b5fadec448acc071240941da9fcca1db76d95c268d32a011570f",
+      "shard": "crystalcall-seed0.jsonl.partial"
+    }
+  ],
+  "turns": 213,
+  "verification_error": 0,
+  "verified_match": 34
+}

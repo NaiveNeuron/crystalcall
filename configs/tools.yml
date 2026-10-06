@@ -1,0 +1,296 @@
+# CrystalCall: frozen declaration of the local (real) tool families.
+#
+# GENERATED FILE - do not hand-edit.  Regenerate with:
+#   uv run scripts/build_snapshots.py --bench --emit-config configs/tools.yml
+#
+# Every `expected_duration_ms` below is the measured warm p50 of the fixed
+# benchmark workload recorded in `experiments/vendor/corpus/BENCH.json`; nothing here is
+# hand-entered.  Effects and resource classes are declarations, not
+# measurements: they are the static annotations the launch gate reasons over,
+# and they are what makes `write_note` / `read_live_clock` permanently
+# ineligible for speculation.
+schema: 1
+provenance:
+  corpus_snapshot_id: corpus@e52c405acde48cac
+  registry_fingerprint: 87f705538ce28a021213a378c1d23d53e600a318248a2e41b733135148d2bb4b
+  warm_reps: 20
+  cold_reps: 5
+  host:
+    machine: aarch64
+    python_version: 3.12.13
+    cpu_count: 20
+    ripgrep: ripgrep 14.1.1 (rev 4649aa9700)
+    ripgrep_path: experiments/vendor/bin/rg
+    torch:
+      installed: false
+      cuda_available: false
+      reason: ModuleNotFoundError
+      detail: No module named 'torch'
+    gpu:
+      available: true
+      devices:
+      - NVIDIA GB10, 12.1
+    embed_search_binary: experiments/vendor/corpus/bin/embed_search
+  cache_drop:
+    method: os.sync() + posix_fadvise(POSIX_FADV_DONTNEED) over all snapshot files + streaming read of
+      a large unrelated file
+    ballast: /usr/lib/aarch64-linux-gnu/libLLVM-18.so
+    sudo: false
+  cuda:
+    arch: sm_121
+    binary: bin/embed_search
+    binary_sha256: c5b14ea2535b74c3a5dc4466fc5b09ccb83a85172cfa11284931a970d9bf7ff5
+    command: /usr/local/cuda/bin/nvcc -O2 -arch=sm_121 --fmad=false -o experiments/vendor/corpus/bin/embed_search
+      src/crystalcall/cuda/embed_search.cu
+    compiled: true
+    error: null
+    flags:
+    - -O2
+    - -arch=sm_121
+    - --fmad=false
+    nvcc: /usr/local/cuda/bin/nvcc
+    nvcc_version: Build cuda_13.0.r13.0/compiler.36424714_0
+    source: src/crystalcall/cuda/embed_search.cu
+  ripgrep:
+    binary_sha256: e07d5c85fa9ca740ff4ab8bbac60a1e11c7a5ce242435f7820a03f7c20ef6276
+    fetch_command: 'curl -fsSL https://github.com/BurntSushi/ripgrep/releases/download/14.1.1/ripgrep-14.1.1-aarch64-unknown-linux-gnu.tar.gz
+      -o /tmp/rg.tar.gz && sha256sum /tmp/rg.tar.gz  # expect c827481c4ff4ea10c9dc7a4022c8de5db34a5737cb74484d62eb94a95841ab2f
+      && tar -xzf /tmp/rg.tar.gz -C /tmp && install -Dm755 /tmp/ripgrep-14.1.1-aarch64-unknown-linux-gnu/rg
+      experiments/vendor/bin/rg'
+    installed_path: experiments/vendor/bin/rg
+    note: 'experiments/vendor/ is gitignored; this record is the committed provenance for the binary.
+      Resolution order at runtime: $CRYSTALCALL_RG, then PATH, then this vendored binary.'
+    resolved_path: experiments/vendor/bin/rg
+    resolved_version: ripgrep 14.1.1 (rev 4649aa9700)
+    resolved_via: vendored
+    revision: 4649aa9700
+    tarball_sha256: c827481c4ff4ea10c9dc7a4022c8de5db34a5737cb74484d62eb94a95841ab2f
+    target: aarch64-unknown-linux-gnu
+    tool: ripgrep
+    url: https://github.com/BurntSushi/ripgrep/releases/download/14.1.1/ripgrep-14.1.1-aarch64-unknown-linux-gnu.tar.gz
+    version: 14.1.1
+tools:
+- name: analyze_module
+  effect: SnapshotRead
+  resource: cpu
+  expected_duration_ms: 22.49815
+  concurrency_limit: 8
+  speculation_eligible: true
+  description: 'Static analysis of one file in the frozen repository snapshot using the stdlib `ast` module
+    only: syntax validity, per-function branch count, sorted imports, def/class counts.'
+  params:
+  - name: path
+    kind: path
+    required: true
+  - name: checks
+    kind: list
+    required: false
+    default:
+    - complexity
+    - imports
+    - syntax
+    order_sensitive: false
+    element_kind: str
+  measured:
+    benchmark_args:
+      path: stdlib/ast.py
+      checks:
+      - complexity
+      - imports
+      - syntax
+    warm_ms:
+      n: 20
+      min: 21.910532
+      p50: 22.49815
+      p95: 24.447988
+      max: 24.736622
+      mean: 22.638013
+    cold_ms:
+      n: 5
+      min: 22.722983
+      p50: 43.270485
+      p95: 47.418812
+      max: 48.380649
+      mean: 36.235959
+    engine: null
+    device: null
+- name: embed_search
+  effect: SnapshotRead
+  resource: gpu
+  expected_duration_ms: 414.73375
+  concurrency_limit: 1
+  speculation_eligible: true
+  description: 'Dense retrieval over the frozen embedding snapshot: embeds `query` with the snapshot''s
+    deterministic embedder and returns the `top_k` documents by cosine similarity.'
+  params:
+  - name: query
+    kind: str
+    required: true
+  - name: top_k
+    kind: int
+    required: false
+    default: 5
+  measured:
+    benchmark_args:
+      query: frozen snapshot identity
+      top_k: 5
+    warm_ms:
+      n: 20
+      min: 391.600779
+      p50: 414.73375
+      p95: 433.970083
+      max: 440.259943
+      mean: 414.094085
+    cold_ms:
+      n: 5
+      min: 852.485498
+      p50: 884.377733
+      p95: 970.412707
+      max: 972.888025
+      mean: 906.82997
+    engine: null
+    device: cuda
+- name: read_live_clock
+  effect: LiveRead
+  resource: cpu
+  expected_duration_ms: 0.000368
+  concurrency_limit: 1
+  speculation_eligible: false
+  description: 'Read the host wall clock. Observes mutable live state, so its value is not a function
+    of any snapshot: never speculated.'
+  params: []
+  measured:
+    benchmark_args: {}
+    warm_ms:
+      n: 20
+      min: 0.00032
+      p50: 0.000368
+      p95: 0.000434
+      max: 0.000464
+      mean: 0.000376
+    cold_ms:
+      n: 5
+      min: 0.004656
+      p50: 0.004832
+      p95: 0.00639
+      max: 0.006448
+      mean: 0.00537
+    engine: null
+    device: null
+- name: search_repo
+  effect: SnapshotRead
+  resource: storage
+  expected_duration_ms: 17.325858
+  concurrency_limit: 4
+  speculation_eligible: true
+  description: Literal (fixed-string) search for `query` in the frozen repository snapshot under `path`.
+    Returns at most `max_results` matches sorted by (path, line).
+  params:
+  - name: query
+    kind: str
+    required: true
+  - name: path
+    kind: path
+    required: false
+    default: .
+  - name: max_results
+    kind: int
+    required: false
+    default: 50
+  measured:
+    benchmark_args:
+      query: 'def '
+      path: .
+      max_results: 50
+    warm_ms:
+      n: 20
+      min: 16.359167
+      p50: 17.325858
+      p95: 21.536897
+      max: 22.139092
+      mean: 18.291705
+    cold_ms:
+      n: 5
+      min: 139.184819
+      p50: 160.199844
+      p95: 187.473564
+      max: 193.772724
+      mean: 162.278354
+    engine: ripgrep
+    device: null
+- name: sqlite_query
+  effect: SnapshotRead
+  resource: storage
+  expected_duration_ms: 0.178017
+  concurrency_limit: 4
+  speculation_eligible: true
+  description: Run one read-only SELECT against the frozen SQLite FTS5 snapshot (tables `docs(path, body)`
+    and `doc_meta(path, sha256, lines, bytes)`). Writes, DDL, ATTACH, PRAGMA and multi-statement input
+    are rejected.
+  params:
+  - name: database
+    kind: str
+    required: true
+  - name: sql
+    kind: str
+    required: true
+  - name: max_rows
+    kind: int
+    required: false
+    default: 100
+  measured:
+    benchmark_args:
+      database: corpus.db
+      sql: SELECT path, lines FROM doc_meta ORDER BY path LIMIT 20
+      max_rows: 100
+    warm_ms:
+      n: 20
+      min: 0.170977
+      p50: 0.178017
+      p95: 0.193029
+      max: 0.200704
+      mean: 0.180057
+    cold_ms:
+      n: 5
+      min: 1.455285
+      p50: 1.494213
+      p95: 2.015444
+      max: 2.036199
+      mean: 1.676928
+    engine: null
+    device: null
+- name: write_note
+  effect: Write
+  resource: storage
+  expected_duration_ms: 0.082816
+  concurrency_limit: 1
+  speculation_eligible: false
+  description: 'Append a note to the mutable scratch area. Externally visible side effect: never speculated,
+    only ever executed authoritatively.'
+  params:
+  - name: path
+    kind: path
+    required: true
+  - name: text
+    kind: str
+    required: true
+  measured:
+    benchmark_args:
+      path: bench.txt
+      text: benchmark
+    warm_ms:
+      n: 20
+      min: 0.079425
+      p50: 0.082816
+      p95: 0.095277
+      max: 0.096433
+      mean: 0.083697
+    cold_ms:
+      n: 5
+      min: 0.273105
+      p50: 0.291249
+      p95: 0.355707
+      max: 0.371713
+      mean: 0.302641
+    engine: null
+    device: null

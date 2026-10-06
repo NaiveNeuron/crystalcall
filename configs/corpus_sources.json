@@ -1,0 +1,90 @@
+{
+  "build_command": "uv run scripts/build_snapshots.py --out-dir experiments/vendor/corpus",
+  "cuda": {
+    "binary_sha256": "2af7205b5fd946e3c8a3b10247b63a1698d717082988676901f6013b3ff8ea7f",
+    "command": "/usr/local/cuda/bin/nvcc -O2 -arch=sm_121 --fmad=false -o experiments/vendor/corpus/bin/embed_search src/crystalcall/cuda/embed_search.cu",
+    "flags": [
+      "-O2",
+      "-arch=sm_121",
+      "--fmad=false"
+    ],
+    "nvcc_version": "Build cuda_13.0.r13.0/compiler.36424714_0",
+    "source": "src/crystalcall/cuda/embed_search.cu"
+  },
+  "description": "Provenance of the frozen CrystalCall tool corpus. The corpus itself lives under experiments/vendor/ (gitignored) and is rebuilt with the command below; every corpus input is local, so no download is involved.",
+  "embed": {
+    "dim": 768,
+    "model_id": "hashed-pseudo-embed-v1",
+    "target_rows": 170000,
+    "window_tokens": 32
+  },
+  "id_derivation": "sha256 of canonical-JSON {kind, sorted [name, sha256] entries, extra} truncated to 16 hex chars; see src/crystalcall/snapshots.py",
+  "last_build": {
+    "corpus_snapshot_id": "corpus@e52c405acde48cac",
+    "files": 442,
+    "lines": 167039,
+    "machine": "aarch64",
+    "python_version": "3.12.13",
+    "sub_snapshot_ids": {
+      "embed": "emb:corpus@b1c8b0886bf3c605",
+      "repo": "repo@82594be83f8ceca4",
+      "sqlite": "sqlite:corpus@47687ca7770786cb"
+    }
+  },
+  "min_files": 300,
+  "min_lines": 20000,
+  "note": "Snapshot ids are content-derived, so they change whenever this repository's src/ or docs/ change or the interpreter's stdlib changes. The authoritative ids for a given build are in experiments/vendor/corpus/CORPUS_MANIFEST.json.",
+  "self_trees": [
+    "src",
+    "docs"
+  ],
+  "sqlite_database": "corpus.db",
+  "stdlib_modules": [
+    "argparse.py",
+    "ast.py",
+    "asyncio",
+    "collections",
+    "concurrent",
+    "configparser.py",
+    "csv.py",
+    "ctypes",
+    "dataclasses.py",
+    "dis.py",
+    "email",
+    "encodings",
+    "enum.py",
+    "html",
+    "http",
+    "importlib",
+    "inspect.py",
+    "json",
+    "lib2to3",
+    "logging",
+    "multiprocessing",
+    "re",
+    "sqlite3",
+    "statistics.py",
+    "tarfile.py",
+    "tomllib",
+    "typing.py",
+    "unittest",
+    "urllib",
+    "wsgiref",
+    "xml",
+    "zipfile"
+  ],
+  "vendored_binaries": [
+    {
+      "fetch_command": "curl -fsSL https://github.com/BurntSushi/ripgrep/releases/download/14.1.1/ripgrep-14.1.1-aarch64-unknown-linux-gnu.tar.gz -o /tmp/rg.tar.gz && sha256sum /tmp/rg.tar.gz  # expect c827481c4ff4ea10c9dc7a4022c8de5db34a5737cb74484d62eb94a95841ab2f && tar -xzf /tmp/rg.tar.gz -C /tmp && install -Dm755 /tmp/ripgrep-14.1.1-aarch64-unknown-linux-gnu/rg experiments/vendor/bin/rg",
+      "installed_path": "experiments/vendor/bin/rg",
+      "note": "experiments/vendor/ is gitignored; this record is the committed provenance for the binary. Resolution order at runtime: $CRYSTALCALL_RG, then PATH, then this vendored binary.",
+      "revision": "4649aa9700",
+      "tarball_sha256": "c827481c4ff4ea10c9dc7a4022c8de5db34a5737cb74484d62eb94a95841ab2f",
+      "target": "aarch64-unknown-linux-gnu",
+      "tool": "ripgrep",
+      "url": "https://github.com/BurntSushi/ripgrep/releases/download/14.1.1/ripgrep-14.1.1-aarch64-unknown-linux-gnu.tar.gz",
+      "version": "14.1.1"
+    }
+  ],
+  "verify_command": "uv run scripts/build_snapshots.py --out-dir experiments/vendor/corpus --verify"
+}

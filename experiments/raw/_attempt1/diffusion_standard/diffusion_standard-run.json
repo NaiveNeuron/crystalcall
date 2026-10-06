@@ -1,0 +1,95 @@
+{
+  "arm": "diffusion_standard",
+  "claimed": 0,
+  "doctor_digest": "4c1f900236dc2406039a31011e3bb3509e497ead2a8d39ba5a74214ae053b782",
+  "failures": 0,
+  "frozen_policy": {
+    "path": "configs/frozen_policy.json",
+    "status": "absent"
+  },
+  "instrumentation": "parse",
+  "manifest": "experiments/manifests/dev.jsonl",
+  "manifest_sha256": "bcac80d20775dddbbf667b29e81a5c8765545b6f4ff19abdcbab10d36f4a4188",
+  "policy": {
+    "allowed_resources": [
+      "cpu",
+      "gpu",
+      "storage"
+    ],
+    "confidence_mode": "min",
+    "fixed_step": null,
+    "k": 2,
+    "max_inflight": 4,
+    "min_overlap_ms": 50.0,
+    "name": "full_gate",
+    "oracle": null,
+    "random_rate": null,
+    "tau": 0.9,
+    "use_confidence": true,
+    "use_overlap": true,
+    "use_persistence": true,
+    "use_resource": true
+  },
+  "policy_fingerprint": "ba6c5d6c138508b50af1d89a69db37427926ee6c20b96000fbec56ef3b251572",
+  "profile_fingerprint": "355644b578caf43eb00d897f6b3928ccb981b5e428cef9056cd40ed84f7b277d",
+  "prompts": 100,
+  "runtime_costs": {
+    "contention_ms_per_launch": {},
+    "parse_ms_per_revision": 0.12419796482412061,
+    "schedule_ms_per_launch": 0.0,
+    "trace_ms_per_revision": 0.23152031407035176
+  },
+  "seeds": [
+    0
+  ],
+  "semantic_divergence": 0,
+  "shards": [
+    {
+      "bytes": 4641957,
+      "final_chain": "5d14905929ffa63ddc72d41f0ac428a2d30aea7a7ddb387b4d50dbbaf1aaeed6",
+      "meta": {
+        "arm": "diffusion_standard",
+        "doctor_digest": "4c1f900236dc2406039a31011e3bb3509e497ead2a8d39ba5a74214ae053b782",
+        "frozen_policy": {
+          "path": "configs/frozen_policy.json",
+          "status": "absent"
+        },
+        "instrumentation": "parse",
+        "manifest": "experiments/manifests/dev.jsonl",
+        "manifest_sha256": "bcac80d20775dddbbf667b29e81a5c8765545b6f4ff19abdcbab10d36f4a4188",
+        "model": null,
+        "policy": {
+          "allowed_resources": [
+            "cpu",
+            "gpu",
+            "storage"
+          ],
+          "confidence_mode": "min",
+          "fixed_step": null,
+          "k": 2,
+          "max_inflight": 4,
+          "min_overlap_ms": 50.0,
+          "name": "full_gate",
+          "oracle": null,
+          "random_rate": null,
+          "tau": 0.9,
+          "use_confidence": true,
+          "use_overlap": true,
+          "use_persistence": true,
+          "use_resource": true
+        },
+        "profile_fingerprint": "355644b578caf43eb00d897f6b3928ccb981b5e428cef9056cd40ed84f7b277d",
+        "seed": 0,
+        "tool_sleep_ms": 0.0
+      },
+      "path": "experiments/raw/diffusion_standard/diffusion_standard-seed0.jsonl",
+      "records": 1100,
+      "schema_version": "crystalcall-trace/1",
+      "sha256": "07ff46de67163c8b372a04c717ab8cad072e5b70ad49eaecdf475f1fbc418334",
+      "shard": "diffusion_standard-seed0.jsonl.partial"
+    }
+  ],
+  "turns": 317,
+  "verification_error": 0,
+  "verified_match": 0
+}

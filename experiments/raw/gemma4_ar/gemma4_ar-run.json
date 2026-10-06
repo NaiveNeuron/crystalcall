@@ -1,0 +1,97 @@
+{
+  "arm": "gemma4_ar",
+  "claimed": 0,
+  "doctor_digest": "547bc22144f46c0ac6cf9c902346ae04e4f69e8595811eb56ebc8151d095cf09",
+  "failures": 0,
+  "frozen_policy": {
+    "path": "configs/frozen_policy.json",
+    "status": "absent"
+  },
+  "instrumentation": "off",
+  "manifest": "experiments/manifests/dev.jsonl",
+  "manifest_sha256": "bcac80d20775dddbbf667b29e81a5c8765545b6f4ff19abdcbab10d36f4a4188",
+  "policy": {
+    "allowed_resources": [
+      "cpu",
+      "gpu",
+      "storage"
+    ],
+    "confidence_mode": "min",
+    "fixed_step": null,
+    "k": 2,
+    "max_inflight": 4,
+    "min_overlap_ms": 50.0,
+    "name": "full_gate",
+    "oracle": null,
+    "random_rate": null,
+    "tau": 0.9,
+    "use_acceptance": false,
+    "use_confidence": true,
+    "use_overlap": true,
+    "use_persistence": true,
+    "use_resource": true
+  },
+  "policy_fingerprint": "0b3622314e37ec76c7317ec06435af022a39a96f9e789f6745368495f30eca9d",
+  "profile_fingerprint": "0b6fd4092e0e109cd18891cc0cf9669fd4aa0c4b2a1a891f115bfbe5912b7eeb",
+  "prompts": 100,
+  "runtime_costs": {
+    "contention_ms_per_launch": {},
+    "parse_ms_per_revision": 0.0,
+    "schedule_ms_per_launch": 0.0,
+    "trace_ms_per_revision": 0.0
+  },
+  "seeds": [
+    0
+  ],
+  "semantic_divergence": 0,
+  "shards": [
+    {
+      "bytes": 19955579,
+      "final_chain": "f94bb4ecc3277e366184444d7576203315f401a8855a65148341235a7cd6ce0e",
+      "meta": {
+        "arm": "gemma4_ar",
+        "doctor_digest": "547bc22144f46c0ac6cf9c902346ae04e4f69e8595811eb56ebc8151d095cf09",
+        "frozen_policy": {
+          "path": "configs/frozen_policy.json",
+          "status": "absent"
+        },
+        "instrumentation": "off",
+        "manifest": "experiments/manifests/dev.jsonl",
+        "manifest_sha256": "bcac80d20775dddbbf667b29e81a5c8765545b6f4ff19abdcbab10d36f4a4188",
+        "model": null,
+        "policy": {
+          "allowed_resources": [
+            "cpu",
+            "gpu",
+            "storage"
+          ],
+          "confidence_mode": "min",
+          "fixed_step": null,
+          "k": 2,
+          "max_inflight": 4,
+          "min_overlap_ms": 50.0,
+          "name": "full_gate",
+          "oracle": null,
+          "random_rate": null,
+          "tau": 0.9,
+          "use_acceptance": false,
+          "use_confidence": true,
+          "use_overlap": true,
+          "use_persistence": true,
+          "use_resource": true
+        },
+        "profile_fingerprint": "0b6fd4092e0e109cd18891cc0cf9669fd4aa0c4b2a1a891f115bfbe5912b7eeb",
+        "seed": 0,
+        "tool_sleep_ms": 0.0
+      },
+      "path": "experiments/raw/gemma4_ar/gemma4_ar-seed0.jsonl",
+      "records": 8702,
+      "schema_version": "crystalcall-trace/1",
+      "sha256": "09f0929b4c2eddf5fce1710207b5c73928ea18ad4ebc03c91e16aa9ddcb7448d",
+      "shard": "gemma4_ar-seed0.jsonl.partial"
+    }
+  ],
+  "turns": 100,
+  "verification_error": 0,
+  "verified_match": 0
+}
